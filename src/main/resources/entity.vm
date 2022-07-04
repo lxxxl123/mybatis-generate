@@ -1,5 +1,6 @@
 package ${package}.${entity};
 
+import lombok.Data;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,6 +12,7 @@ import java.util.Date;
 #set($hasDate=1)
 #end
 #end
+@Data
 @Table(name="${table}")
 public class ${name}{
 
@@ -24,13 +26,13 @@ public class ${name}{
     private ${column.javaType} ${column.javaFieldName};
 #end
 
-#foreach(${column} in ${columns})
-    public void set${column.javaFieldNameUF}(${column.javaType} ${column.javaFieldName}){
-        this.${column.javaFieldName} = ${column.javaFieldName};
-    }
-
-    public ${column.javaType} get${column.javaFieldNameUF}(){
-        return this.${column.javaFieldName};
-    }
-
-#end}
+###foreach(${column} in ${columns})
+##    public void set${column.javaFieldNameUF}(${column.javaType} ${column.javaFieldName}){
+##        this.${column.javaFieldName} = ${column.javaFieldName};
+##    }
+##
+##    public ${column.javaType} get${column.javaFieldNameUF}(){
+##        return this.${column.javaFieldName};
+##    }
+##
+###end}

@@ -44,6 +44,10 @@ public class GeneratorMojo extends AbstractMojo {
     @Parameter(property = "project.basedir", required = true, readonly = true)
     private File basedir;
 
+    @Parameter(property = "driver", required = true, readonly = true)
+    private String driver;
+
+
     private String getSourcePath(){
         return String.format("%s/src/main/resources/",basedir.getAbsolutePath());
     }
@@ -74,8 +78,6 @@ public class GeneratorMojo extends AbstractMojo {
 
             doGenerator(configContext, columnDefinitionList, new Callback() {
                 public void write(ConfigContext configContext, VelocityContext context) {
-
-
                     FileUtil.writeFile(rootPath+configContext.getTargetEntity(),                   //输出目录
                             String.format("%s.java",configContext.getTargetName()),    //文件名
                             VelocityUtil.render("entity.vm", context));                 //模板生成内容

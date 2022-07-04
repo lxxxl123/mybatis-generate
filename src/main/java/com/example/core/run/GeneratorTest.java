@@ -20,9 +20,9 @@ import java.util.Map;
  */
 public class GeneratorTest {
 
-    private static String SourcePath = "E:\\Research\\maven_plugin\\src\\main\\resource\\";
+    private static String SourcePath = "C:\\Users\\chenwh3\\IdeaProjects\\generator-plugin-test\\src\\main\\resources\\";
 
-    private static String OutputPath = "E:\\Research\\maven_plugin\\src\\main\\java\\com\\example\\gcode\\";
+    private static String OutputPath = "C:\\Users\\chenwh3\\IdeaProjects\\generator-plugin-test\\output";
 
     public static void main(String[] args){
 
@@ -36,6 +36,8 @@ public class GeneratorTest {
 
         //元数据处理
         List<ColumnDefinition> columnDefinitionList = ColumnHelper.covertColumnDefinition(resultList);
+
+        System.out.println(columnDefinitionList);
 
         //生成代码
         /*GeneratorMojo.doGenerator(configContext, columnDefinitionList, new Callback() {

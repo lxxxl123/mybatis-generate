@@ -7,6 +7,7 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
 import java.io.*;
+import java.sql.Driver;
 import java.util.ArrayList;
 import java.util.List;
 
