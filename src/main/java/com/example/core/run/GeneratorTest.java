@@ -29,11 +29,11 @@ public class GeneratorTest {
         ConfigContext configContext = new ConfigContext(SourcePath, OutputPath);
 
         //初始化DB工具类
-        AbstractDbHelper dbHelper =  AbstractDbHelper.of(configContext);
+        AbstractDbHelper dbHelper = AbstractDbHelper.of(configContext);
 
         List<ColumnDefinition> metaData = dbHelper.getMetaData();
 
-        String rootPath = configContext.getOutputPath() + GeneratorMojo.getPackagePath(configContext.getTargetPackage());
+        String rootPath = configContext.getOutputPath() + configContext.getTargetPackage();
 
         String serviceImplPath = configContext.getOutputPath() + configContext.getTargetPackage() + "/" + configContext.getTargetServiceImpl();
         //生成代码
@@ -41,25 +41,29 @@ public class GeneratorTest {
         System.out.println(metaData);
         GeneratorMojo.doGenerator(configContext, metaData, new Callback() {
             public void write(ConfigContext configContext, VelocityContext context) {
-                FileUtil.writeFile(rootPath+configContext.getTargetEntity(),                   //输出目录
-                        String.format("%s.java",configContext.getTargetName()),    //文件名
+                FileUtil.writeFile(rootPath + configContext.getTargetEntity(),                   //输出目录
+                        String.format("%s.java", configContext.getTargetName()),    //文件名
                         VelocityUtil.render("entity.vm", context));                 //模板生成内容
 
-                FileUtil.writeFile(rootPath+configContext.getTargetService(),
+                FileUtil.writeFile(rootPath + configContext.getTargetService(),
                         String.format("%sService.java", configContext.getTargetName()),
                         VelocityUtil.render("contract.vm", context));
 
-                FileUtil.writeFile(rootPath+configContext.getTargetDao(),
+                FileUtil.writeFile(rootPath + configContext.getTargetDao(),
                         String.format("%sMapper.java", configContext.getTargetName()),
                         VelocityUtil.render("dao.vm", context));
 
-                FileUtil.writeFile(GeneratorMojo.getPackagePath(serviceImplPath),
+                FileUtil.writeFile(serviceImplPath,
                         String.format("%sServiceImpl.java", configContext.getTargetName()),
                         VelocityUtil.render("service.vm", context));
 
-                FileUtil.writeFile(rootPath+configContext.getTargetController(),
+                FileUtil.writeFile(rootPath + configContext.getTargetController(),
                         String.format("%sController.java", configContext.getTargetName()),
                         VelocityUtil.render("controller.vm", context));
+
+                FileUtil.writeFile(SourcePath + configContext.getMapperXmlPath(),
+                        String.format("%sMapper.xml", configContext.getTargetName()),
+                        VelocityUtil.render("mapper.vm", context));
             }
         });
 

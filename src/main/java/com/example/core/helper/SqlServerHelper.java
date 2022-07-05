@@ -38,6 +38,7 @@ public class SqlServerHelper extends AbstractDbHelper {
         columnDefinition.setType(temp[0]);
         columnDefinition.setJavaType(SqlTypeUtil.convertToJavaBoxType(temp[0]));
         columnDefinition.setJavaFieldName(StringUtil.underlineToCamelhump(columnName));
+        columnDefinition.setJdbcType(SqlTypeUtil.convertToMyBatisJdbcType(temp[0]));
         columnDefinition.setPk(Objects.equals(order, 1));
 
         return columnDefinition;

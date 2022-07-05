@@ -29,6 +29,7 @@ public class ConfigContext {
     private String targetServiceImpl;
     private String targetController;
     private String targetDao;
+    private String mapperXmlPath;
 
     public ConfigContext(String sourcePath, String outputPath) {
 
@@ -49,6 +50,7 @@ public class ConfigContext {
         setTargetServiceImpl(PropsUtil.getString(properties, Constant.TARGET_SERVICEIMPL));
         setTargetController(PropsUtil.getString(properties, Constant.TARGET_CONTROLLER));
         setTargetDao(PropsUtil.getString(properties, Constant.TARGET_DAO));
+        setMapperXmlPath(PropsUtil.getString(properties, Constant.TARGET_MAPPER_XML_PATH));
     }
 
 

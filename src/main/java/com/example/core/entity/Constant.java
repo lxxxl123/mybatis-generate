@@ -24,5 +24,7 @@ public class Constant {
     public static String TARGET_CONTROLLER = "target.controller";
     public static String TARGET_DAO = "target.dao";
 
+    public static String TARGET_MAPPER_XML_PATH = "target.mapperXmlPath";
+
 
 }

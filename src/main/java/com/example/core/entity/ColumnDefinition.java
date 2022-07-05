@@ -15,5 +15,6 @@ public class ColumnDefinition {
 	private boolean pk; // 是否主键
 	private String javaType;
 	private String javaFieldName;
+	private String jdbcType;
 
 }
