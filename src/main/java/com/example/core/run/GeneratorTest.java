@@ -2,15 +2,15 @@ package com.example.core.run;
 
 import com.example.core.entity.ColumnDefinition;
 import com.example.core.entity.ConfigContext;
-import com.example.core.helper.ColumnHelper;
-import com.example.core.helper.DBHelper;
+import com.example.core.helper.AbstractDbHelper;
 import com.example.core.service.Callback;
 import com.example.core.util.FileUtil;
 import com.example.core.util.VelocityUtil;
+import com.example.plugin.GeneratorMojo;
 import org.apache.velocity.VelocityContext;
 
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description TODO
@@ -22,44 +22,46 @@ public class GeneratorTest {
 
     private static String SourcePath = "C:\\Users\\chenwh3\\IdeaProjects\\generator-plugin-test\\src\\main\\resources\\";
 
-    private static String OutputPath = "C:\\Users\\chenwh3\\IdeaProjects\\generator-plugin-test\\output";
+    private static String OutputPath = "C:\\Users\\chenwh3\\IdeaProjects\\qms-platform\\qms-service\\src\\main\\java\\";
 
-    public static void main(String[] args){
+    public static void main(String[] args) throws SQLException {
 
         ConfigContext configContext = new ConfigContext(SourcePath, OutputPath);
 
         //初始化DB工具类
-        DBHelper dbHelper = new DBHelper(configContext);
+        AbstractDbHelper dbHelper =  AbstractDbHelper.of(configContext);
 
-        //得到数据库表的元数据
-        List<Map<String, Object>> resultList = dbHelper.descTable();
+        List<ColumnDefinition> metaData = dbHelper.getMetaData();
 
-        //元数据处理
-        List<ColumnDefinition> columnDefinitionList = ColumnHelper.covertColumnDefinition(resultList);
+        String rootPath = configContext.getOutputPath() + GeneratorMojo.getPackagePath(configContext.getTargetPackage());
 
-        System.out.println(columnDefinitionList);
-
+        String serviceImplPath = configContext.getOutputPath() + configContext.getTargetPackage() + "/" + configContext.getTargetServiceImpl();
         //生成代码
-        /*GeneratorMojo.doGenerator(configContext, columnDefinitionList, new Callback() {
-            public void write(ConfigContext configContext, VelocityContext context) {
 
-                FileUtil.writeFile(configContext.getOutputPath(),                   //输出目录
+        System.out.println(metaData);
+        GeneratorMojo.doGenerator(configContext, metaData, new Callback() {
+            public void write(ConfigContext configContext, VelocityContext context) {
+                FileUtil.writeFile(rootPath+configContext.getTargetEntity(),                   //输出目录
                         String.format("%s.java",configContext.getTargetName()),    //文件名
                         VelocityUtil.render("entity.vm", context));                 //模板生成内容
 
-                FileUtil.writeFile(configContext.getOutputPath(),
-                        String.format("I%sDasService.java",configContext.getTargetName()),
+                FileUtil.writeFile(rootPath+configContext.getTargetService(),
+                        String.format("%sService.java", configContext.getTargetName()),
                         VelocityUtil.render("contract.vm", context));
 
-                FileUtil.writeFile(configContext.getOutputPath(),
-                        String.format("%sDao.java",configContext.getTargetName()),
+                FileUtil.writeFile(rootPath+configContext.getTargetDao(),
+                        String.format("%sMapper.java", configContext.getTargetName()),
                         VelocityUtil.render("dao.vm", context));
 
-                FileUtil.writeFile(configContext.getOutputPath(),
-                        String.format("%sDasService.java",configContext.getTargetName()),
+                FileUtil.writeFile(GeneratorMojo.getPackagePath(serviceImplPath),
+                        String.format("%sServiceImpl.java", configContext.getTargetName()),
                         VelocityUtil.render("service.vm", context));
+
+                FileUtil.writeFile(rootPath+configContext.getTargetController(),
+                        String.format("%sController.java", configContext.getTargetName()),
+                        VelocityUtil.render("controller.vm", context));
             }
-        });*/
+        });
 
     }
 

@@ -1,38 +1,38 @@
 package ${package}.${entity};
 
 import lombok.Data;
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 
 #set($hasDate=0)
 #foreach($column in $columns)
-#if($column.javaType=='Date' && $hasDate==0)
-import java.util.Date;
-#set($hasDate=1)
+    #if($column.javaType=='Date' && $hasDate==0)import java.util.Date;
+    #set($hasDate=1)#end
 #end
-#end
+
 @Data
-@Table(name="${table}")
+@TableName("${table}")
 public class ${name}{
 
-    private static final long serialVersionUID = 1L;
+private static final long serialVersionUID = 1L;
 
 #foreach($column in $columns)
-#if(!${column.isPk})
-    @Id
-#end
-    @Column(name = "${column.columnName}")
+    #if(${column.pk})
+    @TableId(value = "${column.columnName}" #if(${column.identity}),type = IdType.AUTO#end)
+    private Integer nid;
+
+    #else
+    @TableField(value = "${column.columnName}"##
+        #if(${column.columnName} == "creator" || ${column.columnName} == "create_time") ,fill = FieldFill.INSERT##
+        #elseif(${column.columnName} == "modifier" || ${column.columnName} == "update_time") ,fill = FieldFill.UPDATE##
+        #end)
     private ${column.javaType} ${column.javaFieldName};
+
+    #end
 #end
 
-###foreach(${column} in ${columns})
-##    public void set${column.javaFieldNameUF}(${column.javaType} ${column.javaFieldName}){
-##        this.${column.javaFieldName} = ${column.javaFieldName};
-##    }
-##
-##    public ${column.javaType} get${column.javaFieldNameUF}(){
-##        return this.${column.javaFieldName};
-##    }
-##
-###end}
+
+}

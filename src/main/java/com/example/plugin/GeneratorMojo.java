@@ -2,8 +2,7 @@ package com.example.plugin;
 
 import com.example.core.entity.ColumnDefinition;
 import com.example.core.entity.ConfigContext;
-import com.example.core.helper.ColumnHelper;
-import com.example.core.helper.DBHelper;
+import com.example.core.helper.AbstractDbHelper;
 import com.example.core.service.Callback;
 import com.example.core.util.FileUtil;
 import com.example.core.util.VelocityUtil;
@@ -19,7 +18,6 @@ import org.apache.velocity.app.VelocityEngine;
 
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -32,28 +30,24 @@ import java.util.Properties;
 @Mojo(name = "generator")
 public class GeneratorMojo extends AbstractMojo {
 
-    //项目构建根目录
-    @Parameter(property = "project.build.directory", required = true)
-    private File outputDirectory;
-
-    //项目构建资源文件根目录
-    @Parameter(property = "project.build.sourceDirectory", required = true, readonly = true)
-    private File sourcedir;
+//    //项目构建根目录
+//    @Parameter(property = "project.build.directory", required = true)
+//    private File outputDirectory;
+//
+//    //项目构建资源文件根目录
+//    @Parameter(property = "project.build.sourceDirectory", required = true, readonly = true)
+//    private File sourcedir;
 
     //项目根目录 如：E:\Research\maven_plugin
     @Parameter(property = "project.basedir", required = true, readonly = true)
     private File basedir;
 
-    @Parameter(property = "driver", required = true, readonly = true)
-    private String driver;
-
-
     private String getSourcePath(){
-        return String.format("%s/src/main/resources/",basedir.getAbsolutePath());
+        return String.format("%s/src/main/resources/", basedir.getAbsolutePath());
     }
 
     private String getOutputPath(){
-        return String.format("%s/src/main/java/",basedir.getAbsolutePath());
+        return String.format("%s/src/main/java/", basedir.getAbsolutePath());
     }
 
 
@@ -64,13 +58,10 @@ public class GeneratorMojo extends AbstractMojo {
             ConfigContext configContext = new ConfigContext(getSourcePath(),getOutputPath());
 
             //初始化DB工具类
-            DBHelper dbHelper = new DBHelper(configContext);
-
-            //得到数据库表的元数据
-            List<Map<String,Object>> resultList= dbHelper.descTable();
+            AbstractDbHelper dbHelper =  AbstractDbHelper.of(configContext);
 
             //元数据处理
-            List<ColumnDefinition> columnDefinitionList = ColumnHelper.covertColumnDefinition(resultList);
+            List<ColumnDefinition> columnDefinitionList = dbHelper.getMetaData();
 
             String rootPath = configContext.getOutputPath() + getPackagePath(configContext.getTargetPackage());
 
@@ -83,7 +74,7 @@ public class GeneratorMojo extends AbstractMojo {
                             VelocityUtil.render("entity.vm", context));                 //模板生成内容
 
                     FileUtil.writeFile(rootPath+configContext.getTargetService(),
-                            String.format("I%sService.java", configContext.getTargetName()),
+                            String.format("%sService.java", configContext.getTargetName()),
                             VelocityUtil.render("contract.vm", context));
 
                     FileUtil.writeFile(rootPath+configContext.getTargetDao(),
@@ -105,11 +96,14 @@ public class GeneratorMojo extends AbstractMojo {
 
     }
 
-    private static void doGenerator(ConfigContext configContext, Object data, Callback callback) {
+    public static void doGenerator(ConfigContext configContext, Object data, Callback callback) {
         //配置velocity的资源加载路径
         Properties velocityPros = new Properties();
         velocityPros.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, configContext.getSourcePath());
+        velocityPros.setProperty("input.encoding", "utf-8");
+        velocityPros.setProperty("output.encoding", "utf-8");
         Velocity.init(velocityPros);
+
 
         //封装velocity数据
         VelocityContext context = new VelocityContext();
@@ -123,11 +117,12 @@ public class GeneratorMojo extends AbstractMojo {
         context.put("controller", configContext.getTargetController());
         context.put("dao", configContext.getTargetDao());
 
+
         callback.write(configContext, context);
 
     }
 
-    private static String getPackagePath(String targetPackage){
+    public static String getPackagePath(String targetPackage){
         return StringUtils.replace(targetPackage,".","/")+"/";
     }
 }

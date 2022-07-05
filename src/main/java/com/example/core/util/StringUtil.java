@@ -100,11 +100,12 @@ public class StringUtil {
      */
     public static String firstToUpper(String str) {
         if(isNotEmpty(str)){
-            if(str.length()>1){
+            if (str.length() > 1) {
                 return Character.toUpperCase(str.charAt(0)) + str.substring(1);
-            }else{
-                return Character.toUpperCase(str.charAt(0))+"";
+            } else {
+                return Character.toUpperCase(str.charAt(0)) + "";
             }
+
         }
         return "";
     }

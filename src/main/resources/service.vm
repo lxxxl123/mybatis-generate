@@ -1,45 +1,17 @@
-package ${package}.${serviceImpl};
+package com.haday.qms.${serviceImpl};
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import ${package}.${service}.${name}Service;
+import ${package}.${dao}.${name}Mapper;
 import ${package}.${entity}.${name};
-import ${package}.${service}.I${name}Service;
-import ${package}.${dao}.${name}Dao;
-
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-
-import java.util.List;
-
-
+/**
+* @author chenwh3
+*/
 @Service
-public class ${name}ServiceImpl implements I${name}Service {
-
-    @Resource
-    private ${name}Dao dao;
-
-    @Override
-    public ${name} loadById(Object id) {
-        return dao.selectByPrimaryKey(id);
-    }
-
-    @Override
-    public long insert(${name} entity) {
-        return dao.insert(entity);
-    }
-
-    @Override
-    public void update(${name} entity, Object example) {
-        dao.updateByExample(entity, example);
-    }
-
-    @Override
-    public List<${name}> loadAll() {
-        return dao.selectAll();
-    }
-
-    @Override
-    public void deleteById(Object id) {
-        dao.deleteByPrimaryKey(id);
-    }
+public class ${name}ServiceImpl extends ServiceImpl<${name}Mapper, ${name}>
+    implements ${name}Service {
 
 }
+
