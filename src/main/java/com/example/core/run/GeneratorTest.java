@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class GeneratorTest {
 
-    private static String SourcePath = "C:\\Users\\chenwh3\\IdeaProjects\\generator-plugin-test\\src\\main\\resources\\";
+    private static String SourcePath = "C:\\Users\\chenwh3\\IdeaProjects\\generator-plugin-test\\src\\main\\resources\\vm\\";
 
     private static String OutputPath = "C:\\Users\\chenwh3\\IdeaProjects\\qms-platform\\qms-service\\src\\main\\java\\";
 
