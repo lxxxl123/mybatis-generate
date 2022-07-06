@@ -2,6 +2,8 @@ package com.example.core.helper;
 
 import com.example.core.anno.SqlHelper;
 import com.example.core.entity.ColumnDefinition;
+import com.example.core.util.SqlTypeUtil;
+import com.example.core.util.StringUtil;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -26,17 +28,19 @@ public class MysqlHelper extends AbstractDbHelper {
         //DBUtils 取的MapList中的Map  是不区分key大小写的  所以不用转换
         ColumnDefinition columnDefinition = new ColumnDefinition();
 
-        columnDefinition.setColumnName((String) rowMap.get("FIELD"));
-
         boolean isIdentity = "auto_increment".equalsIgnoreCase((String) rowMap.get("EXTRA"));
-        columnDefinition.setIdentity(isIdentity);
-
         boolean isPk = "PRI".equalsIgnoreCase((String) rowMap.get("KEY"));
-        columnDefinition.setPk(isPk);
-
         String type = buildType((String) rowMap.get("TYPE"));
-        columnDefinition.setType(type);
+        String columnName = (String) rowMap.get("FIELD");
 
+        columnDefinition.setColumnName(columnName);
+        columnDefinition.setIdentity(isIdentity);
+        columnDefinition.setPk(isPk);
+        columnDefinition.setType(type);
+        columnDefinition.setJavaType(SqlTypeUtil.convertToJavaBoxType(type));
+        columnDefinition.setJavaFieldName(StringUtil.underlineToCamelhump(columnName));
+        columnDefinition.setJdbcType(SqlTypeUtil.convertToMyBatisJdbcType(type));
+        
         return columnDefinition;
     }
 
