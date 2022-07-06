@@ -116,7 +116,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <basedir>C:\Users\chenwh3\IdeaProjects\qms-platform\qms-service</basedir>
+                    <basedir>${basedir}</basedir>
                     <configDir>vm</configDir>
                 </configuration>
             </plugin>
