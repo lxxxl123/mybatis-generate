@@ -22,7 +22,7 @@ private static final long serialVersionUID = 1L;
 #foreach($column in $columns)
     #if(${column.pk})
     @TableId(value = "${column.columnName}" #if(${column.identity}),type = IdType.AUTO#end)
-    private Integer nid;
+    private Integer ${column.javaFieldName};
 
     #else
     @TableField(value = "${column.columnName}"##

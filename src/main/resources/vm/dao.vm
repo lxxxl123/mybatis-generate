@@ -1,6 +1,6 @@
-package com.haday.qms.${dao};
+package ${package}.${dao};
 
-import com.haday.qms.${entity}.${name};
+import ${package}.${entity}.${name};
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 /**
