@@ -32,7 +32,7 @@ public class GeneratorMojo extends AbstractMojo {
     @Parameter(readonly = false, defaultValue = "")
     private String configDir = "";
 
-    private String getSourcePath(){
+    private String getResource(){
         return String.format("%s/src/main/resources/", basedir.getAbsolutePath());
     }
 
@@ -44,7 +44,7 @@ public class GeneratorMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             //得到配置文件对象 将指定输出路径与读取资源文件路径
-            ConfigContext configContext = new ConfigContext(StringUtils.appendIfMissing(getSourcePath() + configDir, "/", "/"), getOutputPath());
+            ConfigContext configContext = new ConfigContext(StringUtils.appendIfMissing( configDir, "/", "/"), getOutputPath());
 
             System.out.printf("入参 basedir = %s , configDir = %s", basedir, configDir);
 
@@ -79,7 +79,7 @@ public class GeneratorMojo extends AbstractMojo {
                             String.format("%sController.java", configContext.getTargetName()),
                             VelocityUtil.render("controller.vm", context));
 
-                    FileUtil.writeFile(getSourcePath() + configContext.getMapperXmlPath(),
+                    FileUtil.writeFile(getResource() + configContext.getMapperXmlPath(),
                             String.format("%sMapper.xml", configContext.getTargetName()),
                             VelocityUtil.render("mapper.vm", context));
                 }
@@ -114,6 +114,13 @@ public class GeneratorMojo extends AbstractMojo {
 
         callback.write(configContext, context);
 
+    }
+
+    public static void main(String[] args) throws MojoExecutionException, MojoFailureException {
+        GeneratorMojo generatorMojo = new GeneratorMojo();
+        generatorMojo.basedir = new File("C:\\Users\\chenwh3\\IdeaProjects\\qms-platform\\qms-service");
+        generatorMojo.configDir = "C:\\Users\\chenwh3\\IdeaProjects\\generator-plugin-test\\src\\main\\resources\\vm";
+        generatorMojo.execute();
     }
 
 
