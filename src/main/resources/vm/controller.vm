@@ -18,7 +18,7 @@ import java.util.List;
 * @author chenwh3
 */
 @RestController
-@RequestMapping("")
+@RequestMapping("/${name.substring(0, 1).toLowerCase()}${name.substring(1)}")
 @Api(value = "", tags = "")
 public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name}Mapper, ${name}> {
 
@@ -32,7 +32,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     }
 
     @Override
-    @ApiOperation(value = "更新", notes = "删除")
+    @ApiOperation(value = "更新", notes = "更新")
     @PostMapping("/update")
     @Auth
     public R update(@RequestBody ${name} obj) {
@@ -50,7 +50,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
 
 
     @Override
-    @ApiOperation(value = "查询", notes = "更新")
+    @ApiOperation(value = "查询", notes = "查询")
     @PostMapping("/search")
     @Auth
     public R search(@RequestBody @Validated SearchVo obj) {
