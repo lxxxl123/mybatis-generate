@@ -1,5 +1,6 @@
 package com.example.core.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -13,16 +14,17 @@ import java.io.IOException;
  */
 public class FileUtil {
 
-    public static String getPackagePath(String targetPackage){
-        return StringUtils.replace(targetPackage,".","/")+"/";
+    public static String getPackagePath(String targetPackage) {
+        return StringUtils.replace(targetPackage, ".", "/") + "/";
     }
 
     /**
      * 将字符串写入文件
      */
-    public static void writeFile(String filePath,String fileName, String fileContent) {
+    public static void writeFile(String filePath, String fileName, String fileContent) {
         filePath = getPackagePath(filePath);
         File f = new File(filePath);
+        System.out.println(f.getAbsoluteFile());
 
         if (!f.exists()) {
             f.mkdirs();

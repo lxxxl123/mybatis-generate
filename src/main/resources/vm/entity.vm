@@ -18,7 +18,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 public class ${name}{
 
 private static final long serialVersionUID = 1L;
-
+#set($insertList = ['creator','create_time','createTime'])
+#set($updateList = ['modifier','update_time','updateTime'])
 #foreach($column in $columns)
     #if(${column.pk})
     @TableId(value = "${column.columnName}" #if(${column.identity}),type = IdType.AUTO#end)
@@ -26,8 +27,8 @@ private static final long serialVersionUID = 1L;
 
     #else
     @TableField(value = "${column.columnName}"##
-        #if(${column.columnName} == "creator" || ${column.columnName} == "create_time") ,fill = FieldFill.INSERT##
-        #elseif(${column.columnName} == "modifier" || ${column.columnName} == "update_time") ,fill = FieldFill.UPDATE##
+        #if($insertList.contains($column.columnName)) ,fill = FieldFill.INSERT##
+        #elseif($updateList.contains($column.columnName)) ,fill = FieldFill.UPDATE##
         #end)
     private ${column.javaType} ${column.javaFieldName};
 

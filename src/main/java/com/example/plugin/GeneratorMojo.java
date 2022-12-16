@@ -118,8 +118,9 @@ public class GeneratorMojo extends AbstractMojo {
 
     public static void main(String[] args) throws MojoExecutionException, MojoFailureException {
         GeneratorMojo generatorMojo = new GeneratorMojo();
-        generatorMojo.basedir = new File("C:\\Users\\chenwh3\\IdeaProjects\\qms-platform\\qms-service");
-        generatorMojo.configDir = "C:\\Users\\chenwh3\\IdeaProjects\\generator-plugin-test\\src\\main\\resources\\vm";
+        generatorMojo.basedir = new File("D:\\20221014\\qms-platform\\qms-service");
+//        generatorMojo.basedir = new File("D:\\20221014\\idea-workspace\\qmsapicenter\\qms-service");
+        generatorMojo.configDir = "D:\\20221014\\generator-plugin-test\\src\\main\\resources\\vm";
         generatorMojo.execute();
     }
 
