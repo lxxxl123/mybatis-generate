@@ -27,7 +27,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @ApiOperation(value = "批量保存", notes = "批量保存")
     @PostMapping("/batchAdd")
     @Auth
-    public R batchAdd(@RequestBody List<${name}> list) {
+    public R<?> batchAdd(@RequestBody List<${name}> list) {
         return super.batchAdd(list);
     }
 
@@ -35,7 +35,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @ApiOperation(value = "更新", notes = "更新")
     @PostMapping("/update")
     @Auth
-    public R update(@RequestBody ${name} obj) {
+    public R<?> update(@RequestBody ${name} obj) {
         return super.update(obj);
     }
 
@@ -43,7 +43,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @ApiOperation(value = "删除", notes = "删除")
     @PostMapping("/delete")
     @Auth
-    public R delete(@RequestParam("id") String id) {
+    public R<?> delete(@RequestParam("id") String id) {
         return super.delete(id);
     }
 
@@ -53,7 +53,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @ApiOperation(value = "查询", notes = "查询")
     @PostMapping("/search")
     @Auth
-    public R search(@RequestBody @Validated SearchVo obj) {
+    public R<?> search(@RequestBody @Validated SearchVo obj) {
         return super.search(obj);
     }
 
@@ -62,7 +62,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @ApiOperation(value = "批量删除", notes = "批量删除")
     @PostMapping("/batchDelete")
     @Auth
-    public R batchDelete(@RequestBody List<String> id) {
+    public R<?> batchDelete(@RequestBody List<String> id) {
         return super.batchDelete(id);
     }
 }
