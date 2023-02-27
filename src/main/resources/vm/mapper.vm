@@ -1,44 +1,42 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="${package}.${dao}.${name}Mapper">
+package ${package}.${dao};
 
-    <resultMap id="BaseResultMap" type="${package}.${entity}.${name}">
-        #foreach($column in $columns)
-            #if(${column.pk})
-                <id property="${column.javaFieldName}" column="${column.columnName}" jdbcType="${column.jdbcType}"/>
-            #else
-                <result property="${column.javaFieldName}" column="${column.columnName}" jdbcType="${column.jdbcType}"/>
-            #end
-        #end
-    </resultMap>
-
-    <sql id="Base_Column_List">
-        #foreach($column in $columns)##
-${column.columnName}#if($foreach.hasNext),#end##
-#end
-
-    </sql>
+import ${package}.${entity}.${name};
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 #if(${isMerge})
-    <update id="merge">
-        MERGE ${table} AS t
-        USING  (SELECT
-        #foreach($column in $columns)##
-            #{obj.${column.columnName}} as ${column.columnName} #if($foreach.hasNext),
-        #end##
-        #end
-        ) AS s
-        ON t.id = s.id
-        WHEN MATCHED THEN
-        UPDATE SET
-        #foreach($column in $columns)##
-            #if(!${column.pk}) t.${column.columnName} = s.${column.columnName} #if($foreach.hasNext), #end
-        #end##
-        #end
-        WHEN NOT MATCHED THEN
-        INSERT (#foreach($column in $columns) #if(!${column.pk}) ${column.columnName} #if($foreach.hasNext), #end  #end #end)
-        VALUES (#foreach($column in $columns) #if(!${column.pk}) s.${column.columnName} #if($foreach.hasNext), #end #end #end);
-    </update>
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 #end
-</mapper>
+#if(${buildSelect})
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import java.util.Map;
+#end
+/**
+* @author ${author}
+*/
+@Mapper
+public interface ${name}Mapper extends BaseMapper<${name}> {
+
+#if(${isMerge})
+    /**
+     * 合并数据
+     * @param obj 行
+     * @return 影响行
+     */
+    int merge(@Param("list") List<${name}> obj);
+#end
+
+#if(${buildSelect})
+    /**
+    * 查询
+    * @param page 分页参数
+    * @param wrapper 条件
+    * @return 数据行行
+    */
+    Page<Map<String,Object>> select(Page page, @Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
+#end
+
+}

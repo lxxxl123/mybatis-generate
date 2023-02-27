@@ -2,8 +2,10 @@ package com.example.core.helper;
 
 import com.example.core.anno.SqlHelper;
 import com.example.core.entity.ColumnDefinition;
+import com.example.core.entity.TableDefinition;
 import com.example.core.util.SqlTypeUtil;
 import com.example.core.util.StringUtil;
+import com.xiaoleilu.hutool.json.JSONObject;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,12 +21,17 @@ import java.util.Map;
 public class MysqlHelper extends AbstractDbHelper {
 
     @Override
-    String descSql() {
+    String descColumnSql() {
         return String.format("desc %s", context.getTargetTable());
     }
 
     @Override
-    protected ColumnDefinition buildColumnDefinition(Map<String, Object> rowMap) {
+    String descTableSql() {
+        return null;
+    }
+
+    @Override
+    protected ColumnDefinition buildColumnDefinition(JSONObject rowMap) {
         //DBUtils 取的MapList中的Map  是不区分key大小写的  所以不用转换
         ColumnDefinition columnDefinition = new ColumnDefinition();
 
@@ -42,6 +49,11 @@ public class MysqlHelper extends AbstractDbHelper {
         columnDefinition.setJdbcType(SqlTypeUtil.convertToMyBatisJdbcType(type));
         
         return columnDefinition;
+    }
+
+    @Override
+    TableDefinition buildTableDefinition(JSONObject rowMap) {
+        return null;
     }
 
     private String buildType(String type) {

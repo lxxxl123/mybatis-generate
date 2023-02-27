@@ -5,6 +5,15 @@ import ${package}.${service}.${name}Service;
 import ${package}.${dao}.${name}Mapper;
 import ${package}.${entity}.${name};
 import org.springframework.stereotype.Service;
+#if($isMerge)import java.util.List;
+#end
+
+#if($buildSelect)
+import com.haday.qms.interceptor.anno.Try;
+import com.haday.qms.vo.SearchVo;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+#end
 
 /**
 * @author ${author}
@@ -12,6 +21,26 @@ import org.springframework.stereotype.Service;
 @Service
 public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
+
+    #if(${isMerge})public Integer merge(List<$name> obj){
+        return baseMapper.merge(obj);
+    }#end ##
+
+
+#if(${buildSelect})##
+    @Try
+    public Page search(JSONObject obj) {
+        SearchVo searchVo = obj.toJavaObject(SearchVo.class);
+        return baseMapper.select(searchVo.buildPage(), searchVo.buildWrapper());
+    }
+#end ##
+
+#if(${buildExport})##
+    @Try
+    public Page<?> export(JSONObject body, Page<?> page) {
+        return search(getExportJson(body, page));
+    }
+#end ##
 
 }
 

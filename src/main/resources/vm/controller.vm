@@ -11,6 +11,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+#if(${buildSelect})##
+import com.alibaba.fastjson.JSONObject;
+#end
 
 import java.util.List;
 
@@ -19,7 +22,7 @@ import java.util.List;
 */
 @RestController
 @RequestMapping("/${name.substring(0, 1).toLowerCase()}${name.substring(1)}")
-@Api(value = "", tags = "")
+@Api(value = "${tableInfo.desc}控制器", tags = "${tableInfo.desc}控制器")
 public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name}Mapper, ${name}> {
 
 
@@ -39,7 +42,24 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
         return super.update(obj);
     }
 
+#if($isMerge)##
+    @ApiOperation(value = "合并", notes = "合并")
+    @PostMapping("/merge")
+    @Auth
+    public R<?> merge(@RequestBody List<${name}> list) {
+        return R.data(service.merge(list));
+    }##
 
+#end
+
+#if(${buildSelect})##
+    @ApiOperation(value = "查询", notes = "查询")
+    @PostMapping("/search")
+    @Auth
+    public R<?> search(@RequestBody JSONObject obj) {
+        return R.data(service.search(obj));
+    }
+#else##
     @Override
     @ApiOperation(value = "查询", notes = "查询")
     @PostMapping("/search")
@@ -47,6 +67,8 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     public R<?> search(@RequestBody @Validated SearchVo obj) {
         return super.search(obj);
     }
+#end
+
 
 
     @Override

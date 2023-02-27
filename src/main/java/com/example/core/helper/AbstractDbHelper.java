@@ -3,6 +3,9 @@ package com.example.core.helper;
 import com.example.core.anno.SqlHelper;
 import com.example.core.entity.ColumnDefinition;
 import com.example.core.entity.ConfigContext;
+import com.example.core.entity.TableDefinition;
+import com.xiaoleilu.hutool.json.JSONArray;
+import com.xiaoleilu.hutool.json.JSONObject;
 import eu.infomas.annotation.AnnotationDetector;
 import lombok.Data;
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -99,37 +102,50 @@ abstract public class AbstractDbHelper {
         return dbHelper;
     }
 
-    abstract String descSql();
+    abstract String descColumnSql();
 
-    protected List<Map<String, Object>> descTable() {
-        return queryMapList(descSql(), null);
+    abstract String descTableSql();
+
+    protected JSONArray descTableCol() {
+        return queryMapList(descColumnSql(), null);
     }
 
-    public List<Map<String, Object>> queryMapList(String sql, Object... params) {
+    protected JSONObject descTable() {
+        return queryMapList(descTableSql(), null).getJSONObject(0);
+    }
+
+
+    public JSONArray queryMapList(String sql, Object... params) {
         List<Map<String, Object>> fieldMapList;
         try {
             fieldMapList = queryRunner.query(sql, new MapListHandler(), params);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return fieldMapList;
+        return new JSONArray(fieldMapList);
     }
 
 
-    public List<ColumnDefinition> covertColumnDefinition(List<Map<String, Object>> list) {
-        List<ColumnDefinition> columnDefinitionList = new ArrayList<ColumnDefinition>();
-        for (Map<String, Object> rowMap : list) {
-            // 构建columnDefinition
-            columnDefinitionList.add(buildColumnDefinition(rowMap));
+    public List<ColumnDefinition> covertColumnDefinition(JSONArray jsonArray) {
+        List<ColumnDefinition> columnDefinitionList = new ArrayList<>();
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject map = jsonArray.getJSONObject(i);
+            columnDefinitionList.add(buildColumnDefinition(map));
+
         }
         return columnDefinitionList;
     }
 
     public List<ColumnDefinition> getMetaData() {
-        return covertColumnDefinition(descTable());
+        return covertColumnDefinition(descTableCol());
     }
 
-    abstract ColumnDefinition buildColumnDefinition(Map<String, Object> rowMap);
+    abstract ColumnDefinition buildColumnDefinition(JSONObject rowMap);
+
+    abstract TableDefinition buildTableDefinition(JSONObject rowMap);
 
 
+    public TableDefinition getTableInfo() {
+        return buildTableDefinition(descTable());
+    }
 }
