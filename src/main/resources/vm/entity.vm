@@ -7,25 +7,36 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 
+
 #set($hasDate=0)
 #foreach($column in $columns)
     #if($column.javaType=='Date' && $hasDate==0)import java.util.Date;
     #set($hasDate=1)#end
 #end
 
+/**
+* @author ${author}
+*/
 @Data
 @TableName("${table}")
 public class ${name}{
 
 private static final long serialVersionUID = 1L;
+
 #set($insertList = ['creator','create_time','createTime'])
 #set($updateList = ['modifier','update_time','updateTime'])
 #foreach($column in $columns)
     #if(${column.pk})
+    /**
+    * ${column.remark}
+    */
     @TableId(value = "${column.columnName}" #if(${column.identity}),type = IdType.AUTO#end)
     private Integer ${column.javaFieldName};
 
     #else
+    /**
+      * ${column.remark}
+      */
     @TableField(value = "${column.columnName}"##
         #if($insertList.contains($column.columnName)) ,fill = FieldFill.INSERT##
         #elseif($updateList.contains($column.columnName)) ,fill = FieldFill.UPDATE##

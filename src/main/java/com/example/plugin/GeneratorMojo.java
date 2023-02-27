@@ -110,6 +110,7 @@ public class GeneratorMojo extends AbstractMojo {
         context.put("serviceImpl", configContext.getTargetServiceImpl());
         context.put("controller", configContext.getTargetController());
         context.put("dao", configContext.getTargetDao());
+        context.put("author", configContext.getAuthor());
 
 
         callback.write(configContext, context);

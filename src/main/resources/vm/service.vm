@@ -7,7 +7,7 @@ import ${package}.${entity}.${name};
 import org.springframework.stereotype.Service;
 
 /**
-* @author chenwh3
+* @author ${author}
 */
 @Service
 public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>

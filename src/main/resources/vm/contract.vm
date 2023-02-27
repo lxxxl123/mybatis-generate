@@ -4,7 +4,7 @@ import ${package}.${entity}.${name};
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
-* @author chenwh3
+* @author ${author}
 */
 public interface ${name}Service extends IService<${name}> {
 

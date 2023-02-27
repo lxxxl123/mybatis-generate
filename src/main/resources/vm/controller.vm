@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
-* @author chenwh3
+* @author ${author}
 */
 @RestController
 @RequestMapping("/${name.substring(0, 1).toLowerCase()}${name.substring(1)}")

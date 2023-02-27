@@ -16,5 +16,6 @@ public class ColumnDefinition {
 	private String javaType;
 	private String javaFieldName;
 	private String jdbcType;
+	private String remark;
 
 }
