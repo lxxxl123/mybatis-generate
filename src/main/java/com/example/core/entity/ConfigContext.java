@@ -4,6 +4,7 @@ import com.example.core.util.PropsUtil;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -37,6 +38,7 @@ public class ConfigContext {
     private Map<String, String> other = new HashMap<>();
 
     public ConfigContext(String sourcePath, String outputPath) {
+        sourcePath = StringUtils.appendIfMissing(sourcePath,"/","/");
 
         Properties properties = PropsUtil.loadProps(sourcePath+Constant.CONFIG_PROPS);
         setSourcePath(sourcePath);

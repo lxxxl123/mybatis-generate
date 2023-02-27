@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.MsMapper">
+
+
+    <select id="getColumnsInfo" resultType="map">
+        SELECT TABLE_NAME, c.COLUMN_NAME, c.DATA_TYPE, t.REMARK, ORDINAL_POSITION
+        FROM [INFORMATION_SCHEMA].[COLUMNS] c
+                 left join (SELECT B.name  AS COLUMN_NAME,
+                                   C.value AS REMARK
+                            FROM sys.tables A
+                                     INNER JOIN sys.columns B ON B.object_id = A.object_id
+                                     LEFT JOIN sys.extended_properties C
+                                               ON C.major_id = B.object_id AND C.minor_id = B.column_id
+                            WHERE A.name = #{tableName}) t on t.COLUMN_NAME = c.COLUMN_NAME
+        WHERE TABLE_NAME = #{tableName}
+    </select>
+    <select id="getTableInfo" resultType="map">
+        select a.name  AS TABLE_NAME,
+               g.value AS TABLE_DESC
+        from sys.tables a
+                 left join sys.extended_properties g on a.object_id = g.major_id AND g.minor_id = 0
+        where a.name = 'ori_pak_supplier'
+    </select>
+</mapper>

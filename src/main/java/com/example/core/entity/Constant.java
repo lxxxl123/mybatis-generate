@@ -10,6 +10,8 @@ public class Constant {
 
     public static String CONFIG_PROPS = "generator.properties";
 
+    public static String FRONT_PROPS = "front.properties";
+
     public static String JDBC_DRIVER = "jdbc.driver";
     public static String JDBC_URL = "jdbc.url";
     public static String JDBC_USERNAME = "jdbc.username";

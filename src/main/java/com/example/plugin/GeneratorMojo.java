@@ -1,6 +1,5 @@
 package com.example.plugin;
 
-import com.example.core.entity.ColumnDefinition;
 import com.example.core.entity.ConfigContext;
 import com.example.core.helper.AbstractDbHelper;
 import com.example.core.service.Callback;
@@ -8,11 +7,6 @@ import com.example.core.util.FileUtil;
 import com.example.core.util.VelocityUtil;
 import com.xiaoleilu.hutool.convert.Convert;
 import com.xiaoleilu.hutool.json.JSONObject;
-import com.xiaoleilu.hutool.util.BeanUtil;
-import com.xiaoleilu.hutool.util.StrUtil;
-import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -23,8 +17,6 @@ import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -54,7 +46,7 @@ public class GeneratorMojo extends AbstractMojo {
         AbstractDbHelper dbHelper =  AbstractDbHelper.of(configContext);
 
         //元数据处理
-        map.put("columns", dbHelper.getMetaData());
+        map.put("columns", dbHelper.getColumnsInfo());
 
         map.put("tableInfo", dbHelper.getTableInfo());
         return map;
@@ -64,7 +56,7 @@ public class GeneratorMojo extends AbstractMojo {
     public void execute() throws MojoExecutionException, MojoFailureException {
         try {
             //得到配置文件对象 将指定输出路径与读取资源文件路径
-            ConfigContext configContext = new ConfigContext(StringUtils.appendIfMissing( configDir, "/", "/"), getOutputPath());
+            ConfigContext configContext = new ConfigContext(configDir, getOutputPath());
 
             System.out.printf("入参 basedir = %s , configDir = %s\n", basedir, configDir);
 
