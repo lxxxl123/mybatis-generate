@@ -26,7 +26,6 @@ public class Constant {
 
     public static String TARGET_MAPPER_XML_PATH = "target.mapperXmlPath";
 
-    public static String AUTHOR = "author";
 
 
 

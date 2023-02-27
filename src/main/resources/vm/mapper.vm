@@ -20,4 +20,25 @@ ${column.columnName}#if($foreach.hasNext),#end##
 #end
 
     </sql>
+#if(${isMerge})
+    <update id="merge">
+        MERGE ${table} AS t
+        USING  (SELECT
+        #foreach($column in $columns)##
+            #{obj.${column.columnName}} as ${column.columnName} #if($foreach.hasNext),
+        #end##
+        #end
+        ) AS s
+        ON t.id = s.id
+        WHEN MATCHED THEN
+        UPDATE SET
+        #foreach($column in $columns)##
+            #if(!${column.pk}) t.${column.columnName} = s.${column.columnName} #if($foreach.hasNext), #end
+        #end##
+        #end
+        WHEN NOT MATCHED THEN
+        INSERT (#foreach($column in $columns) #if(!${column.pk}) ${column.columnName} #if($foreach.hasNext), #end  #end #end)
+        VALUES (#foreach($column in $columns) #if(!${column.pk}) s.${column.columnName} #if($foreach.hasNext), #end #end #end);
+    </update>
+#end
 </mapper>

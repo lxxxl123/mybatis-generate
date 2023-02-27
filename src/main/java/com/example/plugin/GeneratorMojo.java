@@ -6,7 +6,12 @@ import com.example.core.helper.AbstractDbHelper;
 import com.example.core.service.Callback;
 import com.example.core.util.FileUtil;
 import com.example.core.util.VelocityUtil;
+import com.xiaoleilu.hutool.convert.Convert;
+import com.xiaoleilu.hutool.util.BeanUtil;
+import com.xiaoleilu.hutool.util.StrUtil;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.reflect.TypeUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -18,6 +23,7 @@ import org.apache.velocity.app.VelocityEngine;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -101,6 +107,15 @@ public class GeneratorMojo extends AbstractMojo {
 
         //封装velocity数据
         VelocityContext context = new VelocityContext();
+        Map<String, String> other = configContext.getOther();
+        for (Map.Entry<String, String> entry : other.entrySet()) {
+            if (entry.getKey().startsWith("is")) {
+                context.put(entry.getKey(), Convert.toBool(entry.getValue()));
+            } else {
+                context.put(entry.getKey(), entry.getValue());
+            }
+        }
+
         context.put("table", configContext.getTargetTable());
         context.put("name", configContext.getTargetName());
         context.put("package", configContext.getTargetPackage());
@@ -110,8 +125,6 @@ public class GeneratorMojo extends AbstractMojo {
         context.put("serviceImpl", configContext.getTargetServiceImpl());
         context.put("controller", configContext.getTargetController());
         context.put("dao", configContext.getTargetDao());
-        context.put("author", configContext.getAuthor());
-
 
         callback.write(configContext, context);
 

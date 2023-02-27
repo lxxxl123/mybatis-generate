@@ -39,15 +39,6 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
         return super.update(obj);
     }
 
-    @Override
-    @ApiOperation(value = "删除", notes = "删除")
-    @PostMapping("/delete")
-    @Auth
-    public R<?> delete(@RequestParam("id") String id) {
-        return super.delete(id);
-    }
-
-
 
     @Override
     @ApiOperation(value = "查询", notes = "查询")

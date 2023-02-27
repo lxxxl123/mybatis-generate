@@ -2,7 +2,10 @@ package com.example.core.entity;
 
 import com.example.core.util.PropsUtil;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 
@@ -31,6 +34,7 @@ public class ConfigContext {
     private String targetDao;
     private String mapperXmlPath;
     private String author;
+    private Map<String, String> other = new HashMap<>();
 
     public ConfigContext(String sourcePath, String outputPath) {
 
@@ -51,7 +55,12 @@ public class ConfigContext {
         setTargetServiceImpl(PropsUtil.getString(properties, Constant.TARGET_SERVICEIMPL));
         setTargetController(PropsUtil.getString(properties, Constant.TARGET_CONTROLLER));
         setTargetDao(PropsUtil.getString(properties, Constant.TARGET_DAO));
-        setAuthor(PropsUtil.getString(properties, "author"));
+        for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+            String key = ((String) entry.getKey());
+            if (StringUtils.startsWithAny(key, "other.")) {
+                other.put(key.substring(6), (String) entry.getValue());
+            }
+        }
         setMapperXmlPath(PropsUtil.getString(properties, Constant.TARGET_MAPPER_XML_PATH));
     }
 
