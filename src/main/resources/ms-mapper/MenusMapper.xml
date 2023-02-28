@@ -5,12 +5,6 @@
 <mapper namespace="com.example.mapper.MenusMapper">
 
 
-    <select id="getAllMenus" resultType="cn.hutool.json.JSONObject">
-        select *
-        from upms_permission;
-    </select>
-
-
     <insert id="insert">
         merge upms_permission as t
         using (select *,

@@ -1,6 +1,6 @@
-package ${package}.${dao};
+package ${package}.${dao}.${prefix};
 
-import ${package}.${entity}.${name};
+import ${package}.${entity}.${prefix}.${name};
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 #if(${isMerge})

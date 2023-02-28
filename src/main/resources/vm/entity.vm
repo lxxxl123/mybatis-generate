@@ -1,4 +1,4 @@
-package ${package}.${entity};
+package ${package}.${entity}.${prefix};
 
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.IdType;

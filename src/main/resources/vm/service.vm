@@ -1,9 +1,9 @@
-package ${package}.${serviceImpl};
+package ${package}.${service}.${prefix}.${serviceImpl};
 
 import com.haday.qms.service.base.impl.BaseServiceImpl;
-import ${package}.${service}.${name}Service;
-import ${package}.${dao}.${name}Mapper;
-import ${package}.${entity}.${name};
+import ${package}.${service}.${prefix}.${name}Service;
+import ${package}.${dao}.${prefix}.${name}Mapper;
+import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
 #if($isMerge)import java.util.List;
 #end

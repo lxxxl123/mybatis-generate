@@ -1,12 +1,12 @@
-package ${package}.${controller};
+package ${package}.${controller}.${prefix};
 
 import ${package}.controller.base.BaseController;
-import ${package}.${dao}.${name}Mapper;
+import ${package}.${dao}.${prefix}.${name}Mapper;
 import com.haday.qms.core.tool.api.R;
-import ${package}.${entity}.${name};
+import ${package}.${entity}.${prefix}.${name};
 import com.haday.qms.interceptor.anno.Auth;
 import ${package}.vo.SearchVo;
-import ${package}.${serviceImpl}.${name}ServiceImpl;
+import ${package}.${service}.${prefix}.${serviceImpl}.${name}ServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;

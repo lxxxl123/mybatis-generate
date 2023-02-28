@@ -4,7 +4,6 @@ import com.example.core.util.PropsUtil;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -16,7 +15,7 @@ import java.util.Properties;
 @Data
 public class ConfigContext {
 
-    private String sourcePath;
+    private String vmPath;
     private String outputPath;
 
     private String driver;
@@ -31,17 +30,18 @@ public class ConfigContext {
     private String targetEntity;
     private String targetService;
     private String targetServiceImpl;
+    private String prefix;
     private String targetController;
     private String targetDao;
     private String mapperXmlPath;
     private String author;
     private Map<String, String> other = new HashMap<>();
 
-    public ConfigContext(String sourcePath, String outputPath) {
-        sourcePath = StringUtils.appendIfMissing(sourcePath,"/","/");
+    public ConfigContext(String vmPath, String outputPath) {
+        vmPath = StringUtils.appendIfMissing(vmPath,"/","/");
 
-        Properties properties = PropsUtil.loadProps(sourcePath+Constant.CONFIG_PROPS);
-        setSourcePath(sourcePath);
+        Properties properties = PropsUtil.loadProps(vmPath +Constant.CONFIG_PROPS);
+        setVmPath(vmPath);
         setOutputPath(outputPath);
 
         setDriver(PropsUtil.getString(properties, Constant.JDBC_DRIVER));
@@ -54,6 +54,7 @@ public class ConfigContext {
         setTargetPackage(PropsUtil.getString(properties, Constant.TARGET_PACKAGE));
         setTargetEntity(PropsUtil.getString(properties, Constant.TARGET_ENTITY));
         setTargetService(PropsUtil.getString(properties, Constant.TARGET_SERVICE));
+        setPrefix(PropsUtil.getString(properties, "target.prefix"));
         setTargetServiceImpl(PropsUtil.getString(properties, Constant.TARGET_SERVICEIMPL));
         setTargetController(PropsUtil.getString(properties, Constant.TARGET_CONTROLLER));
         setTargetDao(PropsUtil.getString(properties, Constant.TARGET_DAO));

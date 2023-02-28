@@ -1,5 +1,7 @@
 package com.example.plugin;
 
+import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.StrUtil;
 import com.example.core.entity.FrontContext;
 import com.example.core.service.BaseDataService;
 import com.example.core.service.MenusService;
@@ -60,6 +62,35 @@ public class GeneratorVue extends AbstractMojo {
         buildMetaData();
         // 生成前端菜单
         buildMenus();
+        
+        buildVue();
+        
+    }
+
+    private void buildVue() {
+        buildRoute();
+        buildApi();
+        buildView();
+
+    }
+
+    private void buildView() {
+    }
+
+    private void buildApi() {
+    }
+
+    private void buildRoute() {
+        String routePath = StrUtil.removeSuffix(context.getStr("routePath"), "/");
+        String prefix = context.getStr("prefix");
+        String menusChPath = context.getStr("menusChPath");
+        String[] split = menusChPath.split("-");
+        context.put("pathChName", ArrayUtil.get(split, -1));
+        String modulesFilePath = StrUtil.format("{}/modules/{}.js", routePath, prefix);
+        String routeFilePath = StrUtil.format("{}/routes.js", routePath);
+
+
+
     }
 
     private void buildMenus() {

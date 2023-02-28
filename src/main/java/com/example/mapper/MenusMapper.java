@@ -14,7 +14,5 @@ import java.util.Map;
 @Mapper
 public interface MenusMapper {
 
-    List<JSONObject> getAllMenus();
-
     int insert(@Param("obj") UpmPermission upmPermission);
 }

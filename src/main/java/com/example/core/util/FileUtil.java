@@ -1,5 +1,7 @@
 package com.example.core.util;
 
+import cn.hutool.core.lang.Console;
+import cn.hutool.core.util.ReUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,42 +14,20 @@ import java.io.IOException;
  * @Date 2019/1/2
  * @Version 1.0
  */
-public class FileUtil {
+public class FileUtil extends cn.hutool.core.io.FileUtil {
 
     public static String getPackagePath(String targetPackage) {
-        return StringUtils.replace(targetPackage, ".", "/") + "/";
+        return StringUtils.replace(targetPackage, ".", "/");
     }
 
     /**
      * 将字符串写入文件
      */
-    public static void writeFile(String filePath, String fileName, String fileContent) {
+    public static void writeFile(String filePath, String fileContent) {
         filePath = getPackagePath(filePath);
-        File f = new File(filePath);
+        filePath = filePath.replaceAll("/(\\w+)$", ".$1");
+        File f = writeString(fileContent, filePath, "utf-8");
         System.out.println(f.getAbsoluteFile());
-
-        if (!f.exists()) {
-            f.mkdirs();
-        }
-
-        File myFile = new File(f, fileName);
-
-        FileWriter w = null;
-        try {
-            w = new FileWriter(myFile);
-
-            w.write(fileContent);
-        } catch (IOException e) {
-            throw new RuntimeException("Error creating file " + fileName, e);
-        } finally {
-            if (w != null) {
-                try {
-                    w.close();
-                } catch (IOException e) {
-                    // ignore
-                }
-            }
-        }
     }
 
 }
