@@ -21,9 +21,9 @@ public class MapperFactory {
 
         @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-            try (SqlSession session = sessionFactory.openSession()) {
+            try (SqlSession session = sessionFactory.openSession(true)) {
                 Object mapper = session.getMapper(o.getClass().getInterfaces()[0]);
-                return method.invoke(mapper,objects);
+                return method.invoke(mapper, objects);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.core.daoEntity;
 
+import cn.hutool.core.date.DateUtil;
 import com.example.core.util.StringUtil;
 import lombok.Data;
 
@@ -26,5 +27,5 @@ public class UpmPermission {
 
     private String pname;
 
-    private Date ctime = new Date();
+    private String ctime = DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss");
 }
