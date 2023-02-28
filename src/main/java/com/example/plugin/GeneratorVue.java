@@ -1,9 +1,10 @@
 package com.example.plugin;
 
-import cn.hutool.json.JSONObject;
 import com.example.core.entity.FrontContext;
 import com.example.core.service.BaseDataService;
+import com.example.core.service.MenusService;
 import com.example.factory.ServiceFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -14,6 +15,7 @@ import java.io.File;
 /**
  * @author chenwh3
  */
+@Slf4j
 public class GeneratorVue extends AbstractMojo {
 
     @Parameter(property = "project.backDir", required = true, readonly = true)
@@ -47,9 +49,9 @@ public class GeneratorVue extends AbstractMojo {
         BaseDataService dbHelper = serviceFactory.getService(BaseDataService.class);
 
         //元数据处理
-        context.put("columns", dbHelper.getColumnsInfo(context.getStr("tableName")));
+        context.put("columns", dbHelper.getColumnsInfo(context.getStr("targetTable")));
 
-        context.put("tableInfo", dbHelper.getTableInfo(context.getStr("tableName")));
+
     }
 
     public void execute(){
@@ -61,6 +63,11 @@ public class GeneratorVue extends AbstractMojo {
     }
 
     private void buildMenus() {
+        String prefix = context.getStr("prefix");
+        String targetName = context.getStr("targetName");
+        String menusChPath = context.getStr("menusChPath");
+        MenusService service = serviceFactory.getService(MenusService.class);
+        service.buildPermission(prefix, targetName, menusChPath);
 
 
     }
@@ -69,7 +76,9 @@ public class GeneratorVue extends AbstractMojo {
     public static void main(String[] args) throws MojoExecutionException, MojoFailureException {
         GeneratorVue generatorVue = new GeneratorVue();
         generatorVue.frontDir = new File("D:\\20221014\\qms-front");
+        generatorVue.configDir = "D:\\20221014\\generator-plugin-test\\src\\main\\resources\\vm\\";
         generatorVue.execute();
+
     }
 
 

@@ -167,8 +167,8 @@ public class StringUtil {
         return new UUID(random.nextLong(), random.nextLong()).toString().replace("-", "");
     }
 
-    public static void main(String[] args) {
-        System.out.println(randomUUID());
-
+    public static String toNotNullStr(Object str) {
+        return str == null ? "" : str.toString().trim();
     }
+
 }

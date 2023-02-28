@@ -6,6 +6,7 @@ import org.apache.commons.lang.StringUtils;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -24,7 +25,7 @@ public class PropsUtil {
      */
     public static Properties loadProps(String propsPath) {
         Properties props = new Properties();
-        InputStream is = null;
+        InputStreamReader is = null;
         try {
             if (StringUtils.isEmpty(propsPath)) {
                 throw new IllegalArgumentException();
@@ -33,7 +34,8 @@ public class PropsUtil {
             if (propsPath.lastIndexOf(suffix) == -1) {
                 propsPath += suffix;
             }
-            is = new FileInputStream(propsPath);
+            is = new InputStreamReader(new FileInputStream(propsPath), "utf-8");
+
             if (is != null) {
                 props.load(is);
             }

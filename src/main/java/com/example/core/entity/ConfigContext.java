@@ -21,7 +21,7 @@ public class ConfigContext {
 
     private String driver;
     private String url;
-    private String userName;
+    private String username;
     private String password;
 
 
@@ -46,7 +46,7 @@ public class ConfigContext {
 
         setDriver(PropsUtil.getString(properties, Constant.JDBC_DRIVER));
         setUrl(PropsUtil.getString(properties, Constant.JDBC_URL));
-        setUserName(PropsUtil.getString(properties, Constant.JDBC_USERNAME));
+        setUsername(PropsUtil.getString(properties, Constant.JDBC_USERNAME));
         setPassword(PropsUtil.getString(properties, Constant.JDBC_PASSWORD));
 
         setTargetTable(PropsUtil.getString(properties, Constant.TARGET_TABLE));

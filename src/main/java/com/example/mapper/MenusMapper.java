@@ -1,5 +1,7 @@
 package com.example.mapper;
 
+import cn.hutool.json.JSONObject;
+import com.example.core.daoEntity.UpmPermission;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,5 +14,7 @@ import java.util.Map;
 @Mapper
 public interface MenusMapper {
 
-    List<Map> getAllMenus(@Param("tableName") String tableName);
+    List<JSONObject> getAllMenus();
+
+    int insert(@Param("obj") UpmPermission upmPermission);
 }

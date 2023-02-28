@@ -6,6 +6,7 @@ import com.example.core.entity.TableDefinition;
 import com.example.core.util.SqlTypeUtil;
 import com.example.core.util.StringUtil;
 import com.example.mapper.BaseMapper;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.ArrayList;
 import java.util.List;

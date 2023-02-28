@@ -22,6 +22,6 @@
                g.value AS TABLE_DESC
         from sys.tables a
                  left join sys.extended_properties g on a.object_id = g.major_id AND g.minor_id = 0
-        where a.name = 'ori_pak_supplier'
+        where a.name = #{tableName}
     </select>
 </mapper>

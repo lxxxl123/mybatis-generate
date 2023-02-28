@@ -23,7 +23,7 @@ public class MybatisSession {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName(context.getDriver());
         dataSource.setUrl(context.getUrl());
-        dataSource.setUsername(context.getUserName());
+        dataSource.setUsername(context.getUsername());
         dataSource.setPassword(context.getPassword());
         dataSource.setValidationQuery("select 1");
         return dataSource;
