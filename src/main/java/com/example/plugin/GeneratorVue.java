@@ -1,8 +1,9 @@
 package com.example.plugin;
 
+import cn.hutool.json.JSONObject;
 import com.example.core.entity.FrontContext;
-import com.example.core.helper.AbstractDbHelper;
-import com.xiaoleilu.hutool.json.JSONObject;
+import com.example.core.service.BaseDataService;
+import com.example.factory.ServiceFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -11,8 +12,8 @@ import org.apache.maven.plugins.annotations.Parameter;
 import java.io.File;
 
 /**
+ * @author chenwh3
  */
-
 public class GeneratorVue extends AbstractMojo {
 
     @Parameter(property = "project.backDir", required = true, readonly = true)
@@ -31,35 +32,44 @@ public class GeneratorVue extends AbstractMojo {
 
     private FrontContext context ;
 
+    private ServiceFactory serviceFactory ;
+
     private void buildConfig() {
-        this.context = FrontContext.of(configDir);
+        context = FrontContext.of(configDir);
+        serviceFactory = new ServiceFactory(context);
     }
 
     /**
      * 获取数据库信息
      */
-    public JSONObject buildMetaData() {
-        JSONObject map = new JSONObject();
+    public void buildMetaData() {
         //初始化DB工具类
-        AbstractDbHelper dbHelper =  AbstractDbHelper.of(context);
+        BaseDataService dbHelper = serviceFactory.getService(BaseDataService.class);
 
         //元数据处理
-        map.put("columns", dbHelper.getColumnsInfo());
+        context.put("columns", dbHelper.getColumnsInfo(context.getStr("tableName")));
 
-        map.put("tableInfo", dbHelper.getTableInfo());
-        return map;
+        context.put("tableInfo", dbHelper.getTableInfo(context.getStr("tableName")));
     }
 
     public void execute(){
         buildConfig();
+        // 获取数据库信息
+        buildMetaData();
+        // 生成前端菜单
+        buildMenus();
+    }
 
-        JSONObject metaData = buildMetaData();
+    private void buildMenus() {
+
+
     }
 
 
-
     public static void main(String[] args) throws MojoExecutionException, MojoFailureException {
-        new GeneratorVue().execute();
+        GeneratorVue generatorVue = new GeneratorVue();
+        generatorVue.frontDir = new File("D:\\20221014\\qms-front");
+        generatorVue.execute();
     }
 
 

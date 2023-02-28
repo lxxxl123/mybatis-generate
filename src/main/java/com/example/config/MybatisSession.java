@@ -18,7 +18,6 @@ import java.io.File;
  */
 public class MybatisSession {
 
-    private static SqlSessionFactory sessionFactory ;
 
     private static DataSource initDataSource(DriverContext context) {
         BasicDataSource dataSource = new BasicDataSource();
@@ -38,20 +37,19 @@ public class MybatisSession {
         Environment environment = new Environment("dev", transactionFactory, dataSource);
         Configuration configuration = new Configuration(environment);
 
-        File file = new File(MybatisSession.class.getResource("/mapper/").getFile());
+        File file = new File(MybatisSession.class.getResource("/ms-mapper/").getFile());
 
         for (String s : file.list()) {
             String name = new File(s).getName();
-            XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(MybatisSession.class.getResourceAsStream("/mapper/" + name)
+            XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(MybatisSession.class.getResourceAsStream("/ms-mapper/" + name)
                     , configuration
-                    , "/mapper/" + name
+                    , "/ms-mapper/" + name
                     , configuration.getSqlFragments());
             xmlMapperBuilder.parse();
         }
 
 
-
-        sessionFactory = new SqlSessionFactoryBuilder().build(configuration);
-        return sessionFactory;
+        return new SqlSessionFactoryBuilder().build(configuration);
     }
+
 }

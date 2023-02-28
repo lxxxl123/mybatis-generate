@@ -10,9 +10,7 @@ import java.util.Map;
  * @author chenwh3
  */
 @Mapper
-public interface MsMapper {
+public interface MenusMapper {
 
-    List<Map> getColumnsInfo(@Param("tableName") String tableName);
-
-    Map getTableInfo(@Param("tableName") String tableName);
+    List<Map> getAllMenus(@Param("tableName") String tableName);
 }

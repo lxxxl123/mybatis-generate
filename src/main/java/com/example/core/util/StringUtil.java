@@ -2,6 +2,8 @@ package com.example.core.util;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -158,5 +160,15 @@ public class StringUtil {
             displayName = StringUtil.firstToUpper(str);
         }
         return displayName;
+    }
+
+    public static String randomUUID() {
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        return new UUID(random.nextLong(), random.nextLong()).toString().replace("-", "");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(randomUUID());
+
     }
 }

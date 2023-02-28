@@ -1,12 +1,13 @@
 package com.example.plugin;
 
+import cn.hutool.core.convert.Convert;
+import cn.hutool.json.JSONObject;
 import com.example.core.entity.ConfigContext;
-import com.example.core.helper.AbstractDbHelper;
+import com.example.core.service.BaseDataService;
 import com.example.core.service.Callback;
 import com.example.core.util.FileUtil;
 import com.example.core.util.VelocityUtil;
-import com.xiaoleilu.hutool.convert.Convert;
-import com.xiaoleilu.hutool.json.JSONObject;
+import com.example.factory.ServiceFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -32,6 +33,9 @@ public class GeneratorMojo extends AbstractMojo {
     @Parameter(readonly = false, defaultValue = "")
     private String configDir = "";
 
+    private ServiceFactory serviceFactory ;
+
+
     private String getResource(){
         return String.format("%s/src/main/resources/", basedir.getAbsolutePath());
     }
@@ -43,12 +47,13 @@ public class GeneratorMojo extends AbstractMojo {
     public JSONObject buildMetaData(ConfigContext configContext) {
         JSONObject map = new JSONObject();
         //初始化DB工具类
-        AbstractDbHelper dbHelper =  AbstractDbHelper.of(configContext);
+        BaseDataService baseDataService = serviceFactory.getService(BaseDataService.class);
 
         //元数据处理
-        map.put("columns", dbHelper.getColumnsInfo());
+        map.put("columns", baseDataService.getColumnsInfo(configContext.getTargetTable()));
 
-        map.put("tableInfo", dbHelper.getTableInfo());
+        map.put("tableInfo", baseDataService.getTableInfo(configContext.getTargetTable()));
+
         return map;
     }
 
@@ -59,6 +64,8 @@ public class GeneratorMojo extends AbstractMojo {
             ConfigContext configContext = new ConfigContext(configDir, getOutputPath());
 
             System.out.printf("入参 basedir = %s , configDir = %s\n", basedir, configDir);
+
+            serviceFactory = new ServiceFactory(configContext);
 
             JSONObject metaMap = buildMetaData(configContext);
 

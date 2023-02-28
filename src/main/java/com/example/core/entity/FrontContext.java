@@ -1,7 +1,7 @@
 package com.example.core.entity;
 
 import com.example.core.util.PropsUtil;
-import com.xiaoleilu.hutool.json.JSONObject;
+import cn.hutool.json.JSONObject;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
