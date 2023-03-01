@@ -9,7 +9,6 @@ import com.example.core.service.Callback;
 import com.example.core.util.FileUtil;
 import com.example.core.util.VelocityUtil;
 import com.example.factory.ServiceFactory;
-import com.example.factory.VelocityFactory;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -58,7 +57,7 @@ public class GeneratorMojo extends AbstractMojo {
     }
 
 
-    public void execute() throws MojoExecutionException, MojoFailureException {
+    public void execute() throws MojoExecutionException {
         try {
             //得到配置文件对象 将指定输出路径与读取资源文件路径
             ConfigContext configContext = new ConfigContext(vmPath, getOutputPath());
@@ -107,7 +106,7 @@ public class GeneratorMojo extends AbstractMojo {
 
     public static void doGenerator(ConfigContext configContext, JSONObject metaMap, Callback callback) {
         //配置velocity的资源加载路径
-        VelocityFactory.init(configContext.getVmPath());
+        VelocityUtil.init(configContext.getVmPath());
 
         //封装velocity数据
         VelocityContext context = new VelocityContext();

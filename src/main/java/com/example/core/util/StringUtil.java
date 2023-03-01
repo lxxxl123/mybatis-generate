@@ -1,5 +1,6 @@
 package com.example.core.util;
 
+import cn.hutool.core.util.StrUtil;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.UUID;
@@ -169,6 +170,16 @@ public class StringUtil {
 
     public static String toNotNullStr(Object str) {
         return str == null ? "" : str.toString().trim();
+    }
+
+    public static String merge(String main, String part, Pattern pattern) {
+        Matcher matcher = pattern.matcher(main);
+        StringBuffer sb = new StringBuffer();
+        if (matcher.find()) {
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(part));
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
 }

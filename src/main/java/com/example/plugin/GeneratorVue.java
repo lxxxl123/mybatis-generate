@@ -1,10 +1,16 @@
 package com.example.plugin;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
 import com.example.core.entity.FrontContext;
 import com.example.core.service.BaseDataService;
 import com.example.core.service.MenusService;
+import com.example.core.util.StringUtil;
+import com.example.core.util.VelocityUtil;
 import com.example.factory.ServiceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.maven.plugin.AbstractMojo;
@@ -13,6 +19,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.util.regex.Pattern;
 
 /**
  * @author chenwh3
@@ -40,7 +47,8 @@ public class GeneratorVue extends AbstractMojo {
 
     private void buildConfig() {
         context = FrontContext.of(configDir);
-        serviceFactory = new ServiceFactory(context);
+        serviceFactory = new ServiceFactory(context.getBase());
+        VelocityUtil.init(configDir);
     }
 
     /**
@@ -50,8 +58,9 @@ public class GeneratorVue extends AbstractMojo {
         //初始化DB工具类
         BaseDataService dbHelper = serviceFactory.getService(BaseDataService.class);
 
+        JSONObject data = context.getData();
         //元数据处理
-        context.put("columns", dbHelper.getColumnsInfo(context.getStr("targetTable")));
+        data.put("columns", dbHelper.getColumnsInfo(context.getBase().getStr("targetTable")));
 
 
     }
@@ -68,9 +77,18 @@ public class GeneratorVue extends AbstractMojo {
     }
 
     private void buildVue() {
-        buildRoute();
-        buildApi();
-        buildView();
+        JSONObject base = context.getBase();
+        JSONObject data = context.getData();
+        String menusChPath = base.getStr("menusChPath");
+
+        // 生成菜单名
+        String[] split = menusChPath.split("-");
+        Object menusName = ArrayUtil.get(split, -1);
+        data.put("pathChName", menusName);
+
+        buildRoute("routeConfig");
+//        buildApi();
+//        buildView();
 
     }
 
@@ -80,23 +98,36 @@ public class GeneratorVue extends AbstractMojo {
     private void buildApi() {
     }
 
-    private void buildRoute() {
-        String routePath = StrUtil.removeSuffix(context.getStr("routePath"), "/");
-        String prefix = context.getStr("prefix");
-        String menusChPath = context.getStr("menusChPath");
-        String[] split = menusChPath.split("-");
-        context.put("pathChName", ArrayUtil.get(split, -1));
-        String modulesFilePath = StrUtil.format("{}/modules/{}.js", routePath, prefix);
-        String routeFilePath = StrUtil.format("{}/routes.js", routePath);
+    private void buildRoute(String buildName) {
+        JSONObject base = context.getBase();
+        JSONObject data = context.getData();
+        JSONObject config = context.getVueBuilder().getJSONObject(buildName);
+        String routePath = CollUtil.join(config.getJSONArray("path"),"");
+        String replaceRange = config.getStr("replaceRange");
+        String condition = config.getStr("condition");
+        String vm = base.getStr("vm");
+        String replaceVm = config.getStr("replaceVm");
 
 
-
+        File file = new File(routePath);
+        if (!file.exists()) {
+            VelocityUtil.write(routePath, vm, data);
+        } else {
+            String content = FileUtil.readString(file, "utf-8");
+            if (ReUtil.contains(condition, content)) {
+                return;
+            }
+            String part = VelocityUtil.render(replaceVm, data);
+            content = StringUtil.merge(content, part, Pattern.compile(replaceRange));
+            FileUtil.writeString(content, routePath, "utf-8");
+        }
     }
 
     private void buildMenus() {
-        String prefix = context.getStr("prefix");
-        String targetName = context.getStr("targetName");
-        String menusChPath = context.getStr("menusChPath");
+        JSONObject base = context.getBase();
+        String prefix = base.getStr("prefix");
+        String targetName = base.getStr("targetName");
+        String menusChPath = base.getStr("menusChPath");
         MenusService service = serviceFactory.getService(MenusService.class);
         service.buildPermission(prefix, targetName, menusChPath);
 
