@@ -176,7 +176,7 @@ public class StringUtil {
         Matcher matcher = pattern.matcher(main);
         StringBuffer sb = new StringBuffer();
         if (matcher.find()) {
-            matcher.appendReplacement(sb, Matcher.quoteReplacement(part));
+            matcher.appendReplacement(sb, part);
         }
         matcher.appendTail(sb);
         return sb.toString();

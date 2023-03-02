@@ -1,0 +1,41 @@
+import request from '@/plugin/axios'
+
+export function batchAdd (data) {
+  return request({
+    url: '/qms/${targetName}/batchAdd',
+    method: 'post',
+    data
+  })
+}
+
+export function update (data) {
+  return request({
+    url: '/qms/${targetName}/update',
+    method: 'post',
+    data
+  })
+}
+
+export function merge (data) {
+  return request({
+    url: '/qms/${targetName}/merge',
+    method: 'post',
+    data
+  })
+}
+
+export function search (data) {
+  return request({
+    url: '/qms//${targetName}/search',
+    method: 'post',
+    data
+  })
+}
+
+export function batchDelete (data) {
+  return request({
+    url: '/qms//${targetName}/batchDelete',
+    method: 'post',
+    data
+  })
+}

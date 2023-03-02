@@ -1,17 +1,16 @@
 package com.example.core.service;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.example.core.entity.ColumnDefinition;
 import com.example.core.entity.TableDefinition;
 import com.example.core.util.SqlTypeUtil;
 import com.example.core.util.StringUtil;
 import com.example.mapper.BaseMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author chenwh3
@@ -32,17 +31,29 @@ public class BaseDataService {
             String type = rowMap.getStr("DATA_TYPE");
             Integer order = rowMap.getInt("ORDINAL_POSITION");
             String remark = rowMap.getStr("REMARK");
+            String defaultVal = rowMap.getStr("COLUMN_DEFAULT");
+
             String[] temp = type.split("\\s+");
 
 
+            if (defaultVal != null) {
+                columnDefinition.setDefaultVal(StrUtil.unWrap(defaultVal, "(", ")"));
+            }
             columnDefinition.setPk(Objects.equals(order, 1));
             columnDefinition.setColumnName(columnName);
 
+            if (remark.contains("; ")) {
+                Map<String,String> map = new HashMap<>();
+                String[] vals = remark.split(";")[1].split("\\s*,\\s*");
+                for (String val : vals) {
+                    String[] entry = val.split("\\s*-\\s*");
+                    map.put(entry[0], entry[1]);
+                }
+                columnDefinition.setEnumMap(map);
+            }
             String selectSql = columnName;
             if (type.startsWith("date")) {
                 selectSql = String.format("CONVERT(varchar(19), %s, 120) as %s", columnName, columnName);
-            } else if ("isDel".equals(columnName)) {
-                selectSql = "case when isDel=1 then N'是' else N'否' end as isDelStr ,\n\t\tisDel";
             }
             columnDefinition.setSelectSql(selectSql);
 

@@ -5,22 +5,36 @@ base:
   url: jdbc:p6spy:jtds:sqlserver://10.254.2.25:1855;DatabaseName=qc;useLOBs=false
   username: sa
   password: ht123
-  targetTable: ori_pak_supplier
-  targetName: oriPakSupplier
+  targetTable: ori_pak_supplier  # 表名
+  targetName: &targetName
+    oriPakSupplier  # 实体名
   prefix: &prefix
-    oriPak
-  menusChPath: 基础数据-原包材第三方检验基础数据-生产商信息维护
+    oriPak  #路径名
+  menusChPath: 基础数据-原包材第三方检验基础数据-生产商信息维护 # 菜单
 
 vueBuilder:
   routeConfig:
     path: [ D:/20221014/qms-front/src/router/modules/, *prefix , .js ]
     vm: front/route-module.vm
-    condition: 生产商信息维护页面123
+    condition: [ 生产商信息维护 ] #菜单
     replaceRange: '\h*}\v{1,2}(?=\s{2}])'
     replaceVm: front/route-module-part.vm
-  viewConfig:
-    path: D:/20221014/qms-front/src/views/
+
+  routeFormConfig:
+    path: [ D:\20221014\qms-front\src\router\routes.js ]
+    condition: [ 'import ', *prefix , Form ]
+    replace:
+      -
+        range: (import \w+Form.*')\v{4}
+        vm: front/route-form-1.vm
+      -
+        range: (\w+Form)\v{2}]
+        vm: front/route-form-2.vm
   apiConfig:
-    path: D:/20221014/qms-front/src/api/
+    path: [ D:/20221014/qms-front/src/api/, *prefix , / , *targetName ,.js  ]
+    vm: front/api.vm
+  viewConfig:
+    path: [ D:/20221014/qms-front/src/views/, *prefix , / , *targetName , / , index.vue  ]
+    vm: front/views.vm
 
 

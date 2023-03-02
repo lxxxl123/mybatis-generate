@@ -69,7 +69,7 @@ public class GeneratorMojo extends AbstractMojo {
             JSONObject metaMap = buildMetaData(configContext);
 
             String src = configContext.getOutputPath();
-            String qms = configContext.getTargetPackage();
+            String qms = configContext.getTargetPackage().replace(".", "/");
             String service = configContext.getTargetService();
             String entity = configContext.getTargetEntity();
             String controller = configContext.getTargetController();

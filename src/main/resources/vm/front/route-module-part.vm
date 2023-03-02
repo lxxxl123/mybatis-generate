@@ -2,7 +2,7 @@
     // ****************** ${pathChName}页面 ******************/
     {
       path: 'define',
-      name: `${pre}${targetName}`,
+      name: `\${pre}${targetName}`,
       component: _import('${prefix}/${targetName}'),
       meta: {
         ...meta,

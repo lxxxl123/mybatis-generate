@@ -23,7 +23,6 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
      * 将字符串写入文件
      */
     public static void writeFile(String filePath, String fileContent) {
-
         File f = writeString(fileContent, filePath, "utf-8");
         System.out.println(f.getAbsoluteFile());
     }

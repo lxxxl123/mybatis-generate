@@ -4,9 +4,9 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReUtil;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.example.core.entity.FrontContext;
+import com.example.core.entity.VmReplacePo;
 import com.example.core.service.BaseDataService;
 import com.example.core.service.MenusService;
 import com.example.core.util.StringUtil;
@@ -19,6 +19,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -34,16 +36,10 @@ public class GeneratorVue extends AbstractMojo {
 
     private String configDir = "";
 
-    private String outDir = "";
 
-    private String getResource(){
-        return String.format("%s/src/main/resources/", "");
-    }
+    private FrontContext context;
 
-
-    private FrontContext context ;
-
-    private ServiceFactory serviceFactory ;
+    private ServiceFactory serviceFactory;
 
     private void buildConfig() {
         context = FrontContext.of(configDir);
@@ -65,15 +61,15 @@ public class GeneratorVue extends AbstractMojo {
 
     }
 
-    public void execute(){
+    public void execute() {
         buildConfig();
         // 获取数据库信息
         buildMetaData();
         // 生成前端菜单
         buildMenus();
-        
+
         buildVue();
-        
+
     }
 
     private void buildVue() {
@@ -86,40 +82,50 @@ public class GeneratorVue extends AbstractMojo {
         Object menusName = ArrayUtil.get(split, -1);
         data.put("pathChName", menusName);
 
-        buildRoute("routeConfig");
-//        buildApi();
-//        buildView();
+//        buildRoute("routeConfig");
+//        buildRoute("routeFormConfig");
+//        buildRoute("apiConfig");
+        buildRoute("viewConfig");
 
     }
 
-    private void buildView() {
-    }
-
-    private void buildApi() {
-    }
 
     private void buildRoute(String buildName) {
         JSONObject base = context.getBase();
         JSONObject data = context.getData();
         JSONObject config = context.getVueBuilder().getJSONObject(buildName);
-        String routePath = CollUtil.join(config.getJSONArray("path"),"");
-        String replaceRange = config.getStr("replaceRange");
-        String condition = config.getStr("condition");
-        String vm = base.getStr("vm");
-        String replaceVm = config.getStr("replaceVm");
+        String routePath = CollUtil.join(config.getJSONArray("path"), "");
+        String vm = config.getStr("vm");
 
+        String condition = null;
+        if (config.containsKey("condition")) {
+            condition = CollUtil.join(config.getJSONArray("condition"), "");
+        }
+        List<VmReplacePo> replaceList = new ArrayList<>();
+        if (config.containsKey("replace")) {
+            replaceList = config.getJSONArray("replace").toList(VmReplacePo.class);
+        } else {
+            String replaceRange = config.getStr("replaceRange");
+            String replaceVm = config.getStr("replaceVm");
+            if (StringUtil.isNotEmpty(replaceVm)) {
+                VmReplacePo vmReplacePo = new VmReplacePo(replaceRange, replaceVm);
+                replaceList.add(vmReplacePo);
+            }
+        }
 
         File file = new File(routePath);
-        if (!file.exists()) {
+        if (!file.exists() || CollUtil.isEmpty(replaceList)) {
             VelocityUtil.write(routePath, vm, data);
         } else {
             String content = FileUtil.readString(file, "utf-8");
             if (ReUtil.contains(condition, content)) {
                 return;
             }
-            String part = VelocityUtil.render(replaceVm, data);
-            content = StringUtil.merge(content, part, Pattern.compile(replaceRange));
-            FileUtil.writeString(content, routePath, "utf-8");
+            for (VmReplacePo vmPo : replaceList) {
+                String part = VelocityUtil.render(vmPo.getVm(), data);
+                content = StringUtil.merge(content, part, Pattern.compile(vmPo.getRange()));
+                FileUtil.writeString(content, routePath, "utf-8");
+            }
         }
     }
 
@@ -130,8 +136,6 @@ public class GeneratorVue extends AbstractMojo {
         String menusChPath = base.getStr("menusChPath");
         MenusService service = serviceFactory.getService(MenusService.class);
         service.buildPermission(prefix, targetName, menusChPath);
-
-
     }
 
 

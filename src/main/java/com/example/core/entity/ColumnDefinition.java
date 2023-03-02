@@ -1,7 +1,9 @@
 package com.example.core.entity;
 
-import com.example.core.util.StringUtil;
 import lombok.Data;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 表字段信息
@@ -34,6 +36,11 @@ public class ColumnDefinition {
 	private String javaType;
 	private String javaFieldName;
 	private String jdbcType;
+
+	private String defaultVal;
+
+	private Map<String, String> enumMap = new HashMap<>(0);
+
 	/**
 	 * 备注
 	 */

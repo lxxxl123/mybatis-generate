@@ -1,0 +1,127 @@
+<template>
+  <el-container style="background-color: #ffffff; height: calc(100vh - 100px); width: 100% ; min-height: 400px">
+    <el-main>
+      <vxe-page-grid ref="xGrid"
+                     :columns="columns"
+                     :form-data="formData"
+                     size="mini"
+                     :search="searchMethod"
+                     overflow
+                     :rowStyle="rowStyle"
+      >
+        <template #btns>
+          <vxe-search-btn ref="searchForm" :search-form="searchForm" height="auto" width="500" :submit="searchByCond"/>
+          <vxe-export-btn :x-grid="$refs.xGrid"
+                          bean-name="${targetName}ServiceImpl}"
+                          :form-data="formData"
+                          :title="title"
+                          :start-index="2"
+          />
+          <vxe-grid-cond-checkbox ref="showAllBox" :x-grid="$refs.xGrid" un-check-sql="isDel = 0" :after-click="showAll"/>
+          <el-tooltip placement="top">
+            <div slot="content" >颜色说明:
+              <br/><span :style="'color: '+ grey">灰色: </span>被删除行
+            </div>
+            <vxe-button  size="mini" type="text" status="warning">提示</vxe-button>
+          </el-tooltip>
+        </template>
+      </vxe-page-grid>
+    </el-main>
+  </el-container>
+</template>
+<script>
+import * as service from '@/api/${prefix}/${targetName}'
+import VxeExportBtn from '@/views/template/vxe-export-btn'
+import VxePageGrid from '@/views/template/vxe-page-grid'
+import VxeSearchBtn from '@/views/template/vxe-search-btn'
+import gridMethod from '@/views/template/mixin/gridMethod'
+import colorInfo from '@/views/template/mixin/colorInfo'
+import VxeModifyBtn from '@/views/template/vxe-modify-btn'
+import VxeGridCondCheckbox from '@/views/template/other/vxe-grid-cond-checkbox'
+
+export default {
+  name: '${prefix}-${targetName}',
+  components: {  VxeGridCondCheckbox, VxeModifyBtn, VxeSearchBtn, VxePageGrid, VxeExportBtn },
+  data: function () {
+    return {
+      title: '${pathChName}',
+      formData: {
+        condition: '',
+        pageIndex: '',
+        pageSize: '',
+        order: 'nid'
+      },
+      searchMethod: service.search,
+      updateMethod: service.update,
+      mergeMethod: service.merge,
+      batchAddMethod: service.batchAdd,
+      batchDeleteMethod: service.batchDelete,
+      searchForm: [
+        { field: 'ciniSmp', title: '实验室简码', type: 'select', options: 'A-Z', rules: [{ required: true }] },
+        { field: 'cno', title: '样品单号', type: 'vxe-boot-operation-ipt', operation: 'likeRight' },
+        { field: 'verwmerkm', title: '特性编码', type: 'vxe-vtcode-pulldown', propMap: [ { key: 'verwmerkm', val: 'cno' } ] },
+        { field: 'prueflos', param: 'paral.prueflos', title: '检验批号', type: 'vxe-boot-operation-ipt', operation: 'likeRight' },
+        { field: 'cvtUser', title: '检验人员', type: 'vxe-poweruser-pulldown', propMap: [ { key: 'cvtUser', val: 'cname' } ] },
+        { field: 'matnr', title: '物料号', type: 'vxe-matnr-pulldown', propMap: [ { key: 'matnr', val: 'matnr' } ] },
+        { field: 'dclsDate', title: '检验日期', type: 'vxe-range-picker', props: { type: 'date' } }
+      ],
+      columns: [
+        { type: 'seq', width: 50, fixed: 'left' },
+        { type: 'checkbox', width: 45, fixed: 'left' },
+        { field: 'ktextmat', title: '物料名称', minWidth: 155 },
+        { field: 'cno', title: '样品编号', sortable: true },
+        { field: 'vtDesc', title: '特性描述', minWidth: 170 },
+        { field: 'messwerte', title: '检验结果', sortable: true },
+        { field: 'clevel', title: '缺陷等级' },
+        { field: 'kurztext2', title: '加权', minWidth: 120 },
+        { field: 'oriRecord', title: '原始记录', minWidth: 300, editRender: { enabled: true, name: '$input', props: { editable: false } } },
+        { field: 'dvtDate', title: '检验日期', minWidth: 150, sortable: true },
+        { field: 'cvtUser', title: '检验人员', sortable: true },
+        { field: 'verwmerkm', title: '特性编码' },
+        { field: 'cverify', title: '检验标准', minWidth: 150 },
+        { field: 'prueflos', title: '检验批号', minWidth: 120 },
+        { field: 'caudit', params: { property: 'paral.caudit' }, title: '复核人', sortable: true, visible: false },
+        { field: 'daudit', params: { property: 'paral.daudit' }, title: '复核日期', minWidth: 150, sortable: true, visible: false },
+        { field: 'lauditStr', title: '已复核', minWidth: 120, visible: false }
+      ]
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.search()
+    })
+  },
+  mixins: [
+    gridMethod,
+    colorInfo
+  ],
+  methods: {
+    rowStyle (row) {
+      let rowStyle = {}
+      let data = row.row
+      if (data.isDel) {
+        rowStyle.background = this.grey
+      }
+      return rowStyle
+    },
+    showAll () {
+      if (!this.$refs.searchForm.tryValidate()) {
+        return
+      }
+      let condition = this.$refs.searchForm.getCondition()
+      this.searchByCond(condition)
+    },
+    auditValidate ({ rows }) {
+      for (let row of rows) {
+        if (row.isDel) {
+          throw new Error('已删除行无法重复删除')
+        }
+      }
+      return true
+    },
+  },
+  computed: {},
+  watch: {
+  }
+}
+</script>
