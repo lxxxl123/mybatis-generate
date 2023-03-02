@@ -11,13 +11,42 @@
       >
         <template #btns>
           <vxe-search-btn ref="searchForm" :search-form="searchForm" height="auto" width="500" :submit="searchByCond"/>
+          <vxe-add-btn
+                  :title="'新增'+entity"
+                  :form-data="addForm"
+                  :before-show="beforeShowAdd"
+                  :add-method="batchAddMethod"
+                  :after-add="search"
+          />
+          <vxe-update-btn
+                  :x-grid="$refs.xGrid"
+                  :title="'调整'+entity"
+                  :form-data="updateForm"
+                  :auto-reset="true"
+                  :before-show="beforeShowUpdate"
+                  :param-convert="({form})=>form"
+                  :update-method="updateMethod"
+                  :after-add="search"
+          />
+          <vxe-delete-btn
+                  :x-grid="$refs.xGrid"
+                  :delete-method="batchDeleteMethod"
+                  :after-delete="search"
+          />
+          <vxe-import-btn
+                  :x-grid="$refs.xGrid"
+                  :title="entity+'导入模板'"
+                  :form-data="addForm"
+                  :add-method="mergeMethod"
+                  :after-add="trySearch"
+          />
           <vxe-export-btn :x-grid="$refs.xGrid"
-                          bean-name="${targetName}ServiceImpl}"
+                          bean-name="${targetName}ServiceImpl"
                           :form-data="formData"
-                          :title="title"
+                          :title="entity+'导出'"
                           :start-index="2"
           />
-          <vxe-grid-cond-checkbox ref="showAllBox" :x-grid="$refs.xGrid" un-check-sql="isDel = 0" :after-click="showAll"/>
+          <vxe-grid-cond-checkbox ref="showAllBox" :x-grid="$refs.xGrid" un-check-sql="${delCol.col} = 0" :after-click="showAll"/>
           <el-tooltip placement="top">
             <div slot="content" >颜色说明:
               <br/><span :style="'color: '+ grey">灰色: </span>被删除行
@@ -38,18 +67,23 @@ import gridMethod from '@/views/template/mixin/gridMethod'
 import colorInfo from '@/views/template/mixin/colorInfo'
 import VxeModifyBtn from '@/views/template/vxe-modify-btn'
 import VxeGridCondCheckbox from '@/views/template/other/vxe-grid-cond-checkbox'
+import VxeAddBtn from '@/views/template/vxe-add-btn'
+import VxeUpdateBtn from '@/views/template/vxe-update-btn'
+import VxeImportBtn from '@/views/template/vxe-import-btn'
+import VxeDeleteBtn from '@/views/template/vxe-delete-btn'
 
 export default {
   name: '${prefix}-${targetName}',
-  components: {  VxeGridCondCheckbox, VxeModifyBtn, VxeSearchBtn, VxePageGrid, VxeExportBtn },
+  components: {  VxeAddBtn , VxeUpdateBtn , VxeImportBtn ,VxeGridCondCheckbox,VxeDeleteBtn, VxeModifyBtn, VxeSearchBtn, VxePageGrid, VxeExportBtn },
   data: function () {
     return {
       title: '${pathChName}',
+      entity: '${entityName}',
       formData: {
         condition: '',
         pageIndex: '',
         pageSize: '',
-        order: 'nid'
+        order: ''
       },
       searchMethod: service.search,
       updateMethod: service.update,
@@ -57,32 +91,52 @@ export default {
       batchAddMethod: service.batchAdd,
       batchDeleteMethod: service.batchDelete,
       searchForm: [
-        { field: 'ciniSmp', title: '实验室简码', type: 'select', options: 'A-Z', rules: [{ required: true }] },
-        { field: 'cno', title: '样品单号', type: 'vxe-boot-operation-ipt', operation: 'likeRight' },
-        { field: 'verwmerkm', title: '特性编码', type: 'vxe-vtcode-pulldown', propMap: [ { key: 'verwmerkm', val: 'cno' } ] },
-        { field: 'prueflos', param: 'paral.prueflos', title: '检验批号', type: 'vxe-boot-operation-ipt', operation: 'likeRight' },
-        { field: 'cvtUser', title: '检验人员', type: 'vxe-poweruser-pulldown', propMap: [ { key: 'cvtUser', val: 'cname' } ] },
-        { field: 'matnr', title: '物料号', type: 'vxe-matnr-pulldown', propMap: [ { key: 'matnr', val: 'matnr' } ] },
-        { field: 'dclsDate', title: '检验日期', type: 'vxe-range-picker', props: { type: 'date' } }
+#foreach($col in $searchCols)##
+        { field: '${col.field}', title: '${col.title}' ##
+#if($col.isTime), type: 'vxe-range-picker', props: { type: 'date' } ##
+#elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
+#elseif($col.cusMsg), $col.cusMsg ##
+#else, type: 'vxe-boot-operation-ipt', operation: 'likeRight' ##
+#end##
+} #if($foreach.hasNext) ,#end
+
+#end
+      ],
+      addForm: [
+#foreach($col in $addCols)##
+        { field: '${col.field}', title: '${col.title}' ##
+#if($col.isTime), props: { type: 'date' } ##
+#elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
+#else ##
+#end##
+} #if($foreach.hasNext) ,#end
+
+#end
+      ],
+      updateForm: [
+#foreach($col in $addCols)##
+        { field: '${col.field}', title: '${col.title}' ##
+#if($col.isTime), props: { type: 'date' } ##
+#elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
+#else ##
+#end##
+} #if($foreach.hasNext) ,#end
+
+#end
       ],
       columns: [
         { type: 'seq', width: 50, fixed: 'left' },
         { type: 'checkbox', width: 45, fixed: 'left' },
-        { field: 'ktextmat', title: '物料名称', minWidth: 155 },
-        { field: 'cno', title: '样品编号', sortable: true },
-        { field: 'vtDesc', title: '特性描述', minWidth: 170 },
-        { field: 'messwerte', title: '检验结果', sortable: true },
-        { field: 'clevel', title: '缺陷等级' },
-        { field: 'kurztext2', title: '加权', minWidth: 120 },
-        { field: 'oriRecord', title: '原始记录', minWidth: 300, editRender: { enabled: true, name: '$input', props: { editable: false } } },
-        { field: 'dvtDate', title: '检验日期', minWidth: 150, sortable: true },
-        { field: 'cvtUser', title: '检验人员', sortable: true },
-        { field: 'verwmerkm', title: '特性编码' },
-        { field: 'cverify', title: '检验标准', minWidth: 150 },
-        { field: 'prueflos', title: '检验批号', minWidth: 120 },
-        { field: 'caudit', params: { property: 'paral.caudit' }, title: '复核人', sortable: true, visible: false },
-        { field: 'daudit', params: { property: 'paral.daudit' }, title: '复核日期', minWidth: 150, sortable: true, visible: false },
-        { field: 'lauditStr', title: '已复核', minWidth: 120, visible: false }
+        #foreach($col in $searchCols)##
+{ field: '${col.field}', title: '${col.title}' ##
+#if($col.isTime) ##
+#elseif($col.enumMap.size()>0), filters:  [#foreach($para in ${col.enumMap.entrySet()}) { label: '$para.value', value: '${para.key}' } #if($foreach.hasNext),#end #end ] ##
+#else ##
+#end##
+#if($col.col!=$col.field), params: { property: '${col.col}' }#end##
+, sortable: true } #if($foreach.hasNext) ,#end
+
+#end
       ]
     }
   },
@@ -111,13 +165,9 @@ export default {
       let condition = this.$refs.searchForm.getCondition()
       this.searchByCond(condition)
     },
-    auditValidate ({ rows }) {
-      for (let row of rows) {
-        if (row.isDel) {
-          throw new Error('已删除行无法重复删除')
-        }
-      }
-      return true
+    beforeShowAdd ({ form }) {
+    },
+    beforeShowUpdate ({ form, row }) {
     },
   },
   computed: {},

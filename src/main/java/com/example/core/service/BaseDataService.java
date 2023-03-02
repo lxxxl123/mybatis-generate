@@ -32,6 +32,7 @@ public class BaseDataService {
             Integer order = rowMap.getInt("ORDINAL_POSITION");
             String remark = rowMap.getStr("REMARK");
             String defaultVal = rowMap.getStr("COLUMN_DEFAULT");
+            boolean isIndentity = rowMap.getBool("isIndentity");
 
             String[] temp = type.split("\\s+");
 
@@ -47,7 +48,7 @@ public class BaseDataService {
                 String[] vals = remark.split(";")[1].split("\\s*,\\s*");
                 for (String val : vals) {
                     String[] entry = val.split("\\s*-\\s*");
-                    map.put(entry[0], entry[1]);
+                    map.put(entry[0].trim(), entry[1].trim());
                 }
                 columnDefinition.setEnumMap(map);
             }
@@ -57,7 +58,7 @@ public class BaseDataService {
             }
             columnDefinition.setSelectSql(selectSql);
 
-            columnDefinition.setIdentity(temp.length > 1);
+            columnDefinition.setIdentity(isIndentity);
             columnDefinition.setType(temp[0]);
             columnDefinition.setRemark(remark);
             columnDefinition.setJavaType(SqlTypeUtil.convertToJavaBoxType(temp[0]));
