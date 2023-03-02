@@ -6,10 +6,11 @@
                      :form-data="formData"
                      size="mini"
                      :search="searchMethod"
+                     init-cond="${delCol.col} = 0"
                      overflow
                      :rowStyle="rowStyle"
       >
-        <template #btns>
+      <template #btns>
           <vxe-search-btn ref="searchForm" :search-form="searchForm" height="auto" width="500" :submit="searchByCond"/>
           <vxe-add-btn
                   :title="'新增'+entity"
@@ -27,6 +28,24 @@
                   :param-convert="({form})=>form"
                   :update-method="updateMethod"
                   :after-add="search"
+          />
+          <vxe-modify-btn
+                  :x-grid="$refs.xGrid"
+                  icon="el-icon-check"
+                  status="warning"
+                  name="生效"
+                  :method="mergeMethod"
+                  :param-convert="({rows})=> { rows.forEach(e=>e.${delCol.col} = 0) ; return rows }"
+                  :after-modify="search"
+          />
+          <vxe-modify-btn
+                  :x-grid="$refs.xGrid"
+                  icon="el-icon-delete"
+                  status="danger"
+                  name="废止"
+                  :method="mergeMethod"
+                  :param-convert="({rows})=> { rows.forEach(e=>e.${delCol.col} = 1) ; return rows }"
+                  :after-modify="search"
           />
           <vxe-delete-btn
                   :x-grid="$refs.xGrid"
@@ -92,7 +111,7 @@ export default {
       batchDeleteMethod: service.batchDelete,
       searchForm: [
 #foreach($col in $searchCols)##
-        { field: '${col.field}', title: '${col.title}' ##
+        { field: '${col.col}', title: '${col.title}' ##
 #if($col.isTime), type: 'vxe-range-picker', props: { type: 'date' } ##
 #elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
 #elseif($col.cusMsg), $col.cusMsg ##
@@ -153,7 +172,7 @@ export default {
     rowStyle (row) {
       let rowStyle = {}
       let data = row.row
-      if (data.isDel) {
+      if (data.${delCol.col}) {
         rowStyle.background = this.grey
       }
       return rowStyle

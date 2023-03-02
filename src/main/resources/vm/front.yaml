@@ -11,7 +11,7 @@ base:
   prefix: &prefix
     oriPak  #路径名
   menusChPath: 基础数据-原包材第三方检验基础数据-生产商信息维护 # 菜单
-  entityName: '包材生产商'
+  entityName: '包材生产商' # 实体中文名
 
 vueBuilder:
   routeConfig:
