@@ -133,7 +133,7 @@ export default {
 #end
       ],
       updateForm: [
-#foreach($col in $addCols)##
+#foreach($col in $updateCols)##
         { field: '${col.field}', title: '${col.title}' ##
 #if($col.isTime), props: { type: 'date' } ##
 #elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
