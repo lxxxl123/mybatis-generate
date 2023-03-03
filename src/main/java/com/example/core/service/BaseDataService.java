@@ -44,11 +44,16 @@ public class BaseDataService {
             columnDefinition.setColumnName(columnName);
 
             if (remark.contains("; ")) {
-                Map<String,String> map = new HashMap<>();
+                Map<String,String> map = new LinkedHashMap<>();
                 String[] vals = remark.split(";")[1].split("\\s*,\\s*");
                 for (String val : vals) {
                     String[] entry = val.split("\\s*-\\s*");
-                    map.put(entry[0].trim(), entry[1].trim());
+                    String key = entry[0].trim();
+                    String value = key;
+                    if (entry.length > 1) {
+                        value = entry[1].trim();
+                    }
+                    map.put(key,value);
                 }
                 columnDefinition.setEnumMap(map);
             }
