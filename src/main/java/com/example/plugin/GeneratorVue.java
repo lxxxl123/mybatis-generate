@@ -88,13 +88,12 @@ public class GeneratorVue extends AbstractMojo {
         Object menusName = ArrayUtil.get(split, -1);
         data.put("pathChName", menusName);
 
-//        buildRoute("routeConfig");
-//        buildRoute("routeFormConfig");
-//        buildRoute("apiConfig");
-
-        buildViewMetaData();
-
-        buildRoute("viewConfig");
+        buildVue("backYmlFormConfig");
+//        buildVue("routeConfig");
+//        buildVue("routeFormConfig");
+//        buildVue("apiConfig");
+//        buildViewMetaData();
+//        buildVue("viewConfig");
 
     }
 
@@ -168,7 +167,7 @@ public class GeneratorVue extends AbstractMojo {
     }
 
 
-    private void buildRoute(String buildName) {
+    private void buildVue(String buildName) {
         JSONObject base = context.getBase();
         JSONObject data = context.getData();
         JSONObject config = context.getVueBuilder().getJSONObject(buildName);

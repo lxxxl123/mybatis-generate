@@ -21,6 +21,13 @@ vueBuilder:
     replaceRange: '\h*}\v{1,2}(?=\s{2}])'
     replaceVm: front/route-module-part.vm
 
+  backYmlFormConfig:
+    path: [ D:\20221014\qms-platform\qms-service\src\main\resources\application.yml ]
+    condition: [ \/, *targetName , \/\*\*]
+    replace:
+      -
+        range: '(\s+permission: jwtFilter)'
+        vm: front/application.vm
   routeFormConfig:
     path: [ D:\20221014\qms-front\src\router\routes.js ]
     condition: [ 'import ', *prefix , Form ]
