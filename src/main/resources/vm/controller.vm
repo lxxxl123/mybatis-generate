@@ -37,22 +37,23 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
         return super.batchAdd(list);
     }
 
-    @Override
-    @ApiOperation(value = "更新", notes = "更新")
-    @PostMapping("/update")
+    @ApiOperation(value = "批量更新", notes = "批量更新")
+    @PostMapping("/batchUpdate")
     @Auth
     @RequiresPermissions("qms:$path:update")
-    public R<?> update(@RequestBody ${name} obj) {
-        return super.update(obj);
+    public R<?> batchUpdate(@RequestBody List<${name}> list) {
+        return super.batchUpdate(list);
     }
 
+
+
 #if($isMerge)##
-    @ApiOperation(value = "合并", notes = "合并")
-    @PostMapping("/merge")
+    @ApiOperation(value = "批量合并", notes = "批量合并")
+    @PostMapping("/batchMerge")
     @Auth
     @RequiresPermissions("qms:$path:update")
-    public R<?> merge(@RequestBody List<${name}> list) {
-        return R.data(service.merge(list));
+    public R<?> batchMerge(@RequestBody List<${name}> list) {
+        return R.data(service.batchMerge(list));
     }##
 
 #end

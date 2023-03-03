@@ -25,8 +25,8 @@
                   :form-data="updateForm"
                   :auto-reset="true"
                   :before-show="beforeShowUpdate"
-                  :param-convert="({form})=>form"
-                  :update-method="updateMethod"
+                  :param-convert="({form})=> [ form ]"
+                  :update-method="batchUpdateMethod"
                   :after-add="search"
           />
           <vxe-modify-btn
@@ -34,8 +34,8 @@
                   icon="el-icon-check"
                   status="warning"
                   name="生效"
-                  :method="mergeMethod"
-                  :param-convert="({rows})=> { rows.forEach(e=>e.${delCol.col} = 0) ; return rows }"
+                  :method="batchUpdateMethod"
+                  :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 0} ) "
                   :after-modify="search"
           />
           <vxe-modify-btn
@@ -43,8 +43,8 @@
                   icon="el-icon-delete"
                   status="danger"
                   name="废止"
-                  :method="mergeMethod"
-                  :param-convert="({rows})=> { rows.forEach(e=>e.${delCol.col} = 1) ; return rows }"
+                  :method="batchUpdateMethod"
+                  :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 0} ) "
                   :after-modify="search"
           />
           <vxe-delete-btn
@@ -56,7 +56,7 @@
                   :x-grid="$refs.xGrid"
                   :title="entity+'导入模板'"
                   :form-data="addForm"
-                  :add-method="mergeMethod"
+                  :add-method="batchMergeMethod"
                   :after-add="trySearch"
           />
           <vxe-export-btn :x-grid="$refs.xGrid"
@@ -105,8 +105,8 @@ export default {
         order: ''
       },
       searchMethod: service.search,
-      updateMethod: service.update,
-      mergeMethod: service.merge,
+      batchUpdateMethod: service.batchUpdate,
+      batchMergeMethod: service.batchMerge,
       batchAddMethod: service.batchAdd,
       batchDeleteMethod: service.batchDelete,
       searchForm: [

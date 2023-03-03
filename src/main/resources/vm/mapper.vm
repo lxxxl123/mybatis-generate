@@ -26,7 +26,7 @@ public interface ${name}Mapper extends BaseMapper<${name}> {
      * @param obj 行
      * @return 影响行
      */
-    int merge(@Param("list") List<${name}> obj);
+    int batchMerge(@Param("list") List<${name}> obj);
 #end
 
 #if(${buildSelect})

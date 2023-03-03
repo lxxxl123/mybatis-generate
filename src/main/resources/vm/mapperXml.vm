@@ -21,7 +21,7 @@ ${column.columnName}#if($foreach.hasNext),#end##
 
     </sql>
 #if(${isMerge})##
-    <update id="merge">
+    <update id="batchMerge">
         MERGE ${table} AS t
         USING  ( select * from (
         <foreach collection="list" item="item" index="index" separator="union all">
@@ -63,7 +63,7 @@ s.${column.columnName}##
         ${column.selectSql}#if($foreach.hasNext),
         #end#end
 
-        FROM ${table} t
+        FROM ${table} t with (nolock)
         where 1=1
         <if test="ew.sqlSegment != null and ew.sqlSegment != ''">
             and ${ew.sqlSegment}

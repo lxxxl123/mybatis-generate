@@ -22,8 +22,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
 
-    #if(${isMerge})public Integer merge(List<$name> obj){
-        return baseMapper.merge(obj);
+    #if(${isMerge})public Integer batchMerge(List<$name> obj){
+        return baseMapper.batchMerge(obj);
     }#end ##
 
 

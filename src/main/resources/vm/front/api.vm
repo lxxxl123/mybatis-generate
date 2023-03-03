@@ -26,7 +26,7 @@ export function merge (data) {
 
 export function search (data) {
   return request({
-    url: '/qms//${targetName}/search',
+    url: '/qms/${targetName}/search',
     method: 'post',
     data
   })
@@ -34,7 +34,7 @@ export function search (data) {
 
 export function batchDelete (data) {
   return request({
-    url: '/qms//${targetName}/batchDelete',
+    url: '/qms/${targetName}/batchDelete',
     method: 'post',
     data
   })
