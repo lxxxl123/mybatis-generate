@@ -1,0 +1,30 @@
+
+### sqlserver
+base:
+  driver: com.p6spy.engine.spy.P6SpyDriver
+  url: jdbc:p6spy:jtds:sqlserver://10.254.2.25:1855;DatabaseName=qc;useLOBs=false
+  username: sa
+  password: ht123
+  targetTable: ori_pak_mara  # 表名
+  targetName: &targetName # 实体名
+    oriPakMara
+  prefix: &prefix  #路径名
+    oriPak
+
+  codePath: src\main\java\
+  resourcePath: src\main\resources\
+  backEndPath: D:\20221014\qms-platform\qms-service\  #后端代码路径
+  package: com.haday.qms
+  entity: entity
+  service: service
+  serviceImpl: impl
+  controller: controller
+  dao: dao
+  mapperXmlPath: mybatis-mapper
+
+  author: chenwh3
+  isMerge: true
+  buildSelect: true
+  buildExport: true
+
+

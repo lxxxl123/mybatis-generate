@@ -7,7 +7,7 @@ import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.example.core.entity.ColumnDefinition;
-import com.example.core.entity.FrontContext;
+import com.example.core.entity.Context;
 import com.example.core.entity.VmReplacePo;
 import com.example.core.entity.front.Col;
 import com.example.core.service.BaseDataService;
@@ -43,12 +43,12 @@ public class GeneratorVue extends AbstractMojo {
     private String configDir = "";
 
 
-    private FrontContext context;
+    private Context context;
 
     private ServiceFactory serviceFactory;
 
     private void buildConfig() {
-        context = FrontContext.of(configDir);
+        context = Context.of(configDir, "gen-front.yaml");
         serviceFactory = new ServiceFactory(context.getBase());
         VelocityUtil.init(configDir);
     }
@@ -89,11 +89,11 @@ public class GeneratorVue extends AbstractMojo {
         data.put("pathChName", menusName);
 
         buildVue("backYmlFormConfig");
-//        buildVue("routeConfig");
-//        buildVue("routeFormConfig");
-//        buildVue("apiConfig");
-//        buildViewMetaData();
-//        buildVue("viewConfig");
+        buildVue("routeConfig");
+        buildVue("routeFormConfig");
+        buildVue("apiConfig");
+        buildViewMetaData();
+        buildVue("viewConfig");
 
     }
 
@@ -106,7 +106,6 @@ public class GeneratorVue extends AbstractMojo {
         List<Col> list = columns.stream().map(e -> {
             Col col = new Col();
             col.setIsPk(e.isPk());
-
             col.setCol(e.getColumnName());
             col.setField(e.getColumnName());
             col.setTitle(e.getRemark().split(";")[0]);
@@ -117,9 +116,16 @@ public class GeneratorVue extends AbstractMojo {
             col.setIsTime(type.startsWith("date"));
             col.setType(type);
             col.setEnumMap(e.getEnumMap());
+            col.setEnumList(e.getEnumList());
 
             if (col.getTitle().endsWith("人")) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'empName' } ]", col.getCol()));
+            }
+            else if (SetUtils.hashSet("matnr").contains(col.getField())) {
+                col.setCusMsg(StrUtil.format("type: 'vxe-matnr-pulldown', propMap: [ { key: '{}', val: 'matnr' } ]", col.getCol()));
+            }
+            else if (SetUtils.hashSet("vtcode").contains(col.getField())) {
+                col.setCusMsg(StrUtil.format("type: 'vxe-vtcode-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
             }
 
 
@@ -170,7 +176,7 @@ public class GeneratorVue extends AbstractMojo {
     private void buildVue(String buildName) {
         JSONObject base = context.getBase();
         JSONObject data = context.getData();
-        JSONObject config = context.getVueBuilder().getJSONObject(buildName);
+        JSONObject config = context.getFileBuilder().getJSONObject(buildName);
         String routePath = CollUtil.join(config.getJSONArray("path"), "");
         String vm = config.getStr("vm");
 

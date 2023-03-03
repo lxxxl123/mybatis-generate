@@ -1,7 +1,7 @@
     },
     // ****************** ${pathChName}页面 ******************/
     {
-      path: 'define',
+      path: '${targetName}',
       name: `\${pre}${targetName}`,
       component: _import('${prefix}/${targetName}'),
       meta: {

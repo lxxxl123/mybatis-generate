@@ -33,6 +33,7 @@
                   :x-grid="$refs.xGrid"
                   icon="el-icon-check"
                   status="warning"
+                  :validate="reuseValidate"
                   name="生效"
                   :method="batchUpdateMethod"
                   :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 0} ) "
@@ -42,6 +43,7 @@
                   :x-grid="$refs.xGrid"
                   icon="el-icon-delete"
                   status="danger"
+                  :validate="deleteValidate"
                   name="废止"
                   :method="batchUpdateMethod"
                   :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 0} ) "
@@ -114,6 +116,7 @@ export default {
         { field: '${col.col}', title: '${col.title}' ##
 #if($col.isTime), type: 'vxe-range-picker', props: { type: 'date' } ##
 #elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
+#elseif($col.enumList.size()>0), type: 'select', options: '#foreach($para in ${col.enumList}) ${para} #if($foreach.hasNext),#end #end ' ##
 #elseif($col.cusMsg), $col.cusMsg ##
 #else, type: 'vxe-boot-operation-ipt', operation: 'likeRight' ##
 #end##
@@ -126,6 +129,8 @@ export default {
         { field: '${col.field}', title: '${col.title}' ##
 #if($col.isTime), props: { type: 'date' } ##
 #elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
+#elseif($col.enumList.size()>0), type: 'select', options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
+#elseif($col.cusMsg), $col.cusMsg ##
 #else ##
 #end##
 } #if($foreach.hasNext) ,#end
@@ -137,6 +142,8 @@ export default {
         { field: '${col.field}', title: '${col.title}' ##
 #if($col.isTime), props: { type: 'date' } ##
 #elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
+#elseif($col.enumList.size()>0), type: 'select', options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
+#elseif($col.cusMsg), $col.cusMsg ##
 #else ##
 #end##
 } #if($foreach.hasNext) ,#end
@@ -188,6 +195,22 @@ export default {
     },
     beforeShowUpdate ({ form, row }) {
     },
+    reuseValidate ({ rows }) {
+      for (let row of rows) {
+        if (!row.${delCol.col}) {
+          throw new Error('无法对有效数据重复生效')
+        }
+      }
+      return true
+    },
+    deleteValidate ({ rows }) {
+      for (let row of rows) {
+        if (row.${delCol.col}) {
+          throw new Error('无法对废止数据重复废止')
+        }
+      }
+      return true
+    }
   },
   computed: {},
   watch: {

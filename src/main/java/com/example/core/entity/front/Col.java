@@ -2,6 +2,7 @@ package com.example.core.entity.front;
 
 import lombok.Data;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,5 +36,7 @@ public class Col {
     private Boolean isDel = false;
 
     private Map<String,String> enumMap;
+
+    private List<String> enumList;
 
 }

@@ -3,7 +3,6 @@ package com.example.factory;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.example.config.MybatisSession;
-import com.example.core.entity.ConfigContext;
 import com.example.core.entity.DriverContext;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -20,12 +19,6 @@ public class ServiceFactory {
 
     protected SqlSessionFactory sqlSessionFactory;
 
-
-    public ServiceFactory(ConfigContext context) {
-        DriverContext driverContext = new DriverContext();
-        BeanUtil.copyProperties(context, driverContext);
-        init(driverContext);
-    }
 
     public ServiceFactory(Map map) {
         DriverContext driverContext = BeanUtil.mapToBean(map, DriverContext.class, true);

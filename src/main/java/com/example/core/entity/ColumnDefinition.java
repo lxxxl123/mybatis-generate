@@ -2,7 +2,9 @@ package com.example.core.entity;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -40,6 +42,8 @@ public class ColumnDefinition {
 	private String defaultVal;
 
 	private Map<String, String> enumMap = new HashMap<>(0);
+
+	private List<String> enumList = new ArrayList<>();
 
 	/**
 	 * 备注

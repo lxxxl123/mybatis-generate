@@ -8,17 +8,17 @@ export function batchAdd (data) {
   })
 }
 
-export function update (data) {
+export function batchUpdate (data) {
   return request({
-    url: '/qms/${targetName}/update',
+    url: '/qms/${targetName}/batchUpdate',
     method: 'post',
     data
   })
 }
 
-export function merge (data) {
+export function batchMerge (data) {
   return request({
-    url: '/qms/${targetName}/merge',
+    url: '/qms/${targetName}/batchMerge',
     method: 'post',
     data
   })

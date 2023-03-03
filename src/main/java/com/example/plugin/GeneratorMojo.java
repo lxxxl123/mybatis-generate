@@ -1,11 +1,9 @@
 package com.example.plugin;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
-import com.example.core.entity.ConfigContext;
+import com.example.core.entity.Context;
 import com.example.core.service.BaseDataService;
-import com.example.core.service.Callback;
 import com.example.core.util.FileUtil;
 import com.example.core.util.VelocityUtil;
 import com.example.factory.ServiceFactory;
@@ -14,10 +12,6 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.apache.velocity.VelocityContext;
-
-import java.io.File;
-import java.util.Map;
 
 /**
  *
@@ -26,120 +20,86 @@ import java.util.Map;
 @Mojo(name = "generator")
 public class GeneratorMojo extends AbstractMojo {
 
-    @Parameter(property = "project.basedir", required = true, readonly = true)
-    private File basedir;
-
     @Parameter(readonly = false, defaultValue = "")
-    private String vmPath = "";
+    private String configDir = "";
 
     private ServiceFactory serviceFactory;
 
+    private Context context;
 
-    private String getResource() {
-        return String.format("%s/src/main/resources/", basedir.getAbsolutePath());
-    }
-
-    private String getOutputPath() {
-        return String.format("%s/src/main/java/", basedir.getAbsolutePath());
-    }
-
-    public JSONObject buildMetaData(ConfigContext configContext) {
-        JSONObject map = new JSONObject();
+    public void buildMetaData() {
         //初始化DB工具类
         BaseDataService baseDataService = serviceFactory.getService(BaseDataService.class);
 
+        JSONObject base = context.getBase();
+        JSONObject data = context.getData();
+        String targetTable = base.getStr("targetTable");
+
         //元数据处理
-        map.put("columns", baseDataService.getColumnsInfo(configContext.getTargetTable()));
+        data.put("columns", baseDataService.getColumnsInfo(targetTable));
 
-        map.put("tableInfo", baseDataService.getTableInfo(configContext.getTargetTable()));
+        data.put("tableInfo", baseDataService.getTableInfo(targetTable));
+    }
 
-        return map;
+    private void buildConfig() {
+        context = Context.of(configDir,"gen-backend.yaml");
+        serviceFactory = new ServiceFactory(context.getBase());
+        VelocityUtil.init(configDir);
     }
 
 
     public void execute() throws MojoExecutionException {
         try {
             //得到配置文件对象 将指定输出路径与读取资源文件路径
-            ConfigContext configContext = new ConfigContext(vmPath, getOutputPath());
+            buildConfig();
 
-            System.out.printf("入参 basedir = %s , configDir = %s\n", basedir, vmPath);
+            buildMetaData();
 
-            serviceFactory = new ServiceFactory(configContext);
+            JSONObject base = context.getBase();
+            JSONObject data = context.getData();
 
-            JSONObject metaMap = buildMetaData(configContext);
+            String codePath = base.getStr("backEndPath") + base.getStr("codePath");
+            String resourcePath = base.getStr("backEndPath") + base.getStr("resourcePath");
+            String qms = base.getStr("package").replace(".", "/");
+            String service = base.getStr("service");
+            String entity = base.getStr("entity");
+            String controller = base.getStr("controller");
+            String prefix = base.getStr("prefix");
+            String impl = base.getStr("serviceImpl");
+            String dao = base.getStr("dao");
+            String objName = StrUtil.upperFirst(base.getStr("targetName"));
 
-            String src = configContext.getOutputPath();
-            String qms = configContext.getTargetPackage().replace(".", "/");
-            String service = configContext.getTargetService();
-            String entity = configContext.getTargetEntity();
-            String controller = configContext.getTargetController();
-            String prefix = configContext.getPrefix();
-            String impl = configContext.getTargetServiceImpl();
-            String dao = configContext.getTargetDao();
-            String target = configContext.getTargetName();
-            String mapperXmlPath = configContext.getMapperXmlPath();
+            data.put("table", data.getStr("targetTable"));
+            data.put("name", objName);
 
-            doGenerator(configContext, metaMap, (configContext1, context) -> {
-                FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}.java", src, qms, entity, prefix, target),
-                        VelocityUtil.render("entity.vm", context));
+            String mapperXmlPath = base.getStr("mapperXmlPath");
 
-                FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}Service.java", src, qms, service, prefix, target),
-                        VelocityUtil.render("contract.vm", context));
+            FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}.java", codePath, qms, entity, prefix, objName),
+                    VelocityUtil.render("entity.vm", data));
 
-                FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}Mapper.java", src, qms, dao, prefix, target),
-                        VelocityUtil.render("mapper.vm", context));
+            FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}Service.java", codePath, qms, service, prefix, objName),
+                    VelocityUtil.render("contract.vm", data));
 
-                FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}/{}ServiceImpl.java", src, qms, service, prefix, impl, target),
-                        VelocityUtil.render("service.vm", context));
+            FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}Mapper.java", codePath, qms, dao, prefix, objName),
+                    VelocityUtil.render("mapper.vm", data));
 
-                FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}Controller.java", src, qms, controller, prefix, target),
-                        VelocityUtil.render("controller.vm", context));
+            FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}/{}ServiceImpl.java", codePath, qms, service, prefix, impl, objName),
+                    VelocityUtil.render("service.vm", data));
 
-                FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}Mapper.xml", getResource(), mapperXmlPath, prefix, target),
-                        VelocityUtil.render("mapperXml.vm", context));
-            });
+            FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}Controller.java", codePath, qms, controller, prefix, objName),
+                    VelocityUtil.render("controller.vm", data));
+
+            FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}Mapper.xml", resourcePath, mapperXmlPath, prefix, objName),
+                    VelocityUtil.render("mapperXml.vm", data));
+
         } catch (Exception e) {
             throw new MojoExecutionException("unable to generator codes of table.", e);
         }
 
     }
-
-    public static void doGenerator(ConfigContext configContext, JSONObject metaMap, Callback callback) {
-        //配置velocity的资源加载路径
-        VelocityUtil.init(configContext.getVmPath());
-
-        //封装velocity数据
-        VelocityContext context = new VelocityContext();
-        Map<String, String> other = configContext.getOther();
-        for (Map.Entry<String, String> entry : other.entrySet()) {
-            if (entry.getKey().startsWith("is")) {
-                context.put(entry.getKey(), Convert.toBool(entry.getValue()));
-            } else {
-                context.put(entry.getKey(), entry.getValue());
-            }
-        }
-
-        metaMap.forEach(context::put);
-
-        context.put("table", configContext.getTargetTable());
-        context.put("name", configContext.getTargetName());
-        context.put("package", configContext.getTargetPackage());
-        context.put("entity", configContext.getTargetEntity());
-        context.put("prefix", configContext.getPrefix());
-        context.put("service", configContext.getTargetService());
-        context.put("serviceImpl", configContext.getTargetServiceImpl());
-        context.put("controller", configContext.getTargetController());
-        context.put("dao", configContext.getTargetDao());
-
-        callback.write(configContext, context);
-
-    }
-
     public static void main(String[] args) throws MojoExecutionException, MojoFailureException {
         GeneratorMojo generatorMojo = new GeneratorMojo();
-        generatorMojo.basedir = new File("D:\\20221014\\qms-platform\\qms-service");
-//        generatorMojo.basedir = new File("D:\\20221014\\idea-workspace\\qmsapicenter\\qms-service");
-        generatorMojo.vmPath = "D:\\20221014\\generator-plugin-test\\src\\main\\resources\\vm";
+        generatorMojo.configDir = "D:\\20221014\\generator-plugin-test\\src\\main\\resources\\vm\\";
         generatorMojo.execute();
     }
 

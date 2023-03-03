@@ -44,21 +44,29 @@ public class BaseDataService {
             columnDefinition.setColumnName(columnName);
 
             if (remark.contains("; ")) {
-                Map<String,String> map = new LinkedHashMap<>();
                 String[] vals = remark.split(";")[1].split("\\s*,\\s*");
-                for (String val : vals) {
-                    String[] entry = val.split("\\s*-\\s*");
-                    String key = entry[0].trim();
-                    String value = key;
-                    if (entry.length > 1) {
-                        value = entry[1].trim();
+                if (remark.contains("-")) {
+                    Map<String,String> map = new LinkedHashMap<>();
+                    for (String val : vals) {
+                        String[] entry = val.split("\\s*-\\s*");
+                        String key = entry[0].trim();
+                        String value = entry[1].trim();
+                        map.put(key,value);
                     }
-                    map.put(key,value);
+                    columnDefinition.setEnumMap(map);
+                } else {
+                    List<String> enumList = new ArrayList<>();
+                    for (String val : vals) {
+                        enumList.add(val.trim());
+                    }
+                    columnDefinition.setEnumList(enumList);
                 }
-                columnDefinition.setEnumMap(map);
             }
             String selectSql = columnName;
-            if (type.startsWith("date")) {
+            if (StringUtils.equalsAny(type, "date")) {
+                selectSql = String.format("CONVERT(varchar(10), %s, 120) as %s", columnName, columnName);
+            }
+            if (StringUtils.equalsAny(type, "datetime")) {
                 selectSql = String.format("CONVERT(varchar(19), %s, 120) as %s", columnName, columnName);
             }
             columnDefinition.setSelectSql(selectSql);

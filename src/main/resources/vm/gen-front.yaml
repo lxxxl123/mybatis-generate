@@ -5,19 +5,22 @@ base:
   url: jdbc:p6spy:jtds:sqlserver://10.254.2.25:1855;DatabaseName=qc;useLOBs=false
   username: sa
   password: ht123
-  targetTable: ori_pak_supplier  # 表名
+  targetTable: ori_pak_mara  # 表名
   targetName: &targetName
-    oriPakSupplier  # 实体名
+    oriPakMara  # 实体名
   prefix: &prefix
     oriPak  #路径名
-  menusChPath: 基础数据-原包材第三方检验基础数据-生产商信息维护 # 菜单
-  entityName: '包材生产商' # 实体中文名
+  menusChPath: 基础数据-原包材第三方检验基础数据-物料监控项目维护 # 菜单
+  entityName: '物料监控项目' # 实体中文名
 
-vueBuilder:
+
+
+
+fileBuilder:
   routeConfig:
     path: [ D:/20221014/qms-front/src/router/modules/, *prefix , .js ]
     vm: front/route-module.vm
-    condition: [ 生产商信息维护 ] #菜单
+    condition: [ 物料监控项目维护 ] #菜单
     replaceRange: '\h*}\v{1,2}(?=\s{2}])'
     replaceVm: front/route-module-part.vm
 
