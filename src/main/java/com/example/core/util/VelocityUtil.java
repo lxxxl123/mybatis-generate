@@ -35,8 +35,6 @@ public class VelocityUtil {
 		String content = "";
 		String[] arr = null;
 
-
-
 		Template template = null;
 		try {
 			template = Velocity.getTemplate(vm);
@@ -108,9 +106,15 @@ public class VelocityUtil {
             write(routePath, vm, data);
         } else {
             String content = cn.hutool.core.io.FileUtil.readString(file, "utf-8");
-            if (ReUtil.contains(condition, content)) {
-                return;
-            }
+			data.put("content", content);
+			if (condition.startsWith("spel:")) {
+				condition = condition.substring(5);
+				if (SpelUtils.parseBool(condition, context)) {
+					return;
+				}
+			} else if (ReUtil.contains(condition, content)) {
+				return;
+			}
             for (VmReplacePo vmPo : replaceList) {
                 String part = render(vmPo.getVm(), data);
                 content = StringUtil.merge(content, part, Pattern.compile(vmPo.getRange()));

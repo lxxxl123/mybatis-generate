@@ -14,13 +14,14 @@
                c.COLUMN_DEFAULT,
                case when COLUMNPROPERTY(object_id(#{tableName}), c.COLUMN_NAME, 'IsIdentity') = 1 then 1 else 0 end as isIndentity
         FROM [INFORMATION_SCHEMA].[COLUMNS] c
-                 left join (SELECT B.name  AS COLUMN_NAME,
-                                   C.value AS REMARK
-                            FROM sys.tables A
-                                     INNER JOIN sys.columns B ON B.object_id = A.object_id
-                                     LEFT JOIN sys.extended_properties C
-                                               ON C.major_id = B.object_id AND C.minor_id = B.column_id
-                            WHERE A.name = #{tableName}) t on t.COLUMN_NAME = c.COLUMN_NAME
+                 left join (SELECT col.name AS COLUMN_NAME,
+                                   prop.value  AS REMARK,
+                                   prop.*
+                            FROM sys.tables ta
+                                     INNER JOIN sys.columns col ON col.object_id = ta.object_id
+                                     LEFT JOIN sys.extended_properties prop
+                                               ON prop.major_id = col.object_id AND prop.minor_id = col.column_id and prop.class = 1
+                            WHERE ta.name = #{tableName}) t on t.COLUMN_NAME = c.COLUMN_NAME
         WHERE TABLE_NAME = #{tableName}
     </select>
     <select id="getIdxInfo" resultType="com.example.core.entity.table.TableIndex">

@@ -6,7 +6,9 @@
                      :form-data="formData"
                      size="mini"
                      :search="searchMethod"
+#if($delCol)##
                      init-cond="${delCol.col} = 0"
+#end##
                      overflow
                      :rowStyle="rowStyle"
       >
@@ -22,13 +24,15 @@
           <vxe-update-btn
                   :x-grid="$refs.xGrid"
                   :title="'调整'+entity"
-                  :form-data="updateForm"
+                  :form-data="updateForm"A
+                  :use-initial="true"
                   :auto-reset="true"
                   :before-show="beforeShowUpdate"
                   :param-convert="({form})=> [ form ]"
                   :update-method="batchUpdateMethod"
                   :after-add="search"
           />
+#if($delCol)##
           <vxe-modify-btn
                   :x-grid="$refs.xGrid"
                   icon="el-icon-check"
@@ -46,9 +50,10 @@
                   :validate="deleteValidate"
                   name="废止"
                   :method="batchUpdateMethod"
-                  :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 0} ) "
+                  :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 1} ) "
                   :after-modify="search"
           />
+#end##
           <vxe-delete-btn
                   :x-grid="$refs.xGrid"
                   :delete-method="batchDeleteMethod"
@@ -67,7 +72,9 @@
                           :title="entity+'导出'"
                           :start-index="2"
           />
+#if($delCol)##
           <vxe-grid-cond-checkbox ref="showAllBox" :x-grid="$refs.xGrid" un-check-sql="${delCol.col} = 0" :after-click="showAll"/>
+#end##
           <el-tooltip placement="top">
             <div slot="content" >颜色说明:
               <br/><span :style="'color: '+ grey">灰色: </span>被删除行
@@ -179,9 +186,11 @@ export default {
     rowStyle (row) {
       let rowStyle = {}
       let data = row.row
+#if($delCol)##
       if (data.${delCol.col}) {
         rowStyle.background = this.grey
       }
+#end##
       return rowStyle
     },
     showAll () {
@@ -195,6 +204,7 @@ export default {
     },
     beforeShowUpdate ({ form, row }) {
     },
+#if($delCol)##
     reuseValidate ({ rows }) {
       for (let row of rows) {
         if (!row.${delCol.col}) {
@@ -211,6 +221,7 @@ export default {
       }
       return true
     }
+#end##
   },
   computed: {},
   watch: {

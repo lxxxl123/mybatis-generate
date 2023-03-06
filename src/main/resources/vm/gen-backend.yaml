@@ -30,6 +30,7 @@ base:
 fileBuilder:
   backIndexTip:
     path: [ D:\20221014\qms-platform\qms-service\src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
+    condition: [ 'spel:', "['indexs']?.size() > 0 && ['content'].contains(['indexs'][0]['idxName'])" ]
     replace:
       -
         range: '(?m)^\s+\.build\(\);'
