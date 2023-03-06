@@ -3,6 +3,7 @@ package com.example.plugin;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.example.core.entity.Context;
+import com.example.core.entity.table.TableIndex;
 import com.example.core.service.BaseDataService;
 import com.example.core.util.FileUtil;
 import com.example.core.util.VelocityUtil;
@@ -12,6 +13,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+
+import java.util.List;
 
 /**
  *
@@ -39,6 +42,8 @@ public class GeneratorMojo extends AbstractMojo {
         data.put("columns", baseDataService.getColumnsInfo(targetTable));
 
         data.put("tableInfo", baseDataService.getTableInfo(targetTable));
+
+        data.put("indexs", baseDataService.getIdxInfo(targetTable));
     }
 
     private void buildConfig() {
@@ -54,6 +59,8 @@ public class GeneratorMojo extends AbstractMojo {
             buildConfig();
 
             buildMetaData();
+
+            VelocityUtil.buildPage("backIndexTip",context);
 
             JSONObject base = context.getBase();
             JSONObject data = context.getData();

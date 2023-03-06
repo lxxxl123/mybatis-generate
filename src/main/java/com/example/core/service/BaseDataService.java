@@ -2,13 +2,13 @@ package com.example.core.service;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
-import com.example.core.entity.ColumnDefinition;
-import com.example.core.entity.TableDefinition;
+import com.example.core.entity.table.ColumnDefinition;
+import com.example.core.entity.table.TableDefinition;
+import com.example.core.entity.table.TableIndex;
 import com.example.core.util.SqlTypeUtil;
 import com.example.core.util.StringUtil;
 import com.example.mapper.BaseMapper;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.session.SqlSessionFactory;
 
 import java.util.*;
 
@@ -90,6 +90,10 @@ public class BaseDataService {
         tableDefinition.setTableName(rowMap.getStr("TABLE_NAME"));
         tableDefinition.setDesc(rowMap.getStr("TABLE_DESC"));
         return tableDefinition;
+    }
+
+    public List<TableIndex> getIdxInfo(String tableName) {
+        return mapper.getIdxInfo(tableName);
     }
 
 

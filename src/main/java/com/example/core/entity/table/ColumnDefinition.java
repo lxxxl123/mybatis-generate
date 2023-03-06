@@ -1,4 +1,4 @@
-package com.example.core.entity;
+package com.example.core.entity.table;
 
 import lombok.Data;
 

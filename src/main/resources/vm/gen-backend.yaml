@@ -27,4 +27,10 @@ base:
   buildSelect: true
   buildExport: true
 
-
+fileBuilder:
+  backIndexTip:
+    path: [ D:\20221014\qms-platform\qms-service\src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
+    replace:
+      -
+        range: '(?m)^\s+\.build\(\);'
+        vm: back/AspectUtils.vm

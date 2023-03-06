@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 #set($hasDate=0)
@@ -39,9 +40,12 @@ private static final long serialVersionUID = 1L;
       * ${column.remark}
       */
     @TableField(value = "${column.columnName}"##
-        #if($insertList.contains($column.columnName)) ,fill = FieldFill.INSERT##
-        #elseif($updateList.contains($column.columnName)) ,fill = FieldFill.UPDATE##
-        #end)
+#if($insertList.contains($column.columnName)) ,fill = FieldFill.INSERT##
+#elseif($updateList.contains($column.columnName)) ,fill = FieldFill.INSERT_UPDATE##
+#end)
+#if($column.type=='date')##
+@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")##
+#end
     private ${column.javaType} ${column.javaFieldName};
 
     #end

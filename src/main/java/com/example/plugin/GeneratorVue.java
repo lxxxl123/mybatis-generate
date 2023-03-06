@@ -1,18 +1,13 @@
 package com.example.plugin;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
-import com.example.core.entity.ColumnDefinition;
+import com.example.core.entity.table.ColumnDefinition;
 import com.example.core.entity.Context;
-import com.example.core.entity.VmReplacePo;
 import com.example.core.entity.front.Col;
 import com.example.core.service.BaseDataService;
 import com.example.core.service.MenusService;
-import com.example.core.util.StringUtil;
 import com.example.core.util.VelocityUtil;
 import com.example.factory.ServiceFactory;
 import lombok.extern.slf4j.Slf4j;
@@ -20,13 +15,9 @@ import org.apache.commons.collections4.SetUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
-import org.apache.maven.plugins.annotations.Parameter;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -34,11 +25,6 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class GeneratorVue extends AbstractMojo {
-
-    @Parameter(property = "project.backDir", required = true, readonly = true)
-    private File backDir;
-
-    private File frontDir;
 
     private String configDir = "";
 
@@ -88,12 +74,12 @@ public class GeneratorVue extends AbstractMojo {
         Object menusName = ArrayUtil.get(split, -1);
         data.put("pathChName", menusName);
 
-        buildVue("backYmlFormConfig");
-        buildVue("routeConfig");
-        buildVue("routeFormConfig");
-        buildVue("apiConfig");
+        VelocityUtil.buildPage("backYmlFormConfig",context);
+        VelocityUtil.buildPage("routeConfig",context);
+        VelocityUtil.buildPage("routeFormConfig",context);
+        VelocityUtil.buildPage("apiConfig",context);
         buildViewMetaData();
-        buildVue("viewConfig");
+        VelocityUtil.buildPage("viewConfig", context);
 
     }
 
@@ -173,45 +159,6 @@ public class GeneratorVue extends AbstractMojo {
     }
 
 
-    private void buildVue(String buildName) {
-        JSONObject base = context.getBase();
-        JSONObject data = context.getData();
-        JSONObject config = context.getFileBuilder().getJSONObject(buildName);
-        String routePath = CollUtil.join(config.getJSONArray("path"), "");
-        String vm = config.getStr("vm");
-
-        String condition = null;
-        if (config.containsKey("condition")) {
-            condition = CollUtil.join(config.getJSONArray("condition"), "");
-        }
-        List<VmReplacePo> replaceList = new ArrayList<>();
-        if (config.containsKey("replace")) {
-            replaceList = config.getJSONArray("replace").toList(VmReplacePo.class);
-        } else {
-            String replaceRange = config.getStr("replaceRange");
-            String replaceVm = config.getStr("replaceVm");
-            if (StringUtil.isNotEmpty(replaceVm)) {
-                VmReplacePo vmReplacePo = new VmReplacePo(replaceRange, replaceVm);
-                replaceList.add(vmReplacePo);
-            }
-        }
-
-        File file = new File(routePath);
-        if (!file.exists() || CollUtil.isEmpty(replaceList)) {
-            VelocityUtil.write(routePath, vm, data);
-        } else {
-            String content = FileUtil.readString(file, "utf-8");
-            if (ReUtil.contains(condition, content)) {
-                return;
-            }
-            for (VmReplacePo vmPo : replaceList) {
-                String part = VelocityUtil.render(vmPo.getVm(), data);
-                content = StringUtil.merge(content, part, Pattern.compile(vmPo.getRange()));
-                FileUtil.writeString(content, routePath, "utf-8");
-            }
-        }
-    }
-
     private void buildMenus() {
         JSONObject base = context.getBase();
         String prefix = base.getStr("prefix");
@@ -224,7 +171,6 @@ public class GeneratorVue extends AbstractMojo {
 
     public static void main(String[] args) throws MojoExecutionException, MojoFailureException {
         GeneratorVue generatorVue = new GeneratorVue();
-        generatorVue.frontDir = new File("D:\\20221014\\qms-front");
         generatorVue.configDir = "D:\\20221014\\generator-plugin-test\\src\\main\\resources\\vm\\";
         generatorVue.execute();
 

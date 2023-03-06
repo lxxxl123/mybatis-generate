@@ -1,14 +1,23 @@
 package com.example.core.util;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ReUtil;
+import cn.hutool.json.JSONObject;
+import com.example.core.entity.Context;
+import com.example.core.entity.VmReplacePo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 
+import java.io.File;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 /**
  * Velocity工具类,根据模板内容生成文件
@@ -25,6 +34,7 @@ public class VelocityUtil {
 	public static String render(String vm, VelocityContext context) {
 		String content = "";
 		String[] arr = null;
+
 
 
 		Template template = null;
@@ -70,4 +80,42 @@ public class VelocityUtil {
 	}
 
 
+    public static void buildPage(String buildName, Context context) {
+        JSONObject base = context.getBase();
+        JSONObject data = context.getData();
+        JSONObject config = context.getFileBuilder().getJSONObject(buildName);
+        String routePath = CollUtil.join(config.getJSONArray("path"), "");
+        String vm = config.getStr("vm");
+
+        String condition = null;
+        if (config.containsKey("condition")) {
+            condition = CollUtil.join(config.getJSONArray("condition"), "");
+        }
+        List<VmReplacePo> replaceList = new ArrayList<>();
+        if (config.containsKey("replace")) {
+            replaceList = config.getJSONArray("replace").toList(VmReplacePo.class);
+        } else {
+            String replaceRange = config.getStr("replaceRange");
+            String replaceVm = config.getStr("replaceVm");
+            if (StringUtil.isNotEmpty(replaceVm)) {
+                VmReplacePo vmReplacePo = new VmReplacePo(replaceRange, replaceVm);
+                replaceList.add(vmReplacePo);
+            }
+        }
+
+        File file = new File(routePath);
+        if (!file.exists() || CollUtil.isEmpty(replaceList)) {
+            write(routePath, vm, data);
+        } else {
+            String content = cn.hutool.core.io.FileUtil.readString(file, "utf-8");
+            if (ReUtil.contains(condition, content)) {
+                return;
+            }
+            for (VmReplacePo vmPo : replaceList) {
+                String part = render(vmPo.getVm(), data);
+                content = StringUtil.merge(content, part, Pattern.compile(vmPo.getRange()));
+                cn.hutool.core.io.FileUtil.writeString(content, routePath, "utf-8");
+            }
+        }
+    }
 }

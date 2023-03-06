@@ -23,6 +23,14 @@
                             WHERE A.name = #{tableName}) t on t.COLUMN_NAME = c.COLUMN_NAME
         WHERE TABLE_NAME = #{tableName}
     </select>
+    <select id="getIdxInfo" resultType="com.example.core.entity.table.TableIndex">
+        SELECT idx.name as idxName , prop.value as remark
+        FROM sys.indexes idx (NOLOCK)
+                 left join sys.extended_properties prop on prop.major_id = idx.object_id and idx.index_id = prop.minor_id and prop.class = 7
+        WHERE idx.object_id = object_id(N'ori_pak_mara')
+          and idx.is_primary_key = 0
+          and idx.is_unique = 1
+    </select>
     <select id="getTableInfo" resultType="map">
         select a.name  AS TABLE_NAME,
                g.value AS TABLE_DESC
