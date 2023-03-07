@@ -37,3 +37,11 @@ fileBuilder:
       -
         range: '(?m)^\s+\.build\(\);'
         vm: back/AspectUtils.vm
+
+  backYmlFormConfig:
+    path: [ *backEndPath , src\main\resources\application.yml ]
+    condition: [ \/, *targetName , \/\*\*]
+    replace:
+      -
+        range: '(\s+permission: jwtFilter)'
+        vm: front/application.vm

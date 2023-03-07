@@ -30,13 +30,6 @@ fileBuilder:
     replaceRange: '\h*}\v{1,2}(?=\s{2}])'
     replaceVm: front/route-module-part.vm
 
-  backYmlFormConfig:
-    path: [ *backEndPath , src\main\resources\application.yml ]
-    condition: [ \/, *targetName , \/\*\*]
-    replace:
-      -
-        range: '(\s+permission: jwtFilter)'
-        vm: front/application.vm
   routeFormConfig:
     path: [ *frontEndPath ,src\router\routes.js ]
     condition: [ 'import ', *prefix , Form ]
@@ -47,9 +40,11 @@ fileBuilder:
       -
         range: (\w+Form)\v{2}]
         vm: front/route-form-2.vm
+
   apiConfig:
     path: [ *frontEndPath , src/api/, *prefix , / , *targetName ,.js  ]
     vm: front/api.vm
+
   viewConfig:
     path: [ *frontEndPath , src/views/, *prefix , / , *targetName , /index.vue  ]
     vm: front/views.vm

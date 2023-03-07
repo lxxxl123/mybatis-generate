@@ -32,6 +32,7 @@ public class GeneratorMojo extends Generator {
             buildMetaData();
 
             VelocityUtil.buildPage("backIndexTip",context);
+            VelocityUtil.buildPage("backYmlFormConfig",context);
 
             JSONObject base = context.getBase();
             JSONObject data = context.getData();
