@@ -27,7 +27,7 @@ ${column.columnName}#if($foreach.hasNext),#end##
         <foreach collection="list" item="item" index="index" separator="union all">
             select
             #foreach($column in $columns)##
-                #{item.${column.columnName}} as ${column.columnName} #if($foreach.hasNext),
+                #{item.${column.javaFieldName}} as ${column.columnName} #if($foreach.hasNext),
             #end##
             #end
         </foreach> ) temp ) as s
@@ -51,7 +51,6 @@ s.${column.columnName}##
 
 
 #if(${buildSelect})##
-#set($t = 't')
     <select id="select" resultType="map">
         select #foreach($column in $columns)##
         #if($column.enumMap.size()>0)
@@ -59,9 +58,9 @@ s.${column.columnName}##
             #foreach($param in ${column.enumMap.entrySet()})
                 when $t.${column.columnName} = ${param.key} then N'${param.value}'
             #end
-            end as ${column.columnName}Str ,
+            end as ${column.javaFieldName}Str ,
         #end
-        $t.${column.selectSql}#if($foreach.hasNext),
+        ${column.selectSql}#if($foreach.hasNext),
         #end#end
 
         FROM ${table} $t with (nolock)
