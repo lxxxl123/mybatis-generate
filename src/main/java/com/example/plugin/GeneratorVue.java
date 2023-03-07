@@ -24,37 +24,10 @@ import java.util.stream.Collectors;
  * @author chenwh3
  */
 @Slf4j
-public class GeneratorVue extends AbstractMojo {
-
-    private String configDir = "";
-
-
-    private Context context;
-
-    private ServiceFactory serviceFactory;
-
-    private void buildConfig() {
-        context = Context.of(configDir, "gen-front.yaml");
-        serviceFactory = new ServiceFactory(context.getBase());
-        VelocityUtil.init(configDir);
-    }
-
-    /**
-     * 获取数据库信息
-     */
-    public void buildMetaData() {
-        //初始化DB工具类
-        BaseDataService dbHelper = serviceFactory.getService(BaseDataService.class);
-
-        JSONObject data = context.getData();
-        //元数据处理
-        data.put("columns", dbHelper.getColumnsInfo(context.getBase().getStr("targetTable")));
-
-
-    }
+public class GeneratorVue extends Generator {
 
     public void execute() {
-        buildConfig();
+        buildConfig("gen-front.yaml");
         // 获取数据库信息
         buildMetaData();
         // 生成前端菜单

@@ -1,0 +1,54 @@
+package ${package}.${controller}.${prefix};
+
+import ${package}.controller.base.BaseController;
+import ${package}.${dao}.${prefix}.${name}Mapper;
+import com.haday.qms.core.tool.api.R;
+import ${package}.${entity}.${prefix}.${name};
+import ${package}.${service}.${prefix}.${serviceImpl}.${name}ServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+#if(${buildSelect})##
+import com.alibaba.fastjson.JSONObject;
+#end
+
+import java.util.List;
+
+/**
+* @author ${author}
+*/
+#set($path="${name.substring(0, 1).toLowerCase()}${name.substring(1)}")
+@RestController
+@RequestMapping("/$path")
+@Api(value = "${tableInfo.desc}控制器", tags = "${tableInfo.desc}控制器")
+public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name}Mapper, ${name}> {
+
+
+
+#if($isMerge)##
+    @ApiOperation(value = "批量合并", notes = "批量合并")
+    @PostMapping("/batchMerge")
+    public R<?> batchMerge(@RequestBody List<${name}> list) {
+        return R.data(service.batchMerge(list));
+    }##
+
+#end
+
+#if(${buildSelect})##
+    @ApiOperation(value = "查询", notes = "查询")
+    @PostMapping("/search")
+    public R<?> search(@RequestBody JSONObject obj) {
+        return R.data(service.search(obj));
+    }
+#else##
+    @Override
+    @ApiOperation(value = "查询", notes = "查询")
+    @PostMapping("/search")
+    public R<?> search(@RequestBody @Validated SearchVo obj) {
+        return super.search(obj);
+    }
+#end
+
+}

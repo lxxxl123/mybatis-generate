@@ -1,0 +1,40 @@
+package ${package}.${service}.${prefix}.${serviceImpl};
+
+import com.haday.qms.service.base.impl.BaseServiceImpl;
+import ${package}.${service}.${prefix}.${name}Service;
+import ${package}.${dao}.${prefix}.${name}Mapper;
+import ${package}.${entity}.${prefix}.${name};
+import org.springframework.stereotype.Service;
+#if($isMerge)import java.util.List;
+#end
+
+#if($buildSelect)
+import com.haday.qms.interceptor.anno.Try;
+import com.haday.qms.vo.SearchVo;
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+#end
+
+/**
+* @author ${author}
+*/
+@Service
+public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
+    implements ${name}Service {
+
+    #if(${isMerge})@Try
+    public Integer batchMerge(List<$name> obj){
+        return baseMapper.batchMerge(obj);
+    }#end ##
+
+
+#if(${buildSelect})##
+    @Try
+    public Page search(JSONObject obj) {
+        SearchVo searchVo = obj.toJavaObject(SearchVo.class);
+        return baseMapper.select(searchVo.buildPage(), searchVo.buildWrapper());
+    }
+#end ##
+
+}
+

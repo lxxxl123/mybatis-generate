@@ -12,22 +12,25 @@
                t.REMARK,
                ORDINAL_POSITION,
                c.COLUMN_DEFAULT,
-               case when COLUMNPROPERTY(object_id(#{tableName}), c.COLUMN_NAME, 'IsIdentity') = 1 then 1 else 0 end as isIndentity
+               t.is_identity isIndentity
         FROM [INFORMATION_SCHEMA].[COLUMNS] c
-                 left join (SELECT col.name AS COLUMN_NAME,
-                                   prop.value  AS REMARK,
-                                   prop.*
+                 left join (SELECT col.name   AS COLUMN_NAME,
+                                   prop.value AS REMARK,
+                                   col.is_identity,
+                                   ta.name    as tableName
                             FROM sys.tables ta
                                      INNER JOIN sys.columns col ON col.object_id = ta.object_id
                                      LEFT JOIN sys.extended_properties prop
-                                               ON prop.major_id = col.object_id AND prop.minor_id = col.column_id and prop.class = 1
-                            WHERE ta.name = #{tableName}) t on t.COLUMN_NAME = c.COLUMN_NAME
+                                               ON prop.major_id = col.object_id AND prop.minor_id = col.column_id and
+                                                  prop.class = 1) t
+                           on t.COLUMN_NAME = c.COLUMN_NAME and t.tableName = c.TABLE_NAME
         WHERE TABLE_NAME = #{tableName}
     </select>
     <select id="getIdxInfo" resultType="com.example.core.entity.table.TableIndex">
-        SELECT idx.name as idxName , prop.value as remark
+        SELECT idx.name as idxName, prop.value as remark
         FROM sys.indexes idx (NOLOCK)
-                 left join sys.extended_properties prop on prop.major_id = idx.object_id and idx.index_id = prop.minor_id and prop.class = 7
+                 left join sys.extended_properties prop
+                           on prop.major_id = idx.object_id and idx.index_id = prop.minor_id and prop.class = 7
         WHERE idx.object_id = object_id(#{tableName})
           and idx.is_primary_key = 0
           and idx.is_unique = 1

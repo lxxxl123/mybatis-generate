@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import com.example.core.entity.table.ColumnDefinition;
 import com.example.core.entity.table.TableDefinition;
 import com.example.core.entity.table.TableIndex;
+import com.example.core.thread.Ctx;
 import com.example.core.util.SqlTypeUtil;
 import com.example.core.util.StringUtil;
 import com.example.mapper.BaseMapper;
@@ -21,6 +22,8 @@ public class BaseDataService {
 
     public List<ColumnDefinition> getColumnsInfo(String tableName) {
         List<Map> columnsInfo = mapper.getColumnsInfo(tableName);
+
+        String t = Ctx.getStr("t");
 
         List<ColumnDefinition> list = new ArrayList<>();
         for (Map column : columnsInfo) {
@@ -46,12 +49,12 @@ public class BaseDataService {
             if (remark.contains("; ")) {
                 String[] vals = remark.split(";")[1].split("\\s*,\\s*");
                 if (remark.contains("-")) {
-                    Map<String,String> map = new LinkedHashMap<>();
+                    Map<String, String> map = new LinkedHashMap<>();
                     for (String val : vals) {
                         String[] entry = val.split("\\s*-\\s*");
                         String key = entry[0].trim();
                         String value = entry[1].trim();
-                        map.put(key,value);
+                        map.put(key, value);
                     }
                     columnDefinition.setEnumMap(map);
                 } else {
@@ -62,12 +65,18 @@ public class BaseDataService {
                     columnDefinition.setEnumList(enumList);
                 }
             }
-            String selectSql = columnName;
+            String javaFieldName = StringUtil.underlineToCamelhump(columnName);
+            String selectSql;
+            if (javaFieldName.equals(columnName)) {
+                selectSql = columnName;
+            } else {
+                selectSql = StrUtil.format("{}.{} as {}", t, columnName, javaFieldName);
+            }
             if (StringUtils.equalsAny(type, "date")) {
-                selectSql = String.format("CONVERT(varchar(10), %s, 120) as %s", columnName, columnName);
+                selectSql = String.format("CONVERT(varchar(10), %s.%s, 120) as %s", t, columnName, javaFieldName);
             }
             if (StringUtils.equalsAny(type, "datetime")) {
-                selectSql = String.format("CONVERT(varchar(19), %s, 120) as %s", columnName, columnName);
+                selectSql = String.format("CONVERT(varchar(19), %s, 120) as %s", columnName, javaFieldName);
             }
             columnDefinition.setSelectSql(selectSql);
 
@@ -75,7 +84,7 @@ public class BaseDataService {
             columnDefinition.setType(temp[0]);
             columnDefinition.setRemark(remark);
             columnDefinition.setJavaType(SqlTypeUtil.convertToJavaBoxType(temp[0]));
-            columnDefinition.setJavaFieldName(StringUtil.underlineToCamelhump(columnName));
+            columnDefinition.setJavaFieldName(javaFieldName);
             columnDefinition.setJdbcType(SqlTypeUtil.convertToMyBatisJdbcType(temp[0]));
             list.add(columnDefinition);
         }
@@ -95,7 +104,6 @@ public class BaseDataService {
     public List<TableIndex> getIdxInfo(String tableName) {
         return mapper.getIdxInfo(tableName);
     }
-
 
 
 }
