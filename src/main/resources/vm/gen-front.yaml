@@ -5,34 +5,39 @@ base:
   url: jdbc:p6spy:jtds:sqlserver://10.254.2.25:1855;DatabaseName=qc;useLOBs=false
   username: sa
   password: ht123
-  targetTable: ori_pak_mara  # 表名
+  targetTable: ori_pak_supplier  # 表名
   targetName: &targetName
-    oriPakMara  # 实体名
+    oriPakSupplier  # 实体名
   prefix: &prefix
     oriPak  #路径名
-  menusChPath: 基础数据-原包材第三方检验基础数据-物料监控项目维护 # 菜单
-  entityName: '物料监控项目' # 实体中文名
+  menusChPath: 基础数据-原包材第三方检验基础数据-生产商物料关系维护 # 菜单
+  entityName: '生产商物料关系' # 实体中文名
+  frontEndPath: &frontEndPath #前端路径
+    D:/20221014/qms-front/
+
+  backEndPath: &backEndPath # 后端路径
+    D:\20221014\qms-platform\qms-service\
 
 
 
 
 fileBuilder:
   routeConfig:
-    path: [ D:/20221014/qms-front/src/router/modules/, *prefix , .js ]
+    path: [ *frontEndPath , src/router/modules/, *prefix , .js ]
     vm: front/route-module.vm
-    condition: [ 物料监控项目维护 ] #菜单
+    condition: [ 生产商物料关系维护 ] #菜单
     replaceRange: '\h*}\v{1,2}(?=\s{2}])'
     replaceVm: front/route-module-part.vm
 
   backYmlFormConfig:
-    path: [ D:\20221014\qms-platform\qms-service\src\main\resources\application.yml ]
+    path: [ *backEndPath , src\main\resources\application.yml ]
     condition: [ \/, *targetName , \/\*\*]
     replace:
       -
         range: '(\s+permission: jwtFilter)'
         vm: front/application.vm
   routeFormConfig:
-    path: [ D:\20221014\qms-front\src\router\routes.js ]
+    path: [ *frontEndPath ,src\router\routes.js ]
     condition: [ 'import ', *prefix , Form ]
     replace:
       -
@@ -42,10 +47,10 @@ fileBuilder:
         range: (\w+Form)\v{2}]
         vm: front/route-form-2.vm
   apiConfig:
-    path: [ D:/20221014/qms-front/src/api/, *prefix , / , *targetName ,.js  ]
+    path: [ *frontEndPath , src/api/, *prefix , / , *targetName ,.js  ]
     vm: front/api.vm
   viewConfig:
-    path: [ D:/20221014/qms-front/src/views/, *prefix , / , *targetName , / , index.vue  ]
+    path: [ *frontEndPath , src/views/, *prefix , / , *targetName , /index.vue  ]
     vm: front/views.vm
 
 

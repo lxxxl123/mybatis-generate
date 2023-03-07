@@ -5,15 +5,17 @@ base:
   url: jdbc:p6spy:jtds:sqlserver://10.254.2.25:1855;DatabaseName=qc;useLOBs=false
   username: sa
   password: ht123
-  targetTable: ori_pak_mara  # 表名
+  targetTable: ori_pak_supplier  # 表名
   targetName: &targetName # 实体名
-    oriPakMara
+    oriPakSupplier
   prefix: &prefix  #路径名
     oriPak
 
   codePath: src\main\java\
   resourcePath: src\main\resources\
-  backEndPath: D:\20221014\qms-platform\qms-service\  #后端代码路径
+
+  backEndPath: &backEndPath # 后端路径
+     D:\20221014\qms-platform\qms-service\
   package: com.haday.qms
   entity: entity
   service: service
@@ -22,14 +24,14 @@ base:
   dao: dao
   mapperXmlPath: mybatis-mapper
 
-  author: chenwh3
+  author: chenwh3 # 作者名
   isMerge: true
   buildSelect: true
   buildExport: true
 
 fileBuilder:
   backIndexTip:
-    path: [ D:\20221014\qms-platform\qms-service\src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
+    path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
     condition: [ 'spel:', "['indexs']?.size() > 0 && ['content'].contains(['indexs'][0]['idxName'])" ]
     replace:
       -
