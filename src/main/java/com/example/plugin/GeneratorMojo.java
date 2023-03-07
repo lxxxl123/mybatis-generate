@@ -54,22 +54,22 @@ public class GeneratorMojo extends Generator {
             String mapperXmlPath = base.getStr("mapperXmlPath");
 
             FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}.java", codePath, qms, entity, prefix, objName),
-                    VelocityUtil.render("entity.vm", data));
+                    VelocityUtil.render("back/entity.vm", data));
 
             FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}Service.java", codePath, qms, service, prefix, objName),
-                    VelocityUtil.render("contract.vm", data));
+                    VelocityUtil.render("back/contract.vm", data));
 
             FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}Mapper.java", codePath, qms, dao, prefix, objName),
-                    VelocityUtil.render("mapper.vm", data));
+                    VelocityUtil.render("back/mapper.vm", data));
 
             FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}/{}ServiceImpl.java", codePath, qms, service, prefix, impl, objName),
-                    VelocityUtil.render("service.vm", data));
+                    VelocityUtil.render("back/service.vm", data));
 
             FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}/{}Controller.java", codePath, qms, controller, prefix, objName),
-                    VelocityUtil.render("controller.vm", data));
+                    VelocityUtil.render("back/controller.vm", data));
 
             FileUtil.writeFile(StrUtil.format("{}/{}/{}/{}Mapper.xml", resourcePath, mapperXmlPath, prefix, objName),
-                    VelocityUtil.render("mapperXml.vm", data));
+                    VelocityUtil.render("back/mapperXml.vm", data));
 
         } catch (Exception e) {
             throw new MojoExecutionException("unable to generator codes of table.", e);
