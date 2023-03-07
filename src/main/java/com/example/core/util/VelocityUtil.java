@@ -82,7 +82,10 @@ public class VelocityUtil {
         JSONObject base = context.getBase();
         JSONObject data = context.getData();
         JSONObject config = context.getFileBuilder().getJSONObject(buildName);
-        String routePath = CollUtil.join(config.getJSONArray("path"), "");
+		if (config == null) {
+			return;
+		}
+		String routePath = CollUtil.join(config.getJSONArray("path"), "");
         String vm = config.getStr("vm");
 
         String condition = null;
@@ -109,7 +112,7 @@ public class VelocityUtil {
 			data.put("content", content);
 			if (condition.startsWith("spel:")) {
 				condition = condition.substring(5);
-				if (SpelUtils.parseBool(condition, context)) {
+				if (!SpelUtils.parseBool(condition, context)) {
 					return;
 				}
 			} else if (ReUtil.contains(condition, content)) {

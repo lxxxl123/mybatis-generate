@@ -5,11 +5,11 @@ base:
   url: jdbc:p6spy:jtds:sqlserver://10.254.2.25:1855;DatabaseName=qc;useLOBs=false
   username: sa
   password: ht123
-  targetTable: ori_pak_supplier  # 表名
+  targetTable: mdm_supplier_base  # 表名
   targetName: &targetName # 实体名
-    oriPakSupplier
+    mdmSupplierBase
   prefix: &prefix  #路径名
-    oriPak
+    mdm
 
   codePath: src\main\java\
   resourcePath: src\main\resources\
@@ -32,7 +32,7 @@ base:
 fileBuilder:
   backIndexTip:
     path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
-    condition: [ 'spel:', "['indexs']?.size() > 0 && ['content'].contains(['indexs'][0]['idxName'])" ]
+    condition: [ 'spel:', "['indexs']?.size() > 0 && ['indexs'][0]['remark']?.length > 0 && !['content'].contains(['indexs'][0]['idxName'])" ]
     replace:
       -
         range: '(?m)^\s+\.build\(\);'

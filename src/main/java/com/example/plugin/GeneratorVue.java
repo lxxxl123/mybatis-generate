@@ -3,16 +3,14 @@ package com.example.plugin;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
-import com.example.core.entity.table.ColumnDefinition;
-import com.example.core.entity.Context;
 import com.example.core.entity.front.Col;
-import com.example.core.service.BaseDataService;
+import com.example.core.entity.table.ColumnDefinition;
 import com.example.core.service.MenusService;
+import com.example.core.util.StringUtil;
 import com.example.core.util.VelocityUtil;
-import com.example.factory.ServiceFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.SetUtils;
-import org.apache.maven.plugin.AbstractMojo;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 
@@ -137,6 +135,9 @@ public class GeneratorVue extends Generator {
         String prefix = base.getStr("prefix");
         String targetName = base.getStr("targetName");
         String menusChPath = base.getStr("menusChPath");
+        if (StringUtils.isAnyBlank(menusChPath, targetName, prefix)) {
+            return;
+        }
         MenusService service = serviceFactory.getService(MenusService.class);
         service.buildPermission(prefix, targetName, menusChPath);
     }

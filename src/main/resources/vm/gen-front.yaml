@@ -11,6 +11,7 @@ base:
   prefix: &prefix
     oriPak  #路径名
   menusChPath: 基础数据-原包材第三方检验基础数据-生产商物料关系维护 # 菜单
+
   entityName: '生产商物料关系' # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
