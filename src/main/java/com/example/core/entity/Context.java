@@ -4,6 +4,8 @@ import cn.hutool.json.JSONObject;
 import com.example.factory.YamlUtils;
 import lombok.Data;
 
+import java.util.List;
+
 
 /**
  * @author chenwh3
@@ -13,7 +15,11 @@ public class Context {
 
     private JSONObject base;
 
+    private JSONObject database;
+
     private JSONObject fileBuilder;
+
+    private List<JSONObject> actions;
     private JSONObject data = new JSONObject();
 
     public static Context of(String sourcePath, String fileName) {
@@ -23,7 +29,7 @@ public class Context {
     }
 
     public static void main(String[] args) {
-        Context load = YamlUtils.load("vm/gen-front.yaml", Context.class);
+        Context load = YamlUtils.load("vm/gen-backend-1.yaml", Context.class);
         System.out.println(load);
 
     }

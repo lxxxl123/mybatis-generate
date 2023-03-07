@@ -27,8 +27,6 @@ public class GeneratorVue extends Generator {
     public void execute() {
         buildConfig("gen-front.yaml");
         // 获取数据库信息
-        buildMetaData();
-        // 生成前端菜单
         buildMenus();
 
         buildVue();
@@ -83,6 +81,10 @@ public class GeneratorVue extends Generator {
             }
             else if (SetUtils.hashSet("vtcode").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-vtcode-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
+            }
+
+            else if (SetUtils.hashSet("supplierCode").contains(col.getField())) {
+                col.setCusMsg(StrUtil.format("type: 'vxe-supplier-pulldown', propMap: [ { key: '{}', val: 'supplierCode' } ]", col.getCol()));
             }
 
 

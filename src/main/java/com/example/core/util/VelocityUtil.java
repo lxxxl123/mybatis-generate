@@ -5,6 +5,7 @@ import cn.hutool.core.util.ReUtil;
 import cn.hutool.json.JSONObject;
 import com.example.core.entity.Context;
 import com.example.core.entity.VmReplacePo;
+import com.example.core.thread.Ctx;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -28,6 +29,12 @@ public class VelocityUtil {
 	public static String render(String vm, Map<String,Object> map) {
 		VelocityContext context = new VelocityContext();
 		map.forEach(context::put);
+		return render(vm, context);
+	}
+
+	public static String render(String vm) {
+		VelocityContext context = new VelocityContext();
+		Ctx.getAll().forEach(context::put);
 		return render(vm, context);
 	}
 
@@ -63,19 +70,15 @@ public class VelocityUtil {
 		String res = StringUtils.replace(targetPackage, ".", "/");
 		return res.replaceAll("/(\\w+)$", ".$1");
 	}
-	public static void write( String fileName, String vmName, VelocityContext context) {
+	public static void write( String fileName, String vmName) {
 		fileName = getPackagePath(fileName);
 		FileUtil.writeFile(
 				fileName,
-				VelocityUtil.render(vmName, context));
+				VelocityUtil.render(vmName));
 	}
 
 
-	public static void write(String fileName, String vmName, Map<String, Object> map) {
-		VelocityContext context = new VelocityContext();
-		map.forEach(context::put);
-		write(fileName, vmName, context);
-	}
+
 
 
     public static void buildPage(String buildName, Context context) {
@@ -106,13 +109,13 @@ public class VelocityUtil {
 
         File file = new File(routePath);
         if (!file.exists() || CollUtil.isEmpty(replaceList)) {
-            write(routePath, vm, data);
+            write(routePath, vm);
         } else {
             String content = cn.hutool.core.io.FileUtil.readString(file, "utf-8");
 			data.put("content", content);
 			if (condition.startsWith("spel:")) {
 				condition = condition.substring(5);
-				if (!SpelUtils.parseBool(condition, context)) {
+				if (!SpelUtils.parseBool(condition, Ctx.getAll())) {
 					return;
 				}
 			} else if (ReUtil.contains(condition, content)) {

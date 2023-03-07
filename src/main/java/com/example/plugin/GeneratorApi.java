@@ -27,8 +27,6 @@ public class GeneratorApi extends Generator {
             //得到配置文件对象 将指定输出路径与读取资源文件路径
             buildConfig("gen-api.yaml");
 
-            buildMetaData();
-
 //            VelocityUtil.buildPage("backIndexTip",context);
 
             JSONObject base = context.getBase();

@@ -2,19 +2,11 @@ package com.example.plugin;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
-import com.example.core.entity.Context;
-import com.example.core.entity.table.TableIndex;
-import com.example.core.service.BaseDataService;
 import com.example.core.util.FileUtil;
 import com.example.core.util.VelocityUtil;
-import com.example.factory.ServiceFactory;
-import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.Mojo;
-import org.apache.maven.plugins.annotations.Parameter;
-
-import java.util.List;
 
 /**
  *
@@ -29,7 +21,6 @@ public class GeneratorMojo extends Generator {
             //得到配置文件对象 将指定输出路径与读取资源文件路径
             buildConfig("gen-backend.yaml");
 
-            buildMetaData();
 
             VelocityUtil.buildPage("backIndexTip",context);
             VelocityUtil.buildPage("backYmlFormConfig",context);
