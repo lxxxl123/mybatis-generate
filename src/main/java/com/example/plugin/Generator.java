@@ -1,12 +1,15 @@
 package com.example.plugin;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.ClassScanner;
+import cn.hutool.core.map.CaseInsensitiveMap;
 import cn.hutool.core.map.MapBuilder;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.example.core.action.BuildVmFileAction;
 import com.example.core.action.DataBaseAction;
+import com.example.core.action.MenusAction;
 import com.example.core.action.SetCtxAction;
 import com.example.core.action.inf.Action;
 import com.example.core.entity.Context;
@@ -19,11 +22,13 @@ import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugins.annotations.Parameter;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author chenwh3
@@ -37,7 +42,7 @@ public abstract class Generator extends AbstractMojo {
 
     protected Context context;
 
-    public Action getAction(JSONObject obj) throws ClassNotFoundException {
+    public Action getAction(JSONObject obj) {
         String clazz = obj.getStr("class");
         Class<? extends Action> aClass = actionMap.get(clazz);
         if (aClass == null) {
@@ -68,6 +73,8 @@ public abstract class Generator extends AbstractMojo {
                 }
             } else if (spelParams.containsKey(name)) {
                 ReflectUtil.setFieldValue(action, field, SpelUtils.parse((String) spelParams.get(name), Ctx.getAll(), field.getType()));
+            } else if (Ctx.containsKey(name)) {
+                ReflectUtil.setFieldValue(action, field, Ctx.getStr(name));
             }
         }
         return action;
@@ -80,17 +87,24 @@ public abstract class Generator extends AbstractMojo {
     }
 
 
-    private Map<String, Class<? extends Action>> actionMap = MapBuilder.create(new HashMap<String, Class<? extends Action>>())
-            .put("dataBaseAction", DataBaseAction.class)
-            .put("buildVmFileAction", BuildVmFileAction.class)
-            .put("setCtxAction", SetCtxAction.class)
-            .build();
+    private Map<String, Class<? extends Action>> actionMap ;
+
+    public void scanAction(){
+        Set<Class<?>> classes = ClassScanner.scanPackage("com.example.core.action");
+        actionMap = new CaseInsensitiveMap<>();
+        for (Class<?> aClass : classes) {
+            if (Action.class.isAssignableFrom(aClass)) {
+                actionMap.put(aClass.getSimpleName(), (Class<? extends Action>) aClass);
+            }
+        }
+    }
 
     protected void buildConfig(String fileName) {
         context = Context.of(configDir, fileName);
         Ctx.init(context.getData());
         serviceFactory = new ServiceFactory(context.getDatabase());
         VelocityUtil.init(configDir);
+        scanAction();
     }
 
 

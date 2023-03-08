@@ -1,9 +1,11 @@
 package com.example.core.action;
 
+import cn.hutool.core.lang.ClassScanner;
 import com.example.core.action.inf.Action;
 import com.example.core.service.BaseDataService;
 import com.example.core.thread.Ctx;
 import com.example.core.util.SpelUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -14,6 +16,7 @@ import java.util.Map;
 /**
  * @author chenwh3
  */
+@Slf4j
 public class SetCtxAction extends Action {
 
     Map<String,Object> map;
@@ -33,11 +36,11 @@ public class SetCtxAction extends Action {
                 Ctx.put(k, SpelUtils.parseStr(v, Ctx.getAll()));
             });
         }
-        System.out.println(123);
+        log.info("finish");
     }
 
     public static void main(String[] args) {
-
+        System.out.println();
     }
 
 

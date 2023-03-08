@@ -1,61 +1,24 @@
-package com.example.plugin;
+package com.example.core.action;
 
-import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
+import com.example.core.action.inf.Action;
 import com.example.core.entity.front.Col;
 import com.example.core.entity.table.ColumnDefinition;
-import com.example.core.service.MenusService;
-import com.example.core.util.StringUtil;
-import com.example.core.util.VelocityUtil;
+import com.example.core.thread.Ctx;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.SetUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugin.MojoFailureException;
 
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-/**
- * @author chenwh3
- */
 @Slf4j
-public class GeneratorVue extends Generator {
-
-    public void execute() {
-        buildConfig("gen-front.yaml");
-        // 获取数据库信息
-        buildMenus();
-
-        buildVue();
-
-    }
-
-    private void buildVue() {
-        JSONObject base = context.getBase();
-        JSONObject data = context.getData();
-        String menusChPath = base.getStr("menusChPath");
-
-        // 生成菜单名
-        String[] split = menusChPath.split("-");
-        Object menusName = ArrayUtil.get(split, -1);
-        data.put("pathChName", menusName);
-
-        VelocityUtil.buildPage("backYmlFormConfig",context);
-        VelocityUtil.buildPage("routeConfig",context);
-        VelocityUtil.buildPage("routeFormConfig",context);
-        VelocityUtil.buildPage("apiConfig",context);
-        buildViewMetaData();
-        VelocityUtil.buildPage("viewConfig", context);
-
-    }
-
-
-    private void buildViewMetaData() {
+public class SetViewMetaDataAction extends Action {
+    @Override
+    protected void run() {
         Set<String> sets = SetUtils.hashSet("createTime","updateTime","creator","modifier");
-        JSONObject data = context.getData();
+        JSONObject data = Ctx.getAll();
         List<ColumnDefinition> columns = data.getJSONArray("columns").toList(ColumnDefinition.class);
 
         List<Col> list = columns.stream().map(e -> {
@@ -101,6 +64,7 @@ public class GeneratorVue extends Generator {
             return col;
         }).collect(Collectors.toList());
 
+
         data.put("showCols", list.stream()
                 .filter(e->!e.getIsPk())
                 .collect(Collectors.toList()));
@@ -128,29 +92,5 @@ public class GeneratorVue extends Generator {
         data.put("delCol", list.stream()
                 .filter(e -> e.getIsDel())
                 .findFirst().orElse(null));
-
     }
-
-
-    private void buildMenus() {
-        JSONObject base = context.getBase();
-        String prefix = base.getStr("prefix");
-        String targetName = base.getStr("targetName");
-        String menusChPath = base.getStr("menusChPath");
-        if (StringUtils.isAnyBlank(menusChPath, targetName, prefix)) {
-            return;
-        }
-        MenusService service = serviceFactory.getService(MenusService.class);
-        service.buildPermission(prefix, targetName, menusChPath);
-    }
-
-
-    public static void main(String[] args) throws MojoExecutionException, MojoFailureException {
-        GeneratorVue generatorVue = new GeneratorVue();
-        generatorVue.configDir = "D:\\20221014\\generator-plugin-test\\src\\main\\resources\\vm\\";
-        generatorVue.execute();
-
-    }
-
-
 }

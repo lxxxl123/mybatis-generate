@@ -1,5 +1,6 @@
 package com.example.core.util;
 
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.example.core.entity.Context;
@@ -25,6 +26,7 @@ public class SpelUtils {
 
         ctx.setRootObject(context);
         ctx.setVariable("StrUtil", new StrUtil());
+        ctx.setVariable("ReUtil", new ReUtil());
 
         return exp.getValue(ctx, clazz);
     }

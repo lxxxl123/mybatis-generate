@@ -13,6 +13,10 @@ public class Ctx {
         ctx.get().put(key, obj);
     }
 
+    public static boolean containsKey(String key){
+        return ctx.get().containsKey(key);
+    }
+
     public static void putIfAbsent(String key, Object obj){
         ctx.get().putIfAbsent(key, obj);
     }

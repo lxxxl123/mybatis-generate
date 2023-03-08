@@ -19,16 +19,10 @@ public class GeneratorBackEnd extends Generator {
     public void execute() throws MojoExecutionException {
         //得到配置文件对象 将指定输出路径与读取资源文件路径
         buildConfig("gen-backend.yaml");
-
         List<JSONObject> actions = context.getActions();
         for (JSONObject action : actions) {
-            try {
-                getAction(action).start();
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            getAction(action).start();
         }
-
     }
 
     public static void main(String[] args) throws MojoExecutionException, MojoFailureException {
