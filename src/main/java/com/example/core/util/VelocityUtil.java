@@ -13,6 +13,7 @@ import java.util.Properties;
 
 /**
  * Velocity工具类,根据模板内容生成文件
+ * @author chenwh3
  */
 public class VelocityUtil {
 
