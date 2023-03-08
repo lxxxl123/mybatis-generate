@@ -35,8 +35,9 @@ actions:
     params:
       tableName: *targetTable
 
-  - class: buildVmFileAction
-    apply: false
+  - ## 唯一索引错误提示
+    class: buildVmFileAction
+#    apply: false
     params:
       path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
       spelCond: "['indexs']?.size() > 0 && ['indexs'][0]['remark']?.length > 0 && ! ['content'].contains(['indexs'][0]['idxName'])"
@@ -44,8 +45,9 @@ actions:
         - range: '(?m)^\s+\.build\(\);'
           vm: back/AspectUtils.vm
 
-  - class: buildVmFileAction
-    apply: false
+  - ##
+    class: buildVmFileAction
+#    apply: false
     params:
       path: [ *backEndPath , src\main\resources\application.yml ]
       exitIfHave: [ /, *targetName , /\*\*]

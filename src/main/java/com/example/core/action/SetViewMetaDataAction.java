@@ -15,12 +15,13 @@ import java.util.stream.Collectors;
 
 @Slf4j
 public class SetViewMetaDataAction extends Action {
+
+    private List<ColumnDefinition> columns ;
+
     @Override
     protected void run() {
         Set<String> sets = SetUtils.hashSet("createTime","updateTime","creator","modifier");
         JSONObject data = Ctx.getAll();
-        List<ColumnDefinition> columns = data.getJSONArray("columns").toList(ColumnDefinition.class);
-
         List<Col> list = columns.stream().map(e -> {
             Col col = new Col();
             col.setIsPk(e.isPk());

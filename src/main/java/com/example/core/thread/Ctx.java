@@ -24,6 +24,10 @@ public class Ctx {
         return ctx.get().getStr(key);
     }
 
+    public static Object get(String key){
+        return ctx.get().get(key);
+    }
+
     public static void init(JSONObject jsonObject){
         ctx.set(jsonObject);
     }

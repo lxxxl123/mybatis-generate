@@ -63,18 +63,25 @@ public abstract class Generator extends AbstractMojo {
             if (StrUtil.endWithIgnoreCase(name, "service")) {
                 ReflectUtil.setFieldValue(action, field, serviceFactory.getService(field.getType()));
             } else if (params.containsKey(name)) {
-                if (params.get(name) instanceof List && field.getType().isAssignableFrom(String.class)) {
-                    ReflectUtil.setFieldValue(action, field, CollUtil.join(params.getJSONArray(name), ""));
+                JSONObject map = params;
+                if (map.get(name) instanceof List && field.getType().isAssignableFrom(String.class)) {
+                    ReflectUtil.setFieldValue(action, field, CollUtil.join(map.getJSONArray(name), ""));
                 } else if (List.class.isAssignableFrom(field.getType())) {
                     Class actualType = getActualType(field, 0);
-                    ReflectUtil.setFieldValue(action, field, params.getJSONArray(name).toList(actualType));
+                    ReflectUtil.setFieldValue(action, field, map.getJSONArray(name).toList(actualType));
                 } else {
-                    ReflectUtil.setFieldValue(action, field, params.get(name, field.getType()));
+                    ReflectUtil.setFieldValue(action, field, map.get(name, field.getType()));
                 }
             } else if (spelParams.containsKey(name)) {
                 ReflectUtil.setFieldValue(action, field, SpelUtils.parse((String) spelParams.get(name), Ctx.getAll(), field.getType()));
             } else if (Ctx.containsKey(name)) {
-                ReflectUtil.setFieldValue(action, field, Ctx.getStr(name));
+                JSONObject map = Ctx.getAll();
+                if  (List.class.isAssignableFrom(field.getType())) {
+                    Class actualType = getActualType(field, 0);
+                    ReflectUtil.setFieldValue(action, field, map.getJSONArray(name).toList(actualType));
+                } else {
+                    ReflectUtil.setFieldValue(action, field, map.get(name, field.getType()));
+                }
             }
         }
         return action;
