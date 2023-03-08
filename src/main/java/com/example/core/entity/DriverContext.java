@@ -15,6 +15,4 @@ public class DriverContext {
     private String username;
     private String password;
 
-    private String targetTable;
-
 }

@@ -4,11 +4,6 @@ import com.example.core.action.inf.Action;
 import com.example.core.service.BaseDataService;
 import com.example.core.thread.Ctx;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author chenwh3
  */
