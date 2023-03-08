@@ -1,5 +1,6 @@
 package com.example.core.util;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.example.core.entity.Context;
 import org.springframework.expression.Expression;
@@ -8,6 +9,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,6 +24,7 @@ public class SpelUtils {
         StandardEvaluationContext ctx = new StandardEvaluationContext();
 
         ctx.setRootObject(context);
+        ctx.setVariable("StrUtil", new StrUtil());
 
         return exp.getValue(ctx, clazz);
     }
@@ -29,5 +32,10 @@ public class SpelUtils {
     public static Boolean parseBool(String expression, Map<String,Object> context) {
         return parse(expression, context, Boolean.class);
     }
+
+    public static String parseStr(String expression, Map<String,Object> context) {
+        return parse(expression, context, String.class);
+    }
+
 
 }

@@ -1,47 +1,103 @@
 
 ### sqlserver
-base:
+database:
   driver: com.p6spy.engine.spy.P6SpyDriver
   url: jdbc:p6spy:jtds:sqlserver://10.254.2.25:1855;DatabaseName=qc;useLOBs=false
   username: sa
   password: ht123
-  targetTable: mdm_supplier_base  # 表名
-  targetName: &targetName # 实体名
-    mdmSupplierBase
-  prefix: &prefix  #路径名
-    mdm
 
-  codePath: src\main\java\
-  resourcePath: src\main\resources\
+base:
+  targetTable: &targetTable
+    ori_pak_supplier  # 表名
+  targetName: &targetName # 实体名
+    oriPakSupplier
+  prefix: &prefix  #路径名
+    oriPak
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\
+
   package: com.haday.qms
   entity: entity
   service: service
   serviceImpl: impl
   controller: controller
   dao: dao
-  mapperXmlPath: mybatis-mapper
 
   author: chenwh3 # 作者名
   isMerge: true
   buildSelect: true
   buildExport: true
 
-fileBuilder:
-  backIndexTip:
-    path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
-    condition: [ 'spel:', "['indexs']?.size() > 0 && ['indexs'][0]['remark']?.length > 0 && !['content'].contains(['indexs'][0]['idxName'])" ]
-    replace:
-      -
-        range: '(?m)^\s+\.build\(\);'
-        vm: back/AspectUtils.vm
+actions:
+  - class: dataBaseAction
+    apply: true
+    params:
+      tableName: *targetTable
 
-  backYmlFormConfig:
-    path: [ *backEndPath , src\main\resources\application.yml ]
-    condition: [ \/, *targetName , \/\*\*]
-    replace:
-      -
-        range: '(\s+permission: jwtFilter)'
-        vm: front/application.vm
+  - class: buildVmFileAction
+    apply: false
+    params:
+      path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
+      spelCond: "['indexs']?.size() > 0 && ['indexs'][0]['remark']?.length > 0 && ! ['content'].contains(['indexs'][0]['idxName'])"
+      replaceList:
+        - range: '(?m)^\s+\.build\(\);'
+          vm: back/AspectUtils.vm
+
+  - class: buildVmFileAction
+    apply: false
+    params:
+      path: [ *backEndPath , src\main\resources\application.yml ]
+      exitIfHave: [ /, *targetName , /\*\*]
+      replaceList:
+        - range: '(\s+permission: jwtFilter)'
+          vm: front/application.vm
+
+  -
+    class: setCtxAction
+    params:
+      map:
+        table: *targetTable
+      spelMap:
+        name: "#StrUtil.upperFirst(['targetName'])"
+
+  -
+    class: buildVmFileAction
+    params:
+      vm: back/entity.vm
+    spelParams:
+      path: "#StrUtil.format('{}src/main/java/com/haday/qms/entity/{}/{}.java',['backEndPath'],['prefix'],['name'])"
+
+  -
+    class: buildVmFileAction
+    params:
+      vm: back/contract.vm
+    spelParams:
+      path: "#StrUtil.format('{}src/main/java/com/haday/qms/service/{}/{}Service.java',['backEndPath'],['prefix'],['name'])"
+
+  -
+    class: buildVmFileAction
+    params:
+      vm: back/mapper.vm
+    spelParams:
+      path: "#StrUtil.format('{}src/main/java/com/haday/qms/dao/{}/{}Mapper.java',['backEndPath'],['prefix'],['name'])"
+  -
+    class: buildVmFileAction
+    params:
+      vm: back/service.vm
+    spelParams:
+      path: "#StrUtil.format('{}src/main/java/com/haday/qms/service/{}/impl/{}ServiceImpl.java',['backEndPath'],['prefix'],['name'])"
+
+  -
+    class: buildVmFileAction
+    params:
+      vm: back/controller.vm
+    spelParams:
+      path: "#StrUtil.format('{}src/main/java/com/haday/qms/controller/{}/{}Controller.java',['backEndPath'],['prefix'],['name'])"
+
+  -
+    class: buildVmFileAction
+    params:
+      vm: back/mapperXml.vm
+    spelParams:
+      path: "#StrUtil.format('{}src/main/resources/mybatis-mapper/{}/{}Mapper.xml',['backEndPath'],['prefix'],['name'])"

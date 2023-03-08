@@ -31,17 +31,5 @@ public class DataBaseAction extends Action {
         Ctx.put("indexs", baseDataService.getIdxInfo(tableName));
     }
 
-    public static void main(String[] args) {
-
-        List<String> list = new ArrayList<String>() {};
-        Type actualType = getActualType(list, 0);
-        System.out.println(123);
-    }
-
-    public static Type getActualType(Object o,int index) {
-        Type clazz = o.getClass().getGenericSuperclass();
-        ParameterizedType pt = (ParameterizedType)clazz;
-        return pt.getActualTypeArguments()[index];
-    }
 
 }

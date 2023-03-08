@@ -3,7 +3,7 @@ package com.example.core.action;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReUtil;
-import cn.hutool.json.JSONObject;
+import cn.hutool.core.util.StrUtil;
 import com.example.core.action.inf.Action;
 import com.example.core.entity.VmReplacePo;
 import com.example.core.service.BaseDataService;
@@ -14,9 +14,7 @@ import com.example.core.util.VelocityUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -29,7 +27,7 @@ public class BuildVmFileAction extends Action {
 
     private String path;
     
-    private String exitIfContain;
+    private String exitIfHave;
     
     private String spelCond;
 
@@ -41,7 +39,7 @@ public class BuildVmFileAction extends Action {
     @Override
     protected void run() {
         File file = new File(path);
-        if (!file.exists() || CollUtil.isEmpty(replaceList)) {
+        if ((!file.exists() || replaceList == null) && StrUtil.isNotEmpty(vm)) {
             VelocityUtil.write(path, vm);
         } else {
             String content = FileUtil.readString(file, StandardCharsets.UTF_8);
@@ -50,7 +48,7 @@ public class BuildVmFileAction extends Action {
                 if (!SpelUtils.parseBool(spelCond, Ctx.getAll())) {
                     return;
                 }
-            } else if (ReUtil.contains(content, exitIfContain)) {
+            } else if (ReUtil.contains(exitIfHave, content)) {
                 return;
             }
             for (VmReplacePo vmPo : replaceList) {
