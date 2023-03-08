@@ -17,21 +17,12 @@ public class Context {
 
     private JSONObject database;
 
-    private JSONObject fileBuilder;
-
     private List<JSONObject> actions;
-    private JSONObject data = new JSONObject();
-
     public static Context of(String sourcePath, String fileName) {
-        Context load = YamlUtils.load(sourcePath + fileName, Context.class);
-        load.data.putAll(load.base);
-        return load;
+        return YamlUtils.load(sourcePath + fileName, Context.class);
     }
 
     public static void main(String[] args) {
-        Context load = YamlUtils.load("vm/gen-backend-1.yaml", Context.class);
-        System.out.println(load);
-
     }
 
 }

@@ -108,7 +108,7 @@ public abstract class Generator extends AbstractMojo {
 
     protected void buildConfig(String fileName) {
         context = Context.of(configDir, fileName);
-        Ctx.init(context.getData());
+        Ctx.init(context.getBase());
         serviceFactory = new ServiceFactory(context.getDatabase());
         VelocityUtil.init(configDir);
         scanAction();
