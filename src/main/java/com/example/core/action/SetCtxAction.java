@@ -39,9 +39,6 @@ public class SetCtxAction extends Action {
         log.info("finish");
     }
 
-    public static void main(String[] args) {
-        System.out.println();
-    }
 
 
 }

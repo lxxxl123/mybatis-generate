@@ -44,7 +44,6 @@ actions:
     params:
       path: [ *frontEndPath , src/router/modules/, *prefix , .js ]
       vm: front/route-module.vm
-      exitIfHave: 生产商物料关系维护
       replaceList:
         - range: '\h*}\v{1,2}(?=\s{2}])'
           vm: front/route-module-part.vm
