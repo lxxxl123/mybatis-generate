@@ -8,9 +8,11 @@ database:
 
 base:
   targetTable: &targetTable
-    ori_pak_supplier_auth  # 表名
+#    ori_pak_supplier_auth  # 表名
+     ori_pak_supplier_auth_user  # 表名
   targetName: &targetName # 实体名
-    oriPakSupplierAuth
+#    oriPakSupplierAuth
+    oriPakSupplierAuthUser
   prefix: &prefix  #路径名
     oriPak
 

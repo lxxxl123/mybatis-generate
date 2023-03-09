@@ -9,3 +9,12 @@ tables:
         columnName: supplierName
         remark: 供应商描述
         selectSql: supp.supplierName
+  account:
+    tableName: hr_employee
+    prefix: hr
+    on: 'account = hr.one_account'
+    cols:
+      -
+        columnName: emp_name
+        remark: 姓名
+        selectSql: hr.emp_name as userChName
