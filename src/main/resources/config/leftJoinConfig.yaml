@@ -1,0 +1,11 @@
+
+tables:
+  supplierCode:
+    tableName: mdm_supplier_base
+    prefix: supp
+    on: 'supplierCode = supp.supplierCode'
+    cols:
+      -
+        columnName: supplierName
+        remark: 供应商描述
+        selectSql: supp.supplierName

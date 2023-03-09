@@ -6,6 +6,7 @@ import com.example.core.entity.table.ColumnDefinition;
 import com.example.core.entity.table.TableDefinition;
 import com.example.core.entity.table.TableIndex;
 import com.example.core.thread.Ctx;
+import com.example.core.util.SpelUtils;
 import com.example.core.util.SqlTypeUtil;
 import com.example.core.util.StringUtil;
 import com.example.mapper.BaseMapper;
@@ -68,7 +69,7 @@ public class BaseDataService {
             String javaFieldName = StringUtil.underlineToCamelhump(columnName);
             String selectSql;
             if (javaFieldName.equals(columnName)) {
-                selectSql = columnName;
+                selectSql = StrUtil.format("{}.{}", t, columnName);
             } else {
                 selectSql = StrUtil.format("{}.{} as {}", t, columnName, javaFieldName);
             }

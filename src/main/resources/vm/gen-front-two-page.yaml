@@ -5,12 +5,6 @@ database:
   password: ht123
 
 base:
-  targetTable: &targetTable
-    ori_pak_supplier  # 表名
-  targetName: &targetName
-    oriPakSupplier  # 实体名
-  prefix: &prefix
-    oriPak  #路径名
   menusChPath: 基础数据-原包材第三方检验基础数据-生产商物料关系维护 # 菜单
 
   entityName: '生产商物料关系' # 实体中文名
@@ -20,6 +14,11 @@ base:
 
 
 actions:
+  -
+    class: setCtxAction
+    params:
+      spelMap:
+        tableName: ''
   -
     class: dataBaseAction
     params:

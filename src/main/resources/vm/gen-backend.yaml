@@ -8,9 +8,9 @@ database:
 
 base:
   targetTable: &targetTable
-    ori_pak_supplier  # 表名
+    ori_pak_supplier_auth  # 表名
   targetName: &targetName # 实体名
-    oriPakSupplier
+    oriPakSupplierAuth
   prefix: &prefix  #路径名
     oriPak
 
@@ -34,6 +34,8 @@ actions:
     apply: true
     params:
       tableName: *targetTable
+
+  - class: leftAction
 
   - ## 唯一索引错误提示
     class: buildVmFileAction
