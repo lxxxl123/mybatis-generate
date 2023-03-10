@@ -1,6 +1,8 @@
 package com.example.core.action;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import com.example.core.action.inf.Action;
@@ -9,7 +11,7 @@ import com.example.core.entity.table.ColumnDefinition;
 import com.example.core.entity.table.LeftJoinCol;
 import com.example.core.thread.Ctx;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.SetUtils;
+import org.apache.commons.collections.list.SetUniqueList;
 
 import java.util.List;
 import java.util.Set;
@@ -26,7 +28,7 @@ public class SetViewMetaDataAction extends Action {
     private List<LeftJoinCol> leftJoinCols;
 
     private List<Col> buildMainList(List<ColumnDefinition> columns){
-        Set<String> sets = SetUtils.hashSet("createTime","updateTime","creator","modifier");
+        Set<String> sets = CollUtil.newHashSet("createTime","updateTime","creator","modifier");
         List<Col> list = columns.stream().map(e -> {
             Col col = new Col();
             col.setIsPk(e.isPk());
@@ -47,16 +49,16 @@ public class SetViewMetaDataAction extends Action {
             if (col.getTitle().endsWith("人")) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'empName' } ]", col.getCol()));
             }
-            else if (SetUtils.hashSet("account").contains(col.getField())) {
+            else if (CollUtil.newHashSet("account").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'oneAccount' } ]", col.getCol()));
             }
-            else if (SetUtils.hashSet("matnr").contains(col.getField())) {
+            else if (CollUtil.newHashSet("matnr").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-matnr-pulldown', propMap: [ { key: '{}', val: 'matnr' } ]", col.getCol()));
             }
-            else if (SetUtils.hashSet("vtcode").contains(col.getField())) {
+            else if (CollUtil.newHashSet("vtcode").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-vtcode-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
             }
-            else if (SetUtils.hashSet("supplierCode").contains(col.getField())) {
+            else if (CollUtil.newHashSet("supplierCode").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-supplier-pulldown', propMap: [ { key: '{}', val: 'supplierCode' } ]", col.getCol()));
             }
 
