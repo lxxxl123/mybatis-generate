@@ -1,0 +1,138 @@
+<template>
+  <el-container style="background-color: #ffffff; height: calc(100vh - 100px); width: 100% ; min-height: 400px">
+    <el-main>
+      <vxe-page-grid ref="xGrid"
+                     :columns="columns"
+                     :form-data="formData"
+                     size="mini"
+                     :height-light="true"
+                     :show-total="true"
+                     :page-size="5000"
+                     :page-show="false"
+                     :rowConfig="{ isCurrent: true }"
+                     :search="searchMethod"
+                     @current-change="currentChange"
+                     overflow
+      >
+      <template #btns>
+          <vxe-input class-name="vxe-button" style="display: inline-flex ; width: 100px" placeholder="搜索" @input="searchByText"/>
+          <vxe-search-btn ref="searchForm" :search-form="searchForm" height="auto" width="500" :submit="searchByCond"/>
+          <vxe-add-btn
+                  :title="'新增'+entity"
+                  :form-data="addForm"
+                  :before-show="beforeShowAdd"
+                  :add-method="batchAddMethod"
+                  :after-add="search"
+          />
+          <vxe-delete-btn
+                  :x-grid="$refs.xGrid"
+                  :delete-method="batchDeleteMethod"
+                  :after-delete="search"
+          />
+        </template>
+      </vxe-page-grid>
+    </el-main>
+  </el-container>
+</template>
+<script>
+import * as service from '@/api/${prefix}/${targetName}'
+import VxeExportBtn from '@/views/template/vxe-export-btn'
+import VxePageGrid from '@/views/template/vxe-page-grid'
+import VxeSearchBtn from '@/views/template/vxe-search-btn'
+import gridMethod from '@/views/template/mixin/gridMethod'
+import colorInfo from '@/views/template/mixin/colorInfo'
+import VxeModifyBtn from '@/views/template/vxe-modify-btn'
+import VxeGridCondCheckbox from '@/views/template/other/vxe-grid-cond-checkbox'
+import VxeAddBtn from '@/views/template/vxe-add-btn'
+import VxeUpdateBtn from '@/views/template/vxe-update-btn'
+import VxeImportBtn from '@/views/template/vxe-import-btn'
+import VxeDeleteBtn from '@/views/template/vxe-delete-btn'
+
+export default {
+  name: '${prefix}-${targetName}',
+  components: {  VxeAddBtn , VxeUpdateBtn , VxeImportBtn ,VxeGridCondCheckbox,VxeDeleteBtn, VxeModifyBtn, VxeSearchBtn, VxePageGrid, VxeExportBtn },
+  data: function () {
+    return {
+      title: '${pathChName}',
+      entity: '${entityName}',
+      formData: {
+        condition: '',
+        pageIndex: '',
+        pageSize: '',
+        order: ''
+      },
+      searchMethod: service.search,
+      batchUpdateMethod: service.batchUpdate,
+      batchMergeMethod: service.batchMerge,
+      batchAddMethod: service.batchAdd,
+      batchDeleteMethod: service.batchDelete,
+      searchForm: [
+#foreach($col in $searchCols)##
+        { field: '${col.col}', title: '${col.title}' ##
+#if($col.isTime), type: 'vxe-range-picker', props: { type: 'date' } ##
+#elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
+#elseif($col.enumList.size()>0), type: 'select', options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
+#elseif($col.cusMsg), $col.cusMsg ##
+#else, type: 'vxe-boot-operation-ipt', operation: 'likeRight' ##
+#end##
+} #if($foreach.hasNext) ,#end
+
+#end
+      ],
+      addForm: [
+#foreach($col in $addCols)##
+        { field: '${col.field}', title: '${col.title}' ##
+#if($col.isTime), props: { type: 'date' } ##
+#elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
+#elseif($col.enumList.size()>0), type: 'select', options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
+#elseif($col.cusMsg), $col.cusMsg ##
+#else ##
+#end##
+} #if($foreach.hasNext) ,#end
+
+#end
+      ],
+      columns: [
+        { type: 'seq', width: 50, fixed: 'left' },
+        { type: 'checkbox', width: 45, fixed: 'left' },
+        #foreach($col in $searchCols)##
+{ field: '${col.field}', title: '${col.title}' ##
+#if($col.isTime) ##
+#elseif($col.enumMap.size()>0), filters:  [#foreach($para in ${col.enumMap.entrySet()}) { label: '$para.value', value: '${para.key}' } #if($foreach.hasNext),#end #end ] ##
+#else ##
+#end##
+#if($col.col!=$col.field), params: { property: '${col.col}' }#end##
+, sortable: true } #if($foreach.hasNext) ,#end
+
+#end
+      ]
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+        this.$refs.xGrid.active()
+        this.search()
+    })
+  },
+  mixins: [
+    gridMethod,
+    colorInfo
+  ],
+  methods: {
+    searchByText (val) {
+       #set($rowVal='this.$refs.xGrid.searchByText(val.value)')##
+       $rowVal
+    },
+    beforeShowAdd ({ form }) {
+    },
+    beforeShowUpdate ({ form, row }) {
+    },
+    currentChange (row) {
+        this.$emit('codeChange', row.row)
+    }
+  },
+  computed: {},
+  watch: {
+  }
+}
+</script>
