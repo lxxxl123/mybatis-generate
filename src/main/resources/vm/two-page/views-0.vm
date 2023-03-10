@@ -1,0 +1,48 @@
+<template>
+  <el-container style="background-color: #ffffff; height: calc(100vh - 100px); width: 100% ; min-height: 400px">
+    <split-pane @resize="resize" :min-percent="20" :default-percent="40" split="vertical"
+                style="width: 100%;height: 100%">
+      <template slot="paneL">
+        <left-page ref="leftPage" @codeChange="codeChange"/>
+      </template>
+      <template slot="paneR">
+        <right-page ref="rightPage" :code="code" @search="search"/>
+      </template>
+    </split-pane>
+  </el-container>
+</template>
+<script>
+import '@/libs/appConst'
+import Vue from 'vue'
+import splitPane from 'vue-splitpane'
+import LeftPage from '@/views/${prefix}/${targetName}/left'
+import RightPage from '@/views/${prefix}/${targetName}/right'
+
+Vue.component('split-pane', splitPane)
+export default {
+  name: '${prefix}-${targetName}',
+  components: { LeftPage, RightPage },
+  data: function () {
+    return {
+      code: ''
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+    })
+  },
+  methods: {
+      search () {
+      this.$refs.leftPage.search()
+    },
+    resize () {
+
+    },
+    codeChange (val) {
+      this.code = val
+    }
+  },
+  computed: {},
+  watch: {}
+}
+</script>

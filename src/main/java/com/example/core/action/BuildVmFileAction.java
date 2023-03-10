@@ -11,6 +11,7 @@ import com.example.core.thread.Ctx;
 import com.example.core.util.SpelUtils;
 import com.example.core.util.StringUtil;
 import com.example.core.util.VelocityUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
@@ -21,6 +22,7 @@ import java.util.regex.Pattern;
 /**
  * @author chenwh3
  */
+@Slf4j
 public class BuildVmFileAction extends Action {
 
     private BaseDataService baseDataService;
@@ -38,6 +40,7 @@ public class BuildVmFileAction extends Action {
 
     @Override
     protected void run() {
+        log.info("path = {}",path);
         File file = new File(path);
         if ((!file.exists() || replaceList == null) && StrUtil.isNotEmpty(vm)) {
             VelocityUtil.write(path, vm);

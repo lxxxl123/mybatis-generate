@@ -27,7 +27,4 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         System.out.println(f.getAbsoluteFile());
     }
 
-    public static void merge(String fileName, String content) {
-
-    }
 }

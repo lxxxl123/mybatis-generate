@@ -5,40 +5,50 @@ database:
   password: ht123
 
 base:
-  menusChPath: 基础数据-原包材第三方检验基础数据-生产商物料关系维护 # 菜单
+  menusChPath: 基础数据-原包材第三方检验基础数据-供应商数据权限维护 # 菜单
 
-  entityName: '生产商物料关系' # 实体中文名
-  frontEndPath: &frontEndPath #前端路径
+  prefix: |- #路径名
+    oriPak
+
+  frontEndPath:  #前端路径
     D:/20221014/qms-front/
 
+  mainPage: &mainPage
+    targetName: oriPakSupplierAuthPage
+    entityName: 供应商权限
 
+  leftPage: &leftPage
+    tableName: ori_pak_supplier_auth_user  #表名
+    targetName: oriPakSupplierAuthUser #实体名
+    entityName: 供应商权限-用户数据
+
+  rightPage: &rightPage
+    tableName: ori_pak_supplier_auth  #表名
+    targetName: oriPakSupplierAuth #实体名
+    entityName: 供应商权限-供应商数据
 
 actions:
+  #########################################
+  ######################################### 构建菜单
+  #########################################
   -
     class: setCtxAction
     params:
+      map:
+        <<: *mainPage
       spelMap:
-        tableName: ''
-  -
-    class: dataBaseAction
-    params:
-      tableName: *targetTable
+        pathChName: "#ReUtil.get('-([^-]+)$',['menusChPath'],1)"
 
   -
     class: menusAction
-  -
-    class: setCtxAction
-    params:
-      spelMap:
-        pathChName: "#ReUtil.get('-([^-]+)$',['menusChPath'],1)"
 
   - ## build route1
     class: buildVmFileAction
 #    apply: false
     spelParams:
       exitIfHave: "['pathChName']"
+      path: "#StrUtil.format('{}src/router/modules/{}.js',['frontEndPath'],['prefix'])"
     params:
-      path: [ *frontEndPath , src/router/modules/, *prefix , .js ]
       vm: front/route-module.vm
       replaceList:
         - range: '\h*}\v{1,2}(?=\s{2}])'
@@ -47,10 +57,11 @@ actions:
   - ## build route2
     class: buildVmFileAction
 #    apply: false
+    spelParams:
+      path: "#StrUtil.format('{}src/router/routes.js',['frontEndPath'])"
+      exitIfHave: "#StrUtil.format('import {}Form',['prefix'])"
     params:
-      path: [ *frontEndPath ,src\router\routes.js ]
       vm: front/route-module.vm
-      exitIfHave: [ 'import ', *prefix , Form ]
       replaceList:
         -
           range: (import \w+Form.*')\v{4}
@@ -59,12 +70,27 @@ actions:
           range: (\w+Form)\v{2}]
           vm: front/route-form-2.vm
 
+  #########################################
+  ######################################### 构建第一个表格
+  #########################################
+  -
+    class: setCtxAction
+    params:
+      map:
+        <<: *leftPage
+  -
+    class: dataBaseAction
+    spelParams:
+      tableName: "['tableName']"
+
   - ## buildApi
     class: buildVmFileAction
 #    apply: false
+    spelParams:
+      path: "#StrUtil.format('{}src/api/{}/{}.js',['frontEndPath'],['prefix'],['targetName'])"
     params:
-      path: [ *frontEndPath , src/api/, *prefix , / , *targetName ,.js  ]
       vm: front/api.vm
+
 
   - ## buildViewMetaData
     class: setViewMetaDataAction
@@ -72,9 +98,60 @@ actions:
   - ## buildView
     class: buildVmFileAction
 #    apply: false
+    spelParams:
+      path: "#StrUtil.format('{}src/views/{}/{}/left.vue',['frontEndPath'],['prefix'],['mainPage']['targetName'])"
     params:
-      path: [ *frontEndPath , src/views/, *prefix , / , *targetName , /index.vue  ]
-      vm: front/views.vm
+      vm: two-page/views-1.vm
+
+  #########################################
+  ######################################### 构建第二个表格
+  #########################################
+
+  -
+    class: setCtxAction
+    params:
+      map:
+        <<: *rightPage
+  -
+    class: dataBaseAction
+    spelParams:
+      tableName: "['tableName']"
+
+  - ## buildApi
+    class: buildVmFileAction
+    #    apply: false
+    spelParams:
+      path: "#StrUtil.format('{}src/api/{}/{}.js',['frontEndPath'],['prefix'],['targetName'])"
+    params:
+      vm: front/api.vm
 
 
+  - ## buildViewMetaData
+    class: setViewMetaDataAction
 
+  - ## buildView
+    class: buildVmFileAction
+    #    apply: false
+    spelParams:
+      path: "#StrUtil.format('{}src/views/{}/{}/right.vue',['frontEndPath'],['prefix'],['mainPage']['targetName'])"
+    params:
+      vm: two-page/views-2.vm
+
+
+  #########################################
+  ######################################### 构建第三个表格
+  #########################################
+
+  -
+    class: setCtxAction
+    params:
+      map:
+        <<: *mainPage
+
+  - ## buildView
+    class: buildVmFileAction
+    #    apply: false
+    spelParams:
+      path: "#StrUtil.format('{}src/views/{}/{}/index.vue',['frontEndPath'],['prefix'],['mainPage']['targetName'])"
+    params:
+      vm: two-page/views-0.vm
