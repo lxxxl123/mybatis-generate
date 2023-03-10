@@ -16,8 +16,6 @@ public class LeftJoinCol {
 
     private String selectSql;
 
-    public LeftJoinCol(String columnName, String remark) {
-        this.columnName = columnName;
-        this.remark = remark;
-    }
+    private String javaFieldName;
+
 }

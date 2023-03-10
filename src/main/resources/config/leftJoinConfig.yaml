@@ -8,7 +8,6 @@ tables:
       -
         columnName: supplierName
         remark: 供应商描述
-        selectSql: supp.supplierName
   account:
     tableName: hr_employee
     prefix: hr
@@ -17,4 +16,4 @@ tables:
       -
         columnName: emp_name
         remark: 姓名
-        selectSql: hr.emp_name as userChName
+        javaFieldName: userChName

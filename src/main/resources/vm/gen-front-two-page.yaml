@@ -82,6 +82,8 @@ actions:
     class: dataBaseAction
     spelParams:
       tableName: "['tableName']"
+  -
+    class: leftAction
 
   - ## buildApi
     class: buildVmFileAction
@@ -116,6 +118,8 @@ actions:
     class: dataBaseAction
     spelParams:
       tableName: "['tableName']"
+  -
+    class: leftAction
 
   - ## buildApi
     class: buildVmFileAction

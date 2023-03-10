@@ -11,6 +11,7 @@
                      :page-show="false"
                      :rowConfig="{ isCurrent: true }"
                      :search="searchMethod"
+                     :sort-by-remote="false"
                      @current-change="currentChange"
                      overflow
       >

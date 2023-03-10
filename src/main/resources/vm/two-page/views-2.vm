@@ -10,6 +10,7 @@
                            :page-size="5000"
                            :page-show="false"
                            :search="searchMethod"
+                           :sort-by-remote="false"
                            overflow
             >
                 <template #btns>

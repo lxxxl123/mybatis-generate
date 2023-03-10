@@ -1,5 +1,6 @@
 package com.example.core.action;
 
+import cn.hutool.core.util.StrUtil;
 import com.example.config.LeftJoinConfig;
 import com.example.core.action.inf.Action;
 import com.example.core.entity.table.ColumnDefinition;
@@ -35,9 +36,28 @@ public class LeftAction extends Action {
             if (!colNames.contains(key)) {
                 continue;
             }
-            LeftJoinTable value = entry.getValue();
-            List<LeftJoinCol> cols = value.getCols();
-            leftJoinTables.add(value);
+            LeftJoinTable table = entry.getValue();
+            List<LeftJoinCol> cols = table.getCols();
+            leftJoinTables.add(table);
+            String prefix = table.getPrefix();
+            cols.forEach(e->{
+                String columnName = e.getColumnName();
+                String javaFieldName = e.getJavaFieldName();
+                String selectSql = e.getSelectSql();
+                if (javaFieldName == null) {
+                    javaFieldName = columnName;
+                }
+                if (selectSql == null) {
+                    if (!javaFieldName.equals(columnName)) {
+                        selectSql = StrUtil.format("{}.{} as {}", prefix, columnName, javaFieldName);
+                    } else {
+                        selectSql = StrUtil.format("{}.{}", prefix, columnName);
+                    }
+                }
+                e.setJavaFieldName(javaFieldName);
+                e.setSelectSql(selectSql);
+
+            });
             leftJoinCols.addAll(cols);
         }
         Ctx.put("leftJoinTables", leftJoinTables);
