@@ -48,7 +48,7 @@ public class SetViewMetaDataAction extends Action {
                 col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'empName' } ]", col.getCol()));
             }
             else if (SetUtils.hashSet("account").contains(col.getField())) {
-                col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'one_account' } ]", col.getCol()));
+                col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'oneAccount' } ]", col.getCol()));
             }
             else if (SetUtils.hashSet("matnr").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-matnr-pulldown', propMap: [ { key: '{}', val: 'matnr' } ]", col.getCol()));
@@ -56,7 +56,6 @@ public class SetViewMetaDataAction extends Action {
             else if (SetUtils.hashSet("vtcode").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-vtcode-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
             }
-
             else if (SetUtils.hashSet("supplierCode").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-supplier-pulldown', propMap: [ { key: '{}', val: 'supplierCode' } ]", col.getCol()));
             }

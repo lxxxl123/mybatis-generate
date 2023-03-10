@@ -6,7 +6,7 @@
         <left-page ref="leftPage" @codeChange="codeChange"/>
       </template>
       <template slot="paneR">
-        <right-page ref="rightPage" :code="code" @search="search"/>
+        <right-page ref="rightPage" :leftRow="leftRow" @search="search"/>
       </template>
     </split-pane>
   </el-container>
@@ -24,7 +24,7 @@ export default {
   components: { LeftPage, RightPage },
   data: function () {
     return {
-      code: ''
+      leftRow: ''
     }
   },
   mounted () {
@@ -39,7 +39,7 @@ export default {
 
     },
     codeChange (val) {
-      this.code = val
+      this.leftRow = val
     }
   },
   computed: {},

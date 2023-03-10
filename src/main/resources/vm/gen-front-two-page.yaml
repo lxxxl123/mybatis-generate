@@ -27,6 +27,10 @@ base:
     targetName: oriPakSupplierAuth #实体名
     entityName: 供应商权限-供应商数据
 
+  joinConfig:
+    leftCol: account
+    rightCol: acc
+
 actions:
   #########################################
   ######################################### 构建菜单
