@@ -1,5 +1,24 @@
 
 tables:
+  producerCode:
+    tableName: ori_pak_producer
+    prefix: pro
+    on: 'producerCode = pro.cno'
+    cols:
+      - columnName: name
+        remark: 生产商描述
+        javaFieldName: producerName
+
+  matnr:
+    tableName: mdm_mara
+    prefix: mara
+    on: 'matnr = mara.mat_code'
+    cols:
+      - columnName: mat_name
+        remark: 物料描述
+        selectSql: rtrim(mara.mat_name) as maktx
+        javaFieldName: maktx
+
   supplierCode:
     tableName: mdm_supplier_base
     prefix: supp
@@ -8,6 +27,7 @@ tables:
       -
         columnName: supplierName
         remark: 供应商描述
+
   account:
     tableName: hr_employee
     prefix: hr

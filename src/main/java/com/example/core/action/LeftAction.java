@@ -15,6 +15,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author chenwh3
+ */
 public class LeftAction extends Action {
 
     private List<ColumnDefinition> columns;

@@ -52,7 +52,11 @@ s.${column.columnName}##
 
 #if(${buildSelect})##
     <select id="select" resultType="map">
-        select #foreach($column in $columns)##
+        select
+        #foreach($ljCol in ${leftJoinCols})##
+            ${ljCol.selectSql},
+        #end##
+        #foreach($column in $columns)##
         #if($column.enumMap.size()>0)
             case
             #foreach($param in ${column.enumMap.entrySet()})
@@ -62,9 +66,6 @@ s.${column.columnName}##
         #end
         ${column.selectSql}#if($foreach.hasNext),
         #end#end
-#foreach($ljCol in ${leftJoinCols}),
-    ${ljCol.selectSql}#if($foreach.hasNext),#end
-#end##
 
         FROM ${table} $t with (nolock)
 #foreach($ljTable in ${leftJoinTables})##
