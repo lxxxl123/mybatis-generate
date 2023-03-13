@@ -14,5 +14,6 @@ import java.util.Map;
 @Mapper
 public interface MenusMapper {
 
-    int insert(@Param("obj") UpmPermission upmPermission);
+    void insert(@Param("obj") UpmPermission upmPermission);
+    String getId(@Param("obj") UpmPermission upmPermission);
 }

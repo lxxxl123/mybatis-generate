@@ -4,26 +4,43 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.mapper.MenusMapper">
 
+    <resultMap id="base" type="com.example.core.daoEntity.UpmPermission">
+        <!--@mbg.generated-->
+        <!--@Table upms_permission-->
+        <result column="id" jdbcType="VARCHAR" property="id" />
+        <result column="pid" jdbcType="VARCHAR" property="pid" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="type" jdbcType="TINYINT" property="type" />
+        <result column="permission_value" jdbcType="VARCHAR" property="permissionValue" />
+        <result column="uri" jdbcType="VARCHAR" property="uri" />
+        <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+    </resultMap>
 
-    <insert id="insert">
+
+    <insert id="insert" >
         merge upms_permission as t
         using (select *,
                       (select max(orders)
                        from upms_permission
-                       where pid = temp.pid) as orders
+                       where pid = temp.pid and name != N'系统管理') as orders
                from (select #{obj.id}                                                 as id,
                             '40288fcb722b7518017234e294cb0000'                 as system_id,
-                            (select id from upms_permission where name = #{obj.pname}) as pid,
+                            #{obj.pid} as pid,
                             #{obj.name}                                                 as name,
                             #{obj.type}                                                 as type,
                             #{obj.permissionValue}                                     as permission_value,
                             #{obj.uri}                                                 as uri,
                          #{obj.ctime}                                                 as ctime
                      ) as temp) s
-        on s.name = t.name and  (s.pid is null or s.pid = t.pid)
+        on s.name = t.name and  s.pid = t.pid
         when not matched then
             insert (id, system_id, pid, name, type, uri , permission_value, orders, status, ctime)
             values (s.id, s.system_id, isnull(s.pid, '1'), s.name, s.type, s.uri, s.permission_value, isnull(s.orders, 0) + 1,
                     1, s.ctime);
     </insert>
+
+
+    <select id="getId" resultType="string" >
+        select id from upms_permission where name = #{obj.name} and pid = #{obj.pid}
+    </select>
 </mapper>

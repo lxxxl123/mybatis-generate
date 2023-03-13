@@ -16,6 +16,8 @@ public class UpmPermission {
 
     private String name;
 
+    private String pid;
+
     /**
      * 1- 目录,  2-菜单 , 3-权限
      */

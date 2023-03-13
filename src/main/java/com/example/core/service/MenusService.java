@@ -11,15 +11,16 @@ public class MenusService {
 
     private MenusMapper menusMapper;
 
-    public void insert(String name, String pname, Integer type, String url, String permissionValue) {
+    public String insert(String name, String pname, String pid, Integer type, String url, String permissionValue) {
         UpmPermission upmPermission = new UpmPermission();
         upmPermission.setName(name);
         upmPermission.setPname(pname);
+        upmPermission.setPid(pid);
         upmPermission.setType(type);
         upmPermission.setUri(url);
         upmPermission.setPermissionValue(permissionValue);
         menusMapper.insert(upmPermission);
-
+        return menusMapper.getId(upmPermission);
     }
 
     public void buildPermission(String prefix, String table, String paths) {
@@ -27,6 +28,7 @@ public class MenusService {
         paths = paths + "- ";
         String[] pathArr = paths.split("-");
         String pname = null;
+        String pid = "1";
         for (int i = 0; i < pathArr.length; i++) {
             String name = pathArr[i];
             Integer type = 1;
@@ -58,10 +60,10 @@ public class MenusService {
                         url = "delBtn";
                         permissionValue = StrUtil.format("qms:{}:delete", table);
                     }
-                    insert(name, pname, type, url, permissionValue);
+                     insert(name, pname, pid, type, url, permissionValue);
                 }
             } else {
-                insert(name, pname, type, url, permissionValue);
+                pid = insert(name, pname, pid, type, url, permissionValue);
             }
 
             pname = name;
