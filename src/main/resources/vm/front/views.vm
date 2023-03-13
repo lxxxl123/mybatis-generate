@@ -6,34 +6,34 @@
                      :form-data="formData"
                      size="mini"
                      :search="searchMethod"
-#if($delCol)##
+          #if($delCol)##
                      init-cond="${delCol.col} = 0"
-#end##
+          #end##
                      overflow
                      :rowStyle="rowStyle"
       >
-      <template #btns>
+        <template #btns>
           <vxe-search-btn ref="searchForm" :search-form="searchForm" height="auto" width="500" :submit="searchByCond"/>
           <vxe-add-btn
-                  :title="'新增'+entity"
-                  :form-data="addForm"
-                  :before-show="beforeShowAdd"
-                  :add-method="batchAddMethod"
-                  :after-add="search"
+              :title="'新增'+entity"
+              :form-data="addForm"
+              :before-show="beforeShowAdd"
+              :add-method="batchAddMethod"
+              :after-add="search"
           />
           <vxe-update-btn
-                  :x-grid="$refs.xGrid"
-                  :title="'调整'+entity"
-                  :form-data="updateForm"A
-                  :use-initial="true"
-                  :auto-reset="true"
-                  :before-show="beforeShowUpdate"
-                  :param-convert="({form})=> [ form ]"
-                  :update-method="batchUpdateMethod"
-                  :after-add="search"
+              :x-grid="$refs.xGrid"
+              :title="'调整'+entity"
+              :form-data="updateForm" A
+              :use-initial="true"
+              :auto-reset="true"
+              :before-show="beforeShowUpdate"
+              :param-convert="({form})=> [ form ]"
+              :update-method="batchUpdateMethod"
+              :after-add="search"
           />
-#if($delCol)##
-          <vxe-modify-btn
+            #if($delCol)##
+              <vxe-modify-btn
                   :x-grid="$refs.xGrid"
                   icon="el-icon-check"
                   status="warning"
@@ -42,8 +42,8 @@
                   :method="batchUpdateMethod"
                   :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 0} ) "
                   :after-modify="search"
-          />
-          <vxe-modify-btn
+              />
+              <vxe-modify-btn
                   :x-grid="$refs.xGrid"
                   icon="el-icon-delete"
                   status="danger"
@@ -52,19 +52,19 @@
                   :method="batchUpdateMethod"
                   :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 1} ) "
                   :after-modify="search"
-          />
-#end##
+              />
+            #end##
           <vxe-delete-btn
-                  :x-grid="$refs.xGrid"
-                  :delete-method="batchDeleteMethod"
-                  :after-delete="search"
+              :x-grid="$refs.xGrid"
+              :delete-method="batchDeleteMethod"
+              :after-delete="search"
           />
           <vxe-import-btn
-                  :x-grid="$refs.xGrid"
-                  :title="entity+'导入模板'"
-                  :form-data="addForm"
-                  :add-method="batchMergeMethod"
-                  :after-add="trySearch"
+              :x-grid="$refs.xGrid"
+              :title="entity+'导入模板'"
+              :form-data="addForm"
+              :add-method="batchMergeMethod"
+              :after-add="trySearch"
           />
           <vxe-export-btn :x-grid="$refs.xGrid"
                           bean-name="${targetName}ServiceImpl"
@@ -72,14 +72,15 @@
                           :title="entity+'导出'"
                           :start-index="2"
           />
-#if($delCol)##
-          <vxe-grid-cond-checkbox ref="showAllBox" :x-grid="$refs.xGrid" un-check-sql="${delCol.col} = 0" :after-click="showAll"/>
-#end##
+            #if($delCol)##
+              <vxe-grid-cond-checkbox ref="showAllBox" :x-grid="$refs.xGrid" un-check-sql="${delCol.col} = 0"
+                                      :after-click="showAll"/>
+            #end##
           <el-tooltip placement="top">
-            <div slot="content" >颜色说明:
+            <div slot="content">颜色说明:
               <br/><span :style="'color: '+ grey">灰色: </span>被删除行
             </div>
-            <vxe-button  size="mini" type="text" status="warning">提示</vxe-button>
+            <vxe-button size="mini" type="text" status="warning">提示</vxe-button>
           </el-tooltip>
         </template>
       </vxe-page-grid>
@@ -87,144 +88,194 @@
   </el-container>
 </template>
 <script>
-import * as service from '@/api/${prefix}/${targetName}'
-import VxeExportBtn from '@/views/template/vxe-export-btn'
-import VxePageGrid from '@/views/template/vxe-page-grid'
-import VxeSearchBtn from '@/views/template/vxe-search-btn'
-import gridMethod from '@/views/template/mixin/gridMethod'
-import colorInfo from '@/views/template/mixin/colorInfo'
-import VxeModifyBtn from '@/views/template/vxe-modify-btn'
-import VxeGridCondCheckbox from '@/views/template/other/vxe-grid-cond-checkbox'
-import VxeAddBtn from '@/views/template/vxe-add-btn'
-import VxeUpdateBtn from '@/views/template/vxe-update-btn'
-import VxeImportBtn from '@/views/template/vxe-import-btn'
-import VxeDeleteBtn from '@/views/template/vxe-delete-btn'
+  import * as service from '@/api/${prefix}/${targetName}'
+  import VxeExportBtn from '@/views/template/vxe-export-btn'
+  import VxePageGrid from '@/views/template/vxe-page-grid'
+  import VxeSearchBtn from '@/views/template/vxe-search-btn'
+  import gridMethod from '@/views/template/mixin/gridMethod'
+  import colorInfo from '@/views/template/mixin/colorInfo'
+  import VxeModifyBtn from '@/views/template/vxe-modify-btn'
+  import VxeGridCondCheckbox from '@/views/template/other/vxe-grid-cond-checkbox'
+  import VxeAddBtn from '@/views/template/vxe-add-btn'
+  import VxeUpdateBtn from '@/views/template/vxe-update-btn'
+  import VxeImportBtn from '@/views/template/vxe-import-btn'
+  import VxeDeleteBtn from '@/views/template/vxe-delete-btn'
 
-export default {
-  name: '${prefix}-${targetName}',
-  components: {  VxeAddBtn , VxeUpdateBtn , VxeImportBtn ,VxeGridCondCheckbox,VxeDeleteBtn, VxeModifyBtn, VxeSearchBtn, VxePageGrid, VxeExportBtn },
-  data: function () {
-    return {
-      title: '${pathChName}',
-      entity: '${entityName}',
-      formData: {
-        condition: '',
-        pageIndex: '',
-        pageSize: '',
-        order: ''
+  export default {
+    name: '${prefix}-${targetName}',
+    components: {
+      VxeAddBtn,
+      VxeUpdateBtn,
+      VxeImportBtn,
+      VxeGridCondCheckbox,
+      VxeDeleteBtn,
+      VxeModifyBtn,
+      VxeSearchBtn,
+      VxePageGrid,
+      VxeExportBtn
+    },
+    data: function () {
+      return {
+        title: '${pathChName}',
+        entity: '${entityName}',
+        formData: {
+          condition: '',
+          pageIndex: '',
+          pageSize: '',
+          order: ''
+        },
+        searchMethod: service.search,
+        batchUpdateMethod: service.batchUpdate,
+        batchMergeMethod: service.batchMerge,
+        batchAddMethod: service.batchAdd,
+        batchDeleteMethod: service.batchDelete,
+        searchForm: [
+            #foreach($col in $searchCols)##
+              {##
+                field: '${col.col}',##
+                title: '${col.title}' ##
+                #if($col.fullFieldName)##
+                  ,param: '$col.fullFieldName'##
+                #end##
+                  #if($col.isTime),##
+                    type: 'vxe-range-picker',##
+                    props: {type: 'date'} ##
+                  #elseif($col.enumMap.size()>0),##
+                    type: 'select',##
+                    options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}', '${para.key}'] #if($foreach.hasNext),#end #end ] ##
+                  #elseif($col.enumList.size()>0),##
+                    type: 'select',##
+                    options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
+                  #elseif($col.cusMsg),##
+                          $col.cusMsg ##
+                  #else,##
+                    type: 'vxe-boot-operation-ipt',##
+                    operation: 'likeRight' ##
+                  #end##
+              } #if($foreach.hasNext) ,#end
+
+            #end
+        ],
+        addForm: [
+            #foreach($col in $addCols)##
+              { ##
+                field: '${col.field}',##
+                title: '${col.title}' ##
+                  #if($col.isTime),##
+                    props: {type: 'date'} ##
+                  #elseif($col.enumMap.size()>0),##
+                    type: 'select',##
+                    options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}', '${para.key}'] #if($foreach.hasNext),#end #end ] ##
+                  #elseif($col.enumList.size()>0),##
+                    type: 'select',##
+                    options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
+                  #elseif($col.cusMsg),##
+                          $col.cusMsg ##
+                  #else ##
+                  #end##
+              } #if($foreach.hasNext) ,#end
+
+            #end
+        ],
+        updateForm: [
+            #foreach($col in $updateCols)##
+              {##
+                field: '${col.field}',##
+                title: '${col.title}' ##
+                  #if($col.isTime),##
+                    props: {type: 'date'} ##
+                  #elseif($col.enumMap.size()>0),##
+                    type: 'select',##
+                    options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}', '${para.key}'] #if($foreach.hasNext),#end #end ] ##
+                  #elseif($col.enumList.size()>0),##
+                    type: 'select',##
+                    options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
+                  #elseif($col.cusMsg),##
+                          $col.cusMsg ##
+                  #else ##
+                  #end##
+              } #if($foreach.hasNext) ,#end
+
+            #end
+        ],
+        columns: [
+          {type: 'seq', width: 50, fixed: 'left'},
+          {type: 'checkbox', width: 45, fixed: 'left'},
+            #foreach($col in $searchCols)##
+              {##
+                field: '${col.field}',##
+                title: '${col.title}' ##
+                #if($col.fullFieldName)##
+                  ,params: { property: '$col.fullFieldName'}##
+                #end##
+                  #if($col.isTime) ##
+                  #elseif($col.enumMap.size()>0),##
+                    filters: [#foreach($para in ${col.enumMap.entrySet()}) {##
+                      label: '$para.value',##
+                      value: '${para.key}'##
+                    } #if($foreach.hasNext),#end #end ] ##
+                  #else ##
+                  #end##
+                  #if($col.col!=$col.field),##
+                    params: {property: '${col.col}'}#end##
+                , sortable: true##
+              } #if($foreach.hasNext) ,#end
+
+            #end
+        ]
+      }
+    },
+    mounted() {
+      this.$nextTick(() => {
+        this.search()
+      })
+    },
+    mixins: [
+      gridMethod,
+      colorInfo
+    ],
+    methods: {
+      rowStyle(row) {
+        let rowStyle = {}
+        let data = row.row
+          #if($delCol)##
+            if (data.${delCol.col}) {
+              rowStyle.background = this.grey
+            }
+          #end##
+        return rowStyle
       },
-      searchMethod: service.search,
-      batchUpdateMethod: service.batchUpdate,
-      batchMergeMethod: service.batchMerge,
-      batchAddMethod: service.batchAdd,
-      batchDeleteMethod: service.batchDelete,
-      searchForm: [
-#foreach($col in $searchCols)##
-        { field: '${col.col}', title: '${col.title}' ##
-#if($col.isTime), type: 'vxe-range-picker', props: { type: 'date' } ##
-#elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
-#elseif($col.enumList.size()>0), type: 'select', options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
-#elseif($col.cusMsg), $col.cusMsg ##
-#else, type: 'vxe-boot-operation-ipt', operation: 'likeRight' ##
-#end##
-} #if($foreach.hasNext) ,#end
-
-#end
-      ],
-      addForm: [
-#foreach($col in $addCols)##
-        { field: '${col.field}', title: '${col.title}' ##
-#if($col.isTime), props: { type: 'date' } ##
-#elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
-#elseif($col.enumList.size()>0), type: 'select', options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
-#elseif($col.cusMsg), $col.cusMsg ##
-#else ##
-#end##
-} #if($foreach.hasNext) ,#end
-
-#end
-      ],
-      updateForm: [
-#foreach($col in $updateCols)##
-        { field: '${col.field}', title: '${col.title}' ##
-#if($col.isTime), props: { type: 'date' } ##
-#elseif($col.enumMap.size()>0), type: 'select', options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}' ,'${para.key}'] #if($foreach.hasNext),#end #end ] ##
-#elseif($col.enumList.size()>0), type: 'select', options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
-#elseif($col.cusMsg), $col.cusMsg ##
-#else ##
-#end##
-} #if($foreach.hasNext) ,#end
-
-#end
-      ],
-      columns: [
-        { type: 'seq', width: 50, fixed: 'left' },
-        { type: 'checkbox', width: 45, fixed: 'left' },
-        #foreach($col in $searchCols)##
-{ field: '${col.field}', title: '${col.title}' ##
-#if($col.isTime) ##
-#elseif($col.enumMap.size()>0), filters:  [#foreach($para in ${col.enumMap.entrySet()}) { label: '$para.value', value: '${para.key}' } #if($foreach.hasNext),#end #end ] ##
-#else ##
-#end##
-#if($col.col!=$col.field), params: { property: '${col.col}' }#end##
-, sortable: true } #if($foreach.hasNext) ,#end
-
-#end
-      ]
-    }
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.search()
-    })
-  },
-  mixins: [
-    gridMethod,
-    colorInfo
-  ],
-  methods: {
-    rowStyle (row) {
-      let rowStyle = {}
-      let data = row.row
-#if($delCol)##
-      if (data.${delCol.col}) {
-        rowStyle.background = this.grey
-      }
-#end##
-      return rowStyle
-    },
-    showAll () {
-      if (!this.$refs.searchForm.tryValidate()) {
-        return
-      }
-      let condition = this.$refs.searchForm.getCondition()
-      this.searchByCond(condition)
-    },
-    beforeShowAdd ({ form }) {
-    },
-    beforeShowUpdate ({ form, row }) {
-    },
-#if($delCol)##
-    reuseValidate ({ rows }) {
-      for (let row of rows) {
-        if (!row.${delCol.col}) {
-          throw new Error('无法对有效数据重复生效')
+      showAll() {
+        if (!this.$refs.searchForm.tryValidate()) {
+          return
         }
-      }
-      return true
+        let condition = this.$refs.searchForm.getCondition()
+        this.searchByCond(condition)
+      },
+      beforeShowAdd({form}) {
+      },
+      beforeShowUpdate({form, row}) {
+      },
+        #if($delCol)##
+          reuseValidate({rows}) {
+            for (let row of rows) {
+              if (!row.${delCol.col}) {
+                throw new Error('无法对有效数据重复生效')
+              }
+            }
+            return true
+          },
+          deleteValidate({rows}) {
+            for (let row of rows) {
+              if (row.${delCol.col}) {
+                throw new Error('无法对废止数据重复废止')
+              }
+            }
+            return true
+          }
+        #end##
     },
-    deleteValidate ({ rows }) {
-      for (let row of rows) {
-        if (row.${delCol.col}) {
-          throw new Error('无法对废止数据重复废止')
-        }
-      }
-      return true
-    }
-#end##
-  },
-  computed: {},
-  watch: {
+    computed: {},
+    watch: {}
   }
-}
 </script>

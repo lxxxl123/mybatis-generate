@@ -34,7 +34,7 @@ public class SetViewMetaDataAction extends Action {
             col.setIsPk(e.isPk());
             col.setCol(e.getJavaFieldName());
             col.setField(e.getJavaFieldName());
-            col.setTitle(e.getRemark().split(";")[0].trim());
+            col.setTitle(e.getRemark().split("\\s")[0].trim());
             if (sets.contains(col.getField())) {
                 col.setAutoBuild(true);
             }
@@ -42,6 +42,10 @@ public class SetViewMetaDataAction extends Action {
             if (type != null) {
                 col.setIsTime(type.startsWith("date"));
                 col.setType(type);
+            }
+
+            if (e.getPrefix() != null) {
+                col.setFullFieldName(StrUtil.format("{}.{}", e.getPrefix(), e.getColumnName()));
             }
             col.setEnumMap(e.getEnumMap());
             col.setEnumList(e.getEnumList());
@@ -60,6 +64,12 @@ public class SetViewMetaDataAction extends Action {
             }
             else if (CollUtil.newHashSet("supplierCode").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-supplier-pulldown', propMap: [ { key: '{}', val: 'supplierCode' } ]", col.getCol()));
+            }
+            else if (CollUtil.newHashSet("producerCode").contains(col.getField())) {
+                col.setCusMsg(StrUtil.format("type: 'vxe-oriPak-producer-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
+            }
+            else if (col.getTitle().endsWith("年份")) {
+                col.setCusMsg("props: { type: 'year' }");
             }
 
 

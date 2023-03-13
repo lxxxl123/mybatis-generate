@@ -18,4 +18,6 @@ public class LeftJoinCol {
 
     private String javaFieldName;
 
+    private String prefix;
+
 }

@@ -24,6 +24,8 @@ public class Col {
      */
     private String cusMsg;
 
+    private String fullFieldName;
+
     private Boolean autoBuild = false;
 
     private String type;

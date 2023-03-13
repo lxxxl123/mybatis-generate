@@ -59,6 +59,7 @@ public class LeftAction extends Action {
                 }
                 e.setJavaFieldName(javaFieldName);
                 e.setSelectSql(selectSql);
+                e.setPrefix(table.getPrefix());
 
             });
             leftJoinCols.addAll(cols);

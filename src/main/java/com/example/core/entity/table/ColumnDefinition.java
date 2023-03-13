@@ -31,6 +31,8 @@ public class ColumnDefinition {
 	 * 是否自增
 	 */
 	private boolean identity;
+
+
 	/**
 	 * 是否主键
 	 */
@@ -49,5 +51,10 @@ public class ColumnDefinition {
 	 * 备注
 	 */
 	private String remark;
+
+	/**
+	 * 用于前端 , 表示该字段属于的表
+	 */
+	private String prefix;
 
 }
