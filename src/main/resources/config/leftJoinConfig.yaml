@@ -37,3 +37,14 @@ tables:
         columnName: emp_name
         remark: 姓名
         javaFieldName: userChName
+
+  vtcode:
+    tableName: qc_verifystang
+    prefix: vt
+    on: 'vtcode = vt.cno'
+    cols:
+      -
+        columnName: cname
+        remark: 特性描述
+        javaFieldName: vtname
+        selectSql: rtrim(vt.cname) as vtname
