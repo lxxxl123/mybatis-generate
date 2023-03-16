@@ -27,7 +27,7 @@ ${column.columnName}#if($foreach.hasNext),#end##
         <foreach collection="list" item="item" index="index" separator="union all">
             select
             #foreach($column in $columns)##
-                #{item.${column.javaFieldName}} as ${column.columnName} #if($foreach.hasNext),
+                #{item.${column.javaFieldName}, jdbcType=${column.jdbcType}} as ${column.columnName} #if($foreach.hasNext),
             #end##
             #end
         </foreach> ) temp ) as s
@@ -41,7 +41,13 @@ ${column.columnName}#if($foreach.hasNext),#end##
             INSERT (#foreach($column in $columns)#if(!${column.pk})${column.columnName}#if($foreach.hasNext) ,#end#end#end)
             VALUES (#foreach($column in $columns)#if(!${column.pk})##
 #if(${column.defaultVal})##
+    #if($column.defaultVal=="''")##
+s.$column.columnName+''##
+    #elseif($column.defaultVal=="0" or $column.defaultVal=="(0)")##
+s.$column.columnName+0##
+    #else##
 isnull(s.${column.columnName},${column.defaultVal})##
+    #end##
 #else ##
 s.${column.columnName}##
 #end#if($foreach.hasNext) ,#end#end#end);
