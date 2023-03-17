@@ -27,7 +27,7 @@ ${column.columnName}#if($foreach.hasNext),#end##
         <foreach collection="list" item="item" index="index" separator="union all">
             select
             #foreach($column in $columns)##
-                #{item.${column.javaFieldName}, jdbcType=${column.jdbcType}} as ${column.columnName} #if($foreach.hasNext),
+                #{item.${column.javaFieldName}} as ${column.columnName} #if($foreach.hasNext),
             #end##
             #end
         </foreach> ) temp ) as s
