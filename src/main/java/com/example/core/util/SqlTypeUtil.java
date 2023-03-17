@@ -86,7 +86,8 @@ public class SqlTypeUtil {
 		mybatisTypeMap.put("nchar", "NCHAR");
 		mybatisTypeMap.put("ntext", "VARCHAR");
 		mybatisTypeMap.put("numeric", "DECIMAL");
-		mybatisTypeMap.put("nvarchar", "NVARCHAR");
+//		mybatisTypeMap.put("nvarchar", "NVARCHAR");
+		mybatisTypeMap.put("nvarchar", "VARCHAR");
 		mybatisTypeMap.put("real", "FLOAT");
 		mybatisTypeMap.put("smalldatetime", "TIMESTAMP");
 		mybatisTypeMap.put("smallint", "INTEGER");
