@@ -12,6 +12,14 @@
         <easy-rules.version>4.1.0</easy-rules.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>AsposeJavaAPI</id>
+            <name>Aspose Java API</name>
+            <url>https://releases.aspose.com/java/repo/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
 
         <dependency>
@@ -128,6 +136,23 @@
             <version>2.0</version>
         </dependency>
 
+        <!--破解版-->
+        <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-words</artifactId>
+            <version>22.11</version>
+            <classifier>jdk17</classifier>
+            <scope>system</scope>
+            <systemPath>D:/maven-repo/aspose-words-22.11-jdk17-crack.jar</systemPath>
+        </dependency>
+        <!-- 用于反编译文件修改 , https://mvnrepository.com/artifact/org.javassist/javassist -->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.29.0-GA</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -138,23 +163,23 @@
                 <version>3.6.0</version>
             </plugin>
 
-            <plugin>
-                <groupId>com.chen</groupId>
-                <artifactId>mybatis-generate</artifactId>
-                <version>1.0-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <!-- 执行目标 -->
-                            <goal>generator</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <basedir>${basedir}</basedir>
-                    <configDir>vm</configDir>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>com.chen</groupId>-->
+<!--                <artifactId>mybatis-generate</artifactId>-->
+<!--                <version>1.0-SNAPSHOT</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            &lt;!&ndash; 执行目标 &ndash;&gt;-->
+<!--                            <goal>generator</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <basedir>${basedir}</basedir>-->
+<!--                    <configDir>vm</configDir>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
