@@ -1,13 +1,13 @@
 package com.example.core.action;
 
 import cn.hutool.core.util.StrUtil;
-import com.example.config.LeftJoinConfig;
-import com.example.core.action.inf.Action;
+import com.example.core.action.inf.LoadConfigAction;
 import com.example.core.entity.table.ColumnDefinition;
 import com.example.core.entity.table.LeftJoinCol;
 import com.example.core.entity.table.LeftJoinTable;
 import com.example.core.thread.Ctx;
-import com.example.factory.YamlUtils;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,16 +18,18 @@ import java.util.stream.Collectors;
 /**
  * @author chenwh3
  */
-public class LeftAction extends Action {
+public class LeftAction extends LoadConfigAction {
+
+    {
+        config = "config/leftJoinConfig.yaml";
+    }
 
     private List<ColumnDefinition> columns;
 
+    @Setter
+    @Getter
     private Map<String, LeftJoinTable> tables;
 
-    @Override
-    public void init() {
-        tables = LeftJoinConfig.init().getTables();
-    }
 
     @Override
     protected void run() {

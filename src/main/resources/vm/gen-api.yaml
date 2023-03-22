@@ -40,6 +40,8 @@ actions:
       tableName: *targetTable
 
   - class: leftAction
+    params:
+      config: config/leftJoinConfig.yaml
 
 
 

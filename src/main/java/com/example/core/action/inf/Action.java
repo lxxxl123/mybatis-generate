@@ -17,7 +17,7 @@ public abstract class Action {
     private JSONObject ctx;
 
 
-    protected abstract void run();
+    protected void run(){};
 
     public  void init(){};
 
