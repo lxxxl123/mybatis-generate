@@ -47,7 +47,7 @@ public class BaseDataService {
             columnDefinition.setPk(Objects.equals(order, 1));
             columnDefinition.setColumnName(columnName);
 
-            if (remark.contains("; ")) {
+            if (StrUtil.isNotBlank(remark) && remark.contains("; ")) {
                 String[] vals = remark.split(";")[1].split("\\s*,\\s*");
                 if (remark.contains("-")) {
                     Map<String, String> map = new LinkedHashMap<>();

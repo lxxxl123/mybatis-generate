@@ -10,6 +10,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,6 +38,9 @@ public class SpelUtils {
 
     public static String parseStr(String expression, Map<String,Object> context) {
         return parse(expression, context, String.class);
+    }
+
+    public static void main(String[] args) {
     }
 
 

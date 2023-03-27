@@ -10,12 +10,12 @@ database:
 base:
   targetTable: &targetTable
 #    sys_job  # 表名
-    sys_job_para  # 表名
+     qc_entrust_item  # 表名
   targetName: &targetName # 实体名
 #    sysJob
-     SysJobPara
+     qcEntrustItem
   prefix: &prefix  #路径名
-    sys
+    qc
 
 
   backEndPath: &backEndPath # 后端路径
@@ -29,8 +29,8 @@ base:
   dao: dao
 
   author: chenwh3 # 作者名
-  isMerge: true
-  buildSelect: false
+  isMerge: false
+  buildSelect: true
   buildExport: false
 
 actions:
@@ -42,8 +42,6 @@ actions:
   - class: leftAction
     params:
       config: config/leftJoinConfig.yaml
-
-
 
   -
     class: setCtxAction
@@ -60,6 +58,7 @@ actions:
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/entity/{}/{}.java',['backEndPath'],['prefix'],['name'])"
 
+# service
   -
     class: buildVmFileAction
     params:
@@ -67,12 +66,15 @@ actions:
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/service/{}/{}Service.java',['backEndPath'],['prefix'],['name'])"
 
+# mapper
   -
     class: buildVmFileAction
     params:
       vm: back/mapper.vm
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/dao/{}/{}Mapper.java',['backEndPath'],['prefix'],['name'])"
+
+# serviceImpl
   -
     class: buildVmFileAction
     params:
@@ -80,13 +82,16 @@ actions:
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/service/{}/impl/{}ServiceImpl.java',['backEndPath'],['prefix'],['name'])"
 
+# controller
   -
     class: buildVmFileAction
+#    apply: false
     params:
       vm: back/controller.vm
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/controller/{}/{}Controller.java',['backEndPath'],['prefix'],['name'])"
 
+# mapperXml
   -
     class: buildVmFileAction
     params:
