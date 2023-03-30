@@ -37,7 +37,6 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
 #end ##
 
 #if(${buildExport})##
-    @Try
     public Page<?> export(JSONObject body, Page<?> page) {
         return search(getExportJson(body, page));
     }

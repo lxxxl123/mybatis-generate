@@ -29,7 +29,9 @@ public class SetViewMetaDataAction extends Action {
 
     private List<Col> buildMainList(List<ColumnDefinition> columns){
         Set<String> sets = CollUtil.newHashSet("createTime","updateTime","creator","modifier");
-        List<Col> list = columns.stream().map(e -> {
+        List<Col> list = columns.stream()
+        .filter(e->!e.getRemark().startsWith("#"))
+        .map(e -> {
             Col col = new Col();
             col.setIsPk(e.isPk());
             col.setCol(e.getJavaFieldName());
@@ -62,7 +64,7 @@ public class SetViewMetaDataAction extends Action {
             else if (CollUtil.newHashSet("vtcode").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-vtcode-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
             }
-            else if (CollUtil.newHashSet("supplierCode").contains(col.getField())) {
+            else if (CollUtil.newHashSet("supplierCode","supplierNo").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-supplier-pulldown', propMap: [ { key: '{}', val: 'supplierCode' } ]", col.getCol()));
             }
             else if (CollUtil.newHashSet("producerCode").contains(col.getField())) {
@@ -74,7 +76,7 @@ public class SetViewMetaDataAction extends Action {
 
 
 
-            if (StrUtil.containsAnyIgnoreCase(col.getField(), "isDel")) {
+            if (StrUtil.containsAnyIgnoreCase(col.getField(), "isDel","delTag")) {
                 col.setIsDel(true);
             }
             /**

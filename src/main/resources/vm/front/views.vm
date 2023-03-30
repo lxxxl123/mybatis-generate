@@ -5,6 +5,10 @@
                      :columns="columns"
                      :form-data="formData"
                      size="mini"
+                     :page-size="500"
+                     :page-sizes="[100,200,500]"
+                     :height-light="true"
+                     :toolBar="{ refresh: {query: reload} }"
                      :search="searchMethod"
           #if($delCol)##
                      init-cond="${delCol.col} = 0"
@@ -72,6 +76,8 @@
                           :title="entity+'导出'"
                           :start-index="2"
           />
+          <vxe-input class-name="vxe-button" style="display: inline-flex ; width: 100px" placeholder="当前页搜索"
+                     @input="searchByText"/>
             #if($delCol)##
               <vxe-grid-cond-checkbox ref="showAllBox" :x-grid="$refs.xGrid" un-check-sql="${delCol.col} = 0"
                                       :after-click="showAll"/>
