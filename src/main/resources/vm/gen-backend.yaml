@@ -10,13 +10,13 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #     ori_pak_check_report  # 表名
-      mdm_mara  # 表名
+      qc_oem_matnr  # 表名
   targetName: &targetName # 实体名
 #    oriPakSupplierAuth
 #    oriPakCheckReport
-     mdmMara
+     qcOemMatnr
   prefix: &prefix  #路径名
-    mdm
+    qc
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\
@@ -31,7 +31,7 @@ base:
   author: chenwh3 # 作者名
 #  isMerge: true
   buildSelect: true
-#  buildExport: true
+  buildExport: true
 
 actions:
   - class: dataBaseAction
@@ -39,7 +39,7 @@ actions:
     params:
       tableName: *targetTable
 
-#  - class: leftAction
+  - class: leftAction
 
 
   - ## 唯一索引错误提示

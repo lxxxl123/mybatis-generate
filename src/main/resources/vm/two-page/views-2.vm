@@ -22,6 +22,8 @@
               ref="addBtn"
               :title="'新增'+entity"
               :form-data="addForm"
+              :use-initial="true"
+              :auto-reset="true"
               :before-show="beforeShowAdd"
               :add-method="batchAddMethod"
               :after-add="search"
@@ -52,17 +54,17 @@
 </template>
 <script>
 import * as service from '@/api/${prefix}/${targetName}'
-import VxeExportBtn from '@/views/template/vxe-export-btn'
-import VxePageGrid from '@/views/template/vxe-page-grid'
-import VxeSearchBtn from '@/views/template/vxe-search-btn'
+import VxeModifyBtn from '@/views/template/vxe-btn/vxe-modify-btn'
+import VxeGridCondCheckbox from '@/views/template/other/vxe-grid-cond-checkbox'
+import VxeExportBtn from '@/views/template/vxe-btn/vxe-export-btn'
+import VxePageGrid from '@/views/template/other/vxe-page-grid'
+import VxeSearchBtn from '@/views/template/vxe-btn/vxe-search-btn'
 import gridMethod from '@/views/template/mixin/gridMethod'
 import colorInfo from '@/views/template/mixin/colorInfo'
-import VxeModifyBtn from '@/views/template/vxe-modify-btn'
-import VxeGridCondCheckbox from '@/views/template/other/vxe-grid-cond-checkbox'
-import VxeAddBtn from '@/views/template/vxe-add-btn'
-import VxeUpdateBtn from '@/views/template/vxe-update-btn'
-import VxeImportBtn from '@/views/template/vxe-import-btn'
-import VxeDeleteBtn from '@/views/template/vxe-delete-btn'
+import VxeAddBtn from '@/views/template/vxe-btn/vxe-add-btn'
+import VxeUpdateBtn from '@/views/template/vxe-btn/vxe-update-btn'
+import VxeImportBtn from '@/views/template/vxe-btn/vxe-import-btn'
+import VxeDeleteBtn from '@/views/template/vxe-btn/vxe-delete-btn'
 import XEUtils from 'xe-utils'
 
   export default {
@@ -177,6 +179,8 @@ import XEUtils from 'xe-utils'
               $rowVal
       },
       beforeShowAdd({form}) {
+        form.acc = this.leftRow.account
+        form.userChName = this.leftRow.userChName
       },
       beforeShowUpdate({form, row}) {
       },
@@ -203,8 +207,7 @@ import XEUtils from 'xe-utils'
     computed: {},
     watch: {
       leftRow: {
-        handler: function (leftRow) {
-          this.$refs.addBtn.setForm ('acc', leftRow.account)
+        handler: function () {
           this.showAll = false
           this.changeShowAll(this.showAll)
         },

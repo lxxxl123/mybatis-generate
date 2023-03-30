@@ -28,6 +28,15 @@ tables:
         columnName: supplierName
         remark: 供应商描述
 
+  supplierNo:
+    tableName: mdm_supplier_base
+    prefix: supp
+    on: 'supplierNo = supp.supplierCode'
+    cols:
+      -
+        columnName: supplierName
+        remark: 供应商描述
+
   account:
     tableName: hr_employee
     prefix: hr
