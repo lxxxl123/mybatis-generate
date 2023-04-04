@@ -10,11 +10,11 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #     ori_pak_check_report  # 表名
-      qc_oem_matnr  # 表名
+      qc_oem_user  # 表名
   targetName: &targetName # 实体名
 #    oriPakSupplierAuth
 #    oriPakCheckReport
-     qcOemMatnr
+     qcOemUser
   prefix: &prefix  #路径名
     qc
 

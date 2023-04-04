@@ -21,6 +21,8 @@
           <vxe-add-btn
               :title="'新增'+entity"
               :form-data="addForm"
+              :use-initial="true"
+              :auto-reset="true"
               :before-show="beforeShowAdd"
               :add-method="batchAddMethod"
               :after-add="search"
@@ -28,7 +30,7 @@
           <vxe-update-btn
               :x-grid="$refs.xGrid"
               :title="'调整'+entity"
-              :form-data="updateForm" A
+              :form-data="updateForm"
               :use-initial="true"
               :auto-reset="true"
               :before-show="beforeShowUpdate"
