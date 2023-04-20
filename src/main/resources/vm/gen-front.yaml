@@ -5,15 +5,15 @@ database:
   password: ht123
 
 base:
-  targetTable: &targetTable
-                 qc_oem_user  # 表名
-  targetName: &targetName
-      qcOemUser  # 实体名
-  prefix: &prefix
-    oem  #路径名
-  menusChPath: 基础数据-出厂报告主数据-代工厂用户信息维护 # 菜单
+  targetTable: &targetTable # 表名
+                 factory_nutrition_param
+  targetName: &targetName  # 实体名
+      factoryNutritionParam
+  prefix: &prefix #路径名
+    factory
+  menusChPath: 基础数据-出厂报告主数据-营养参数-营养参数维护 # 菜单
 
-  entityName: '代工厂用户信息' # 实体中文名
+  entityName: '营养参数' # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 
@@ -48,7 +48,7 @@ actions:
 
   - ## build route2
     class: buildVmFileAction
-    apply: false
+#    apply: false
     params:
       path: [ *frontEndPath ,src\router\routes.js ]
       vm: front/route-module.vm

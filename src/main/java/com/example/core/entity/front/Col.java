@@ -32,6 +32,9 @@ public class Col {
 
     private Boolean isTime;
 
+    private Boolean isUnique;
+
+    private Boolean editable;
     /**
      * 是否逻辑删除字段
      */

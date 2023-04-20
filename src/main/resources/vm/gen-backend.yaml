@@ -10,11 +10,13 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #     ori_pak_check_report  # 表名
-                 factory_material_group  # 表名
+#                 factory_nutrition_metric  # 表名
+                 factory_nutrition_param  # 表名
   targetName: &targetName # 实体名
 #    oriPakSupplierAuth
 #    oriPakCheckReport
-                factoryMaterialGroup
+#                factoryNutritionMetric
+                factoryNutritionParam
   prefix: &prefix  #路径名
     factory
 
@@ -32,7 +34,7 @@ base:
 #  isMerge: true
   buildSelectPage: true
 #  buildSelectList: true
-#  buildExport: true
+  buildExport: true
 
 actions:
   - class: dataBaseAction

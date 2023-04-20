@@ -57,3 +57,14 @@ tables:
         remark: 特性描述
         javaFieldName: vtname
         selectSql: rtrim(vt.cname) as vtname
+
+  factoryMaraGroup:
+    tableName: factory_material_group
+    prefix: maraGp
+    on: 'factoryMaraGroup = maraGp.code'
+    cols:
+      -
+        columnName: descr
+        remark: 物料组描述
+        javaFieldName: groupDescr
+        selectSql: rtrim(descr) as groupDescr

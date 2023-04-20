@@ -9,6 +9,7 @@ import com.example.core.action.inf.Action;
 import com.example.core.entity.front.Col;
 import com.example.core.entity.table.ColumnDefinition;
 import com.example.core.entity.table.LeftJoinCol;
+import com.example.core.entity.table.TableIndex;
 import com.example.core.thread.Ctx;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.list.SetUniqueList;
@@ -27,8 +28,11 @@ public class SetViewMetaDataAction extends Action {
 
     private List<LeftJoinCol> leftJoinCols;
 
+    private List<TableIndex>  indexs;
+
     private List<Col> buildMainList(List<ColumnDefinition> columns){
         Set<String> sets = CollUtil.newHashSet("createTime","updateTime","creator","modifier");
+        List<String> uindex = indexs.stream().map(e -> e.getIdxName()).filter(e -> StrUtil.endWith(e, "uindex")).collect(Collectors.toList());
         List<Col> list = columns.stream()
         .filter(e->!e.getRemark().startsWith("#"))
         .map(e -> {
@@ -37,6 +41,11 @@ public class SetViewMetaDataAction extends Action {
             col.setCol(e.getJavaFieldName());
             col.setField(e.getJavaFieldName());
             col.setTitle(e.getRemark().split("\\s")[0].trim());
+
+            uindex.stream().filter(e1 -> e1.contains(e.getColumnName())).findFirst().ifPresent(e1 -> {
+                col.setIsUnique(true);
+            });
+
             if (sets.contains(col.getField())) {
                 col.setAutoBuild(true);
             }
@@ -59,7 +68,7 @@ public class SetViewMetaDataAction extends Action {
                 col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'oneAccount' } ]", col.getCol()));
             }
             else if (CollUtil.newHashSet("matnr").contains(col.getField())) {
-                col.setCusMsg(StrUtil.format("type: 'vxe-matnr-pulldown', propMap: [ { key: '{}', val: 'matnr' } ]", col.getCol()));
+                col.setCusMsg(StrUtil.format("type: 'vxe-mara-pulldown', propMap: [ { key: '{}', val: 'matCode' },{ key: '-' ,val: 'matName'} ]", col.getCol()));
             }
             else if (CollUtil.newHashSet("vtcode").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-vtcode-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
@@ -69,6 +78,9 @@ public class SetViewMetaDataAction extends Action {
             }
             else if (CollUtil.newHashSet("producerCode").contains(col.getField())) {
                 col.setCusMsg(StrUtil.format("type: 'vxe-oriPak-producer-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
+            }
+            else if (CollUtil.newHashSet("factoryMaraGroup").contains(col.getField())) {
+                col.setCusMsg(StrUtil.format("type: 'vxe-factory-mara-gp-pulldown', propMap: [ { key: '{}', val: 'code' }, { key: '-', val: 'descr' } ]", col.getCol()));
             }
             else if (col.getTitle().endsWith("年份")) {
                 col.setCusMsg("props: { type: 'year' }");
@@ -97,7 +109,9 @@ public class SetViewMetaDataAction extends Action {
 
         List<Col> list = buildMainList(columns);
         if (leftJoinCols != null) {
-            list.addAll(buildMainList(BeanUtil.copyToList(leftJoinCols, ColumnDefinition.class)));
+            List<Col> col = buildMainList(BeanUtil.copyToList(leftJoinCols, ColumnDefinition.class));
+            col.forEach(e->e.setEditable(false));
+            list.addAll(col);
         }
 
         data.put("showCols", list.stream()

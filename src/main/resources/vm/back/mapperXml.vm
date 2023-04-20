@@ -56,8 +56,9 @@ s.${column.columnName}##
 #end##
 
 
-#if($buildSelectList||$builsSelectPage)##
+#if($buildSelectList||$buildSelectPage)##
     <select id="select" resultType="map">
+        select * from (
         select
         #foreach($ljCol in ${leftJoinCols})##
             ${ljCol.selectSql},
@@ -77,6 +78,7 @@ s.${column.columnName}##
 #foreach($ljTable in ${leftJoinTables})##
     left join ${ljTable.tableName} ${ljTable.prefix} with(nolock) on ${t}.${ljTable.on}
 #end##
+      ) t
         where 1=1
         <if test="ew.sqlSegment != null and ew.sqlSegment != ''">
             and ${ew.sqlSegment}
