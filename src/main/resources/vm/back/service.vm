@@ -5,10 +5,9 @@ import ${package}.${service}.${prefix}.${name}Service;
 import ${package}.${dao}.${prefix}.${name}Mapper;
 import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
-#if($isMerge)import java.util.List;
-#end
+import java.util.List;
 
-#if($buildSelect)
+#if($buildSelectList||$buildSelectPage)
 import com.haday.qms.interceptor.anno.Try;
 import com.haday.qms.vo.SearchVo;
 import com.alibaba.fastjson.JSONObject;
@@ -28,11 +27,18 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     }#end ##
 
 
-#if(${buildSelect})##
+#if(${buildSelectPage})##
     @Try
     public Page search(JSONObject obj) {
         SearchVo searchVo = obj.toJavaObject(SearchVo.class);
         return baseMapper.select(searchVo.buildPage(), searchVo.buildWrapper());
+    }
+#end ##
+#if(${buildSelectList})##
+    @Try
+        public List search(JSONObject obj) {
+        SearchVo searchVo = obj.toJavaObject(SearchVo.class);
+        return baseMapper.select(searchVo.buildWrapper());
     }
 #end ##
 

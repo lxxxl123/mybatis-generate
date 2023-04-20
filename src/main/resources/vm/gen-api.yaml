@@ -30,7 +30,8 @@ base:
 
   author: chenwh3 # 作者名
   isMerge: false
-  buildSelect: true
+  buildSelectPage: true
+  buildExportList: true
   buildExport: false
 
 actions:

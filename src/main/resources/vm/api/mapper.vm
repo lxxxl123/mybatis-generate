@@ -29,7 +29,7 @@ public interface ${name}Mapper extends BaseMapper<${name}> {
     int batchMerge(@Param("list") List<${name}> obj);
 #end
 
-#if(${buildSelect})
+#if(${buildSelectPage})
     /**
     * 查询
     * @param page 分页参数
@@ -38,5 +38,12 @@ public interface ${name}Mapper extends BaseMapper<${name}> {
     */
     Page<Map<String,Object>> select(Page page, @Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
 #end
-
+#if(${buildSelectList})
+      /**
+      * 查询
+      * @param wrapper 条件
+      * @return 数据行行
+      */
+      List<Map<String,Object>> select(@Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
+#end
 }

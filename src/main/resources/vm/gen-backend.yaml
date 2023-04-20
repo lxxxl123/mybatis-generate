@@ -10,13 +10,13 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #     ori_pak_check_report  # 表名
-      qc_oem_user  # 表名
+                 factory_material_group  # 表名
   targetName: &targetName # 实体名
 #    oriPakSupplierAuth
 #    oriPakCheckReport
-     qcOemUser
+                factoryMaterialGroup
   prefix: &prefix  #路径名
-    qc
+    factory
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\
@@ -30,8 +30,9 @@ base:
 
   author: chenwh3 # 作者名
 #  isMerge: true
-  buildSelect: true
-  buildExport: true
+  buildSelectPage: true
+#  buildSelectList: true
+#  buildExport: true
 
 actions:
   - class: dataBaseAction
@@ -52,7 +53,7 @@ actions:
         - range: '(?m)^\s+\.build\(\);'
           vm: back/AspectUtils.vm
 
-  - ##
+  - ##创建路由豁免
     class: buildVmFileAction
 #    apply: false
     params:

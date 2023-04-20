@@ -3,17 +3,12 @@ package ${package}.${dao}.${prefix};
 import ${package}.${entity}.${prefix}.${name};
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
-#if(${isMerge})
-import org.apache.ibatis.annotations.Param;
 import java.util.List;
-#end
-#if(${buildSelect})
 import com.baomidou.mybatisplus.core.toolkit.Constants;
 import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import java.util.Map;
-#end
 /**
 * @author ${author}
 */
@@ -29,7 +24,7 @@ public interface ${name}Mapper extends BaseMapper<${name}> {
     int batchMerge(@Param("list") List<${name}> obj);
 #end
 
-#if(${buildSelect})
+#if(${buildSelectPage})
     /**
     * 查询
     * @param page 分页参数
@@ -39,4 +34,12 @@ public interface ${name}Mapper extends BaseMapper<${name}> {
     Page<Map<String,Object>> select(Page page, @Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
 #end
 
+#if(${buildSelectList})
+      /**
+      * 查询
+      * @param wrapper 条件
+      * @return 数据行行
+      */
+      List<Map<String,Object>> select(@Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
+#end
 }

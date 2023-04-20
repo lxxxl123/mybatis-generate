@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import com.baomidou.dynamic.datasource.annotation.DS;
 import com.haday.qms.core.tool.utils.StringUtil;
-#if(${buildSelect})##
 import com.alibaba.fastjson.JSONObject;
-#end
 
 import java.util.List;
 
@@ -61,7 +59,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
 
 #end
 
-#if(${buildSelect})##
+#if($buildSelectList || $buildSelectPage)##
     @ApiOperation(value = "查询", notes = "查询")
     @PostMapping("/search")
     @Auth

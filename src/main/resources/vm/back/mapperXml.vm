@@ -56,7 +56,7 @@ s.${column.columnName}##
 #end##
 
 
-#if(${buildSelect})##
+#if($buildSelectList||$builsSelectPage)##
     <select id="select" resultType="map">
         select
         #foreach($ljCol in ${leftJoinCols})##

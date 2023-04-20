@@ -28,11 +28,18 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     }#end ##
 
 
-#if(${buildSelect})##
+#if(${buildSelectPage})##
     @Try
     public Page search(JSONObject obj) {
         SearchVo searchVo = obj.toJavaObject(SearchVo.class);
         return baseMapper.select(searchVo.buildPage(), searchVo.buildWrapper());
+    }
+#end ##
+#if(${buildSelectList})##
+    @Try
+        public List search(JSONObject obj) {
+        SearchVo searchVo = obj.toJavaObject(SearchVo.class);
+        return baseMapper.select(searchVo.buildWrapper());
     }
 #end ##
 
