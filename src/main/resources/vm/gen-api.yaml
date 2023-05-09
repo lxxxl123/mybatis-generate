@@ -10,12 +10,12 @@ database:
 base:
   targetTable: &targetTable
 #    sys_job  # 表名
-     qc_entrust_item  # 表名
+     oa_sync_config  # 表名
   targetName: &targetName # 实体名
 #    sysJob
-     qcEntrustItem
+     oaSyncConfig
   prefix: &prefix  #路径名
-    qc
+    oa
 
 
   backEndPath: &backEndPath # 后端路径
@@ -30,9 +30,11 @@ base:
 
   author: chenwh3 # 作者名
   isMerge: false
-  buildSelectPage: true
-  buildExportList: true
-  buildExport: false
+#  buildExportList: true
+#  buildExport: false
+#  buildSelectPage: true
+  buildSelectList: true
+  buildExport: true
 
 actions:
   - class: dataBaseAction

@@ -15,6 +15,7 @@
     </properties>
 
     <repositories>
+        <!--用于下载apose-->
         <repository>
             <id>AsposeJavaAPI</id>
             <name>Aspose Java API</name>
@@ -139,6 +140,15 @@
         </dependency>
 
         <!--破解版-->
+        <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-cells</artifactId>
+            <version>22.9</version>
+            <!--            <scope>system</scope>-->
+            <!--            <systemPath>D:/maven-repo/aspose-words-22.11-jdk17-crack.jar</systemPath>-->
+        </dependency>
+
+
         <dependency>
             <groupId>com.aspose</groupId>
             <artifactId>aspose-words</artifactId>

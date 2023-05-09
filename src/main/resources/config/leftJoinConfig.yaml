@@ -68,3 +68,29 @@ tables:
         remark: 物料组描述
         javaFieldName: groupDescr
         selectSql: rtrim(descr) as groupDescr
+
+  factoryRptId:
+    tableName: factory_report_h
+    prefix: h
+    on: 'factoryRptId = h.id'
+    cols:
+      -
+        columnName: aufnr
+        remark: 订单号
+        javaFieldName: aufnr
+        selectSql: aufnr
+      -
+        columnName: werk
+        remark: 工厂
+        javaFieldName: werk
+        selectSql: werk
+      -
+        columnName: matnr
+        remark: 物料编码
+      -
+        columnName: maktx
+        remark: 物料描述
+      -
+        columnName: productDate
+        remark: 生产日期
+        selectSql: cast(productDate as date) as productDate

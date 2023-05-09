@@ -34,72 +34,64 @@ public class SetViewMetaDataAction extends Action {
         Set<String> sets = CollUtil.newHashSet("createTime","updateTime","creator","modifier");
         List<String> uindex = indexs.stream().map(e -> e.getIdxName()).filter(e -> StrUtil.endWith(e, "uindex")).collect(Collectors.toList());
         List<Col> list = columns.stream()
-        .filter(e->!e.getRemark().startsWith("#"))
-        .map(e -> {
-            Col col = new Col();
-            col.setIsPk(e.isPk());
-            col.setCol(e.getJavaFieldName());
-            col.setField(e.getJavaFieldName());
-            col.setTitle(e.getRemark().split("\\s")[0].trim());
+                .filter(e -> StrUtil.isNotBlank(e.getRemark()) && !e.getRemark().startsWith("#"))
+                .map(e -> {
+                    Col col = new Col();
+                    col.setIsPk(e.isPk());
+                    col.setCol(e.getJavaFieldName());
+                    col.setField(e.getJavaFieldName());
+                    col.setTitle(e.getRemark().split("\\s")[0].trim());
 
-            uindex.stream().filter(e1 -> e1.contains(e.getColumnName())).findFirst().ifPresent(e1 -> {
-                col.setIsUnique(true);
-            });
+                    uindex.stream().filter(e1 -> e1.contains(e.getColumnName())).findFirst().ifPresent(e1 -> {
+                        col.setIsUnique(true);
+                    });
 
-            if (sets.contains(col.getField())) {
-                col.setAutoBuild(true);
-            }
-            String type = e.getType();
-            if (type != null) {
-                col.setIsTime(type.startsWith("date"));
-                col.setType(type);
-            }
+                    if (sets.contains(col.getField())) {
+                        col.setAutoBuild(true);
+                    }
+                    String type = e.getType();
+                    if (type != null) {
+                        col.setIsTime(type.startsWith("date"));
+                        col.setType(type);
+                    }
 
-            if (e.getPrefix() != null) {
-                col.setFullFieldName(StrUtil.format("{}.{}", e.getPrefix(), e.getColumnName()));
-            }
-            col.setEnumMap(e.getEnumMap());
-            col.setEnumList(e.getEnumList());
+                    if (e.getPrefix() != null) {
+                        col.setFullFieldName(StrUtil.format("{}.{}", e.getPrefix(), e.getColumnName()));
+                    }
+                    col.setEnumMap(e.getEnumMap());
+                    col.setEnumList(e.getEnumList());
 
-            if (col.getTitle().endsWith("人")) {
-                col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'empName' } ]", col.getCol()));
-            }
-            else if (CollUtil.newHashSet("account").contains(col.getField())) {
-                col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'oneAccount' } ]", col.getCol()));
-            }
-            else if (CollUtil.newHashSet("matnr").contains(col.getField())) {
-                col.setCusMsg(StrUtil.format("type: 'vxe-mara-pulldown', propMap: [ { key: '{}', val: 'matCode' },{ key: '-' ,val: 'matName'} ]", col.getCol()));
-            }
-            else if (CollUtil.newHashSet("vtcode").contains(col.getField())) {
-                col.setCusMsg(StrUtil.format("type: 'vxe-vtcode-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
-            }
-            else if (CollUtil.newHashSet("supplierCode","supplierNo").contains(col.getField())) {
-                col.setCusMsg(StrUtil.format("type: 'vxe-supplier-pulldown', propMap: [ { key: '{}', val: 'supplierCode' } ]", col.getCol()));
-            }
-            else if (CollUtil.newHashSet("producerCode").contains(col.getField())) {
-                col.setCusMsg(StrUtil.format("type: 'vxe-oriPak-producer-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
-            }
-            else if (CollUtil.newHashSet("factoryMaraGroup").contains(col.getField())) {
-                col.setCusMsg(StrUtil.format("type: 'vxe-factory-mara-gp-pulldown', propMap: [ { key: '{}', val: 'code' }, { key: '-', val: 'descr' } ]", col.getCol()));
-            }
-            else if (col.getTitle().endsWith("年份")) {
-                col.setCusMsg("props: { type: 'year' }");
-            }
+                    if (col.getTitle().endsWith("人")) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'empName' } ]", col.getCol()));
+                    } else if (CollUtil.newHashSet("account").contains(col.getField())) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-emp-pulldown', propMap: [ { key: '{}', val: 'oneAccount' } ]", col.getCol()));
+                    } else if (CollUtil.newHashSet("matnr").contains(col.getField())) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-mara-pulldown', propMap: [ { key: '{}', val: 'matCode' },{ key: '-' ,val: 'matName'} ]", col.getCol()));
+                    } else if (CollUtil.newHashSet("vtcode").contains(col.getField())) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-vtcode-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
+                    } else if (CollUtil.newHashSet("supplierCode", "supplierNo").contains(col.getField())) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-supplier-pulldown', propMap: [ { key: '{}', val: 'supplierCode' } ]", col.getCol()));
+                    } else if (CollUtil.newHashSet("producerCode").contains(col.getField())) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-oriPak-producer-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
+                    } else if (CollUtil.newHashSet("factoryMaraGroup").contains(col.getField())) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-factory-mara-gp-pulldown', propMap: [ { key: '{}', val: 'code' }, { key: '-', val: 'descr' } ]", col.getCol()));
+                    } else if (col.getTitle().endsWith("年份")) {
+                        col.setCusMsg("props: { type: 'year' }");
+                    }
 
 
+                    if (StrUtil.containsAnyIgnoreCase(col.getField(), "isDel", "delTag")) {
+                        col.setIsDel(true);
+                    }
+                    /**
+                     * 枚举值更改field
+                     */
+                    if (col.getEnumMap().size() > 0) {
+                        col.setField(col.getCol() + "Str");
+                    }
 
-            if (StrUtil.containsAnyIgnoreCase(col.getField(), "isDel","delTag")) {
-                col.setIsDel(true);
-            }
-            /**
-             * 枚举值更改field
-             */
-            if (col.getEnumMap().size() > 0) {
-                col.setField(col.getCol() + "Str");
-            }
-
-            return col;
-        }).collect(Collectors.toList());
+                    return col;
+                }).collect(Collectors.toList());
         return list;
     }
 

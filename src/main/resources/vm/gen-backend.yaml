@@ -11,14 +11,20 @@ base:
 #    ori_pak_supplier_auth  # 表名
 #     ori_pak_check_report  # 表名
 #                 factory_nutrition_metric  # 表名
-                 factory_nutrition_param  # 表名
+#                 factory_nutrition_param  # 表名
+#                     factory_nutrition_rpt  # 表名
+#                 pp_aufm  # 表名
+      oa_sync_config
   targetName: &targetName # 实体名
 #    oriPakSupplierAuth
 #    oriPakCheckReport
 #                factoryNutritionMetric
-                factoryNutritionParam
+#                factoryNutritionParam
+#                factoryNutritionRpt
+    oaSyncConfig
+#                  ppAufm
   prefix: &prefix  #路径名
-    factory
+    oa
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\
@@ -31,7 +37,7 @@ base:
   dao: dao
 
   author: chenwh3 # 作者名
-#  isMerge: true
+  isMerge: true
   buildSelectPage: true
 #  buildSelectList: true
   buildExport: true
@@ -47,7 +53,7 @@ actions:
 
   - ## 唯一索引错误提示
     class: buildVmFileAction
-#    apply: false
+    apply: false
     params:
       path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
       spelCond: "['indexs']?.size() > 0 && ['indexs'][0]['remark']?.length > 0 && ! ['content'].contains(['indexs'][0]['idxName'])"
@@ -57,7 +63,7 @@ actions:
 
   - ##创建路由豁免
     class: buildVmFileAction
-#    apply: false
+    apply: false
     params:
       path: [ *backEndPath , src\main\resources\application.yml ]
       exitIfHave: [ /, *targetName , /\*\*]

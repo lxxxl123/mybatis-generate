@@ -66,6 +66,7 @@ public class BaseDataService {
                     columnDefinition.setEnumList(enumList);
                 }
             }
+//            String javaFieldName = StrUtil.toCamelCase(columnName.toLowerCase());
             String javaFieldName = StringUtil.underlineToCamelhump(columnName);
             String selectSql;
             if (javaFieldName.equals(columnName)) {
