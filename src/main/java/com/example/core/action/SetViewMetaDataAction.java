@@ -127,11 +127,11 @@ public class SetViewMetaDataAction extends Action {
                 .collect(Collectors.toList()));
 
         data.put("pkCol", list.stream()
-                .filter(e -> e.getIsPk())
+                .filter(Col::getIsPk)
                 .findFirst().orElse(null));
 
         data.put("delCol", list.stream()
-                .filter(e -> e.getIsDel())
+                .filter(Col::getIsDel)
                 .findFirst().orElse(null));
     }
 }

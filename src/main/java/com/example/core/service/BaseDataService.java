@@ -32,6 +32,9 @@ public class BaseDataService {
 
             ColumnDefinition columnDefinition = new ColumnDefinition();
             String columnName = rowMap.getStr("COLUMN_NAME");
+            if(StrUtil.isUpperCase(columnName)){
+                columnName = columnName.toLowerCase();
+            }
             String type = rowMap.getStr("DATA_TYPE");
             Integer order = rowMap.getInt("ORDINAL_POSITION");
             String remark = rowMap.getStr("REMARK");

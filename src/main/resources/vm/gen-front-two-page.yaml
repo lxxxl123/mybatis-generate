@@ -2,7 +2,7 @@ database:
   driver: com.p6spy.engine.spy.P6SpyDriver
   url: jdbc:p6spy:jtds:sqlserver://10.254.2.25:1855;DatabaseName=qc;useLOBs=false
   username: sa
-  password: ht123
+  password: BFZybMAmaQ7P
 
 base:
   menusChPath: 基础数据-原包材第三方检验基础数据-供应商数据权限维护 # 菜单

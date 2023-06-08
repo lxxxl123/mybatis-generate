@@ -2,18 +2,20 @@ database:
   driver: com.p6spy.engine.spy.P6SpyDriver
   url: jdbc:p6spy:jtds:sqlserver://10.254.2.25:1855;DatabaseName=qc;useLOBs=false
   username: sa
-  password: ht123
+  password: BFZybMAmaQ7P
 
 base:
   targetTable: &targetTable # 表名
-                 factory_nutrition_rpt
+                 release_magp_vt_map
   targetName: &targetName  # 实体名
-                factoryNutritionRpt
+                releaseMagpVtMap
   prefix: &prefix #路径名
-            factory
-  menusChPath: 报表-质量风险报表-营养指标监控报表 # 菜单
+            qals
+  menusChPath:
+#    报表-质量风险报表-风险流程报表 # 菜单
+     基础数据-检验批自动释放主数据-物料组释放特性维护(08) # 菜单
 
-  entityName: '检验计划' # 实体中文名
+  entityName: 'OA流程' # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 
