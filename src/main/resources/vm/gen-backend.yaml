@@ -11,7 +11,7 @@ base:
 #    ori_pak_supplier_auth  # 表名
 #     ori_pak_check_report  # 表名
 #                 factory_nutrition_metric  # 表名
-                 factory_nutrition_param  # 表名
+                 sap_cskt  # 表名
 #                     factory_nutrition_rpt  # 表名
 #                 pp_aufm  # 表名
 #                 pp_aufm
@@ -21,12 +21,12 @@ base:
 #    oriPakCheckReport
 #                OaSyncConfig
 #                factoryNutritionMetric
-                factoryNutritionParam
+                SapCskt
 #                factoryNutritionRpt
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
-            factory
+            qc
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\
@@ -39,7 +39,7 @@ base:
   dao: dao
 
   author: chenwh3 # 作者名
-  isMerge: true
+#  isMerge: true
 #  buildSelectPage: true
 #  buildSelectList: true
 #  buildExport: true

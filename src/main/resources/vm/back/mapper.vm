@@ -1,7 +1,7 @@
 package ${package}.${dao}.${prefix};
 
 import ${package}.${entity}.${prefix}.${name};
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.haday.qms.dao.base.QmsBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 import com.baomidou.mybatisplus.core.toolkit.Constants;
@@ -13,7 +13,7 @@ import java.util.Map;
 * @author ${author}
 */
 @Mapper
-public interface ${name}Mapper extends BaseMapper<${name}> {
+public interface ${name}Mapper extends QmsBaseMapper<${name}> {
 
 #if(${isMerge})
     /**

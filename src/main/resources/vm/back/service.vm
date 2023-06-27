@@ -1,6 +1,7 @@
 package ${package}.${service}.${prefix}.${serviceImpl};
 
 import com.haday.qms.service.base.impl.BaseServiceImpl;
+import cn.hutool.core.collection.ListUtil;
 import ${package}.${service}.${prefix}.${name}Service;
 import ${package}.${dao}.${prefix}.${name}Mapper;
 import ${package}.${entity}.${prefix}.${name};
@@ -20,6 +21,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 @Service
 public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
+
+    public int batchMerge(List<$name> list){
+      return baseMapper.batchMerge(list, ListUtil.of("id"));
+    }
 
     #if(${isMerge})@Try
     public Integer batchMerge(List<$name> obj){
