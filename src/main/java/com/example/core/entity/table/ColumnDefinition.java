@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 表字段信息
+ * 后端 , 表字段信息
  */
 @Data
 public class ColumnDefinition {

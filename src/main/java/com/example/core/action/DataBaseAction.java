@@ -26,8 +26,8 @@ public class DataBaseAction extends Action {
 
         Ctx.put("indexs", baseDataService.getIdxInfo(tableName));
 
-        Ctx.put("insertList", ListUtil.of("creator","create_time","createTime"));
-        Ctx.put("updateList", ListUtil.of("modifier","update_time","updateTime","mdyUser","mdyDate"));
+        Ctx.put("insertList", ListUtil.of("creator","create_time","createTime","createAcc"));
+        Ctx.put("updateList", ListUtil.of("modifier","update_time","updateTime","mdyUser","mdyDate","updateAcc"));
     }
 
 
