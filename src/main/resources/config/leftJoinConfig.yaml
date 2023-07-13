@@ -36,6 +36,24 @@ tables:
       -
         columnName: supplierName
         remark: 供应商描述
+  createAcc:
+    tableName: hr_employee
+    prefix: hr1
+    on: 'createAcc = hr1.one_account'
+    cols:
+      - columnName: emp_name
+        remark: 姓名
+        javaFieldName: creator
+
+
+  updateAcc:
+    tableName: hr_employee
+    prefix: hr2
+    on: 'updateAcc = hr2.one_account'
+    cols:
+      - columnName: emp_name
+        remark: 姓名
+        javaFieldName: modifier
 
   account:
     tableName: hr_employee
@@ -94,3 +112,29 @@ tables:
         columnName: productDate
         remark: 生产日期
         selectSql: cast(productDate as date) as productDate
+
+  payKostl:
+    tableName: sap_cskt
+    prefix: pay
+    on: 'payKostl = pay.kostl'
+    cols:
+      - columnName: ktext
+        remark: 支出方成本中心描述
+        javaFieldName: payKtext
+
+      - columnName: budgetOrgName
+        remark: 支出方
+        javaFieldName: payCenter
+
+  revenueKostl:
+    tableName: sap_cskt
+    prefix: revenue
+    on: 'revenueKostl = revenue.kostl'
+    cols:
+      - columnName: ktext
+        remark: 收入方成本中心描述
+        javaFieldName: revenueKtext
+
+      - columnName: budgetOrgName
+        remark: 收入方
+        javaFieldName: revenueCenter
