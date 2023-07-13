@@ -29,6 +29,7 @@ public class GeneratorBackEnd extends Generator {
         GeneratorBackEnd generatorMojo = new GeneratorBackEnd();
         generatorMojo.configDir = "D:\\20221014\\generator-plugin-test\\src\\main\\resources\\vm\\";
         generatorMojo.execute();
+
     }
 
 

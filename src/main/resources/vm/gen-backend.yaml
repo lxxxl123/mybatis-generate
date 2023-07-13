@@ -11,22 +11,24 @@ base:
 #    ori_pak_supplier_auth  # 表名
 #     ori_pak_check_report  # 表名
 #                 factory_nutrition_metric  # 表名
-                 flowable_start_record  # 表名
+#                 flowable_start_record  # 表名
 #                     factory_nutrition_rpt  # 表名
 #                 pp_aufm  # 表名
 #                 pp_aufm
 #                 oa_sync_config
+                  cost_month_audit_dt
   targetName: &targetName # 实体名
 #    oriPakSupplierAuth
 #    oriPakCheckReport
 #                OaSyncConfig
 #                factoryNutritionMetric
-                FlowableStartRecord
+#                FlowableStartRecord
 #                factoryNutritionRpt
+    CostMonthAuditDt
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
-            flw
+            cost
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\

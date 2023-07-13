@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import com.example.core.entity.table.ColumnDefinition;
 import com.example.core.entity.table.TableDefinition;
 import com.example.core.entity.table.TableIndex;
+import com.example.core.ex.ServiceException;
 import com.example.core.thread.Ctx;
 import com.example.core.util.SpelUtils;
 import com.example.core.util.SqlTypeUtil;
@@ -100,6 +101,9 @@ public class BaseDataService {
 
     public TableDefinition getTableInfo(String tableName) {
         JSONObject rowMap = new JSONObject(mapper.getTableInfo(tableName));
+        if(rowMap.isEmpty()){
+            throw new ServiceException("表{}不存在", tableName);
+        }
         TableDefinition tableDefinition = new TableDefinition();
         tableDefinition.setTableName(rowMap.getStr("TABLE_NAME"));
         tableDefinition.setDesc(rowMap.getStr("TABLE_DESC"));

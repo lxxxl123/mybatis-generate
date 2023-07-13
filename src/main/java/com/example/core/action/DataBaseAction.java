@@ -19,10 +19,9 @@ public class DataBaseAction extends Action {
     protected void run() {
         Ctx.putIfAbsent("t", "t");
 
+        Ctx.put("tableInfo", baseDataService.getTableInfo(tableName));
         //元数据处理
         Ctx.put("columns", baseDataService.getColumnsInfo(tableName));
-
-        Ctx.put("tableInfo", baseDataService.getTableInfo(tableName));
 
         Ctx.put("indexs", baseDataService.getIdxInfo(tableName));
 
