@@ -6,9 +6,9 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 cost_manual_check
+                 cost_manual_check_dt
   targetName: &targetName  # 实体名
-                costManualCheck
+                costManualCheckDt
   prefix: &prefix #路径名
             cost
   menusChPath:
@@ -29,7 +29,7 @@ actions:
 
   -
     class: menusAction
-#    apply: false
+    apply: false
   -
     class: setCtxAction
     params:
@@ -38,7 +38,7 @@ actions:
 
   - ## build route1
     class: buildVmFileAction
-#    apply: false
+    apply: false
     spelParams:
       exitIfHave: "['pathChName']"
     params:
@@ -50,7 +50,7 @@ actions:
 
   - ## build route2
     class: buildVmFileAction
-#    apply: false
+    apply: false
     params:
       path: [ *frontEndPath ,src\router\routes.js ]
       vm: front/route-module.vm
