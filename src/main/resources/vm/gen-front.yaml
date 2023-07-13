@@ -6,16 +6,16 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 release_magp_vt_map
+                 cost_manual_check
   targetName: &targetName  # 实体名
-                releaseMagpVtMap
+                costManualCheck
   prefix: &prefix #路径名
-            qals
+            cost
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-     基础数据-检验批自动释放主数据-物料组释放特性维护(08) # 菜单
+    报表-成本统计-手工对账单 # 菜单
 
-  entityName: 'OA流程' # 实体中文名
+  entityName: '对账单' # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 

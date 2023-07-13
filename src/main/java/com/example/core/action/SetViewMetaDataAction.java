@@ -75,6 +75,8 @@ public class SetViewMetaDataAction extends Action {
                         col.setCusMsg(StrUtil.format("type: 'vxe-oriPak-producer-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
                     } else if (CollUtil.newHashSet("factoryMaraGroup").contains(col.getField())) {
                         col.setCusMsg(StrUtil.format("type: 'vxe-factory-mara-gp-pulldown', propMap: [ { key: '{}', val: 'code' }, { key: '-', val: 'descr' } ]", col.getCol()));
+                    } else if (col.getField().endsWith("kostl")) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-kostl-pulldown', propMap: [ { key: '{}', val: 'kostl' } ]", col.getCol()));
                     } else if (col.getTitle().endsWith("年份")) {
                         col.setCusMsg("props: { type: 'year' }");
                     }

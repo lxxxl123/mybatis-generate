@@ -63,6 +63,7 @@
           <vxe-delete-btn
               :x-grid="$refs.xGrid"
               :delete-method="batchDeleteMethod"
+              :popup-validate="deleteValidate"
               :after-delete="search"
           />
           <vxe-import-btn
@@ -270,6 +271,8 @@ import XEUtils from 'xe-utils'
       beforeShowAdd({form}) {
       },
       beforeShowUpdate({form, row}) {
+      },
+      deleteValidate({row}) {
       },
         #if($delCol)##
           reuseValidate({rows}) {

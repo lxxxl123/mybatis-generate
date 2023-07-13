@@ -42,7 +42,7 @@ tables:
     on: 'createAcc = hr1.one_account'
     cols:
       - columnName: emp_name
-        remark: 姓名
+        remark: 创建人
         javaFieldName: creator
 
 
@@ -52,7 +52,7 @@ tables:
     on: 'updateAcc = hr2.one_account'
     cols:
       - columnName: emp_name
-        remark: 姓名
+        remark: 修改人
         javaFieldName: modifier
 
   account:
