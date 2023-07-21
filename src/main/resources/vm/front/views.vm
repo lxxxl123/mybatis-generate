@@ -69,11 +69,12 @@
               :add-method="batchMergeMethod"
               :after-add="trySearch"
           />
-          <vxe-export-btn :x-grid="$refs.xGrid"
-                          bean-name="${targetName}ServiceImpl"
-                          :form-data="formData"
-                          :title="entity+'导出'"
-                          :start-index="2"
+          <vxe-export-btn
+              :x-grid="$refs.xGrid"
+              bean-name="${targetName}ServiceImpl"
+              :form-data="formData"
+              :title="entity+'导出'"
+              :start-index="2"
           />
           <vxe-input class-name="vxe-button" style="display: inline-flex ; width: 100px" placeholder="当前页搜索"
                      @input="searchByText"/>
@@ -119,6 +120,7 @@ import XEUtils from 'xe-utils'
       VxePageGrid,
       VxeExportBtn
     },
+    mixins: [ gridMethod, colorInfo ],
     data: function () {
       return {
         title: '${pathChName}',
@@ -242,10 +244,7 @@ import XEUtils from 'xe-utils'
         this.search()
       })
     },
-    mixins: [
-      gridMethod,
-      colorInfo
-    ],
+
     methods: {
       rowStyle(row) {
         let rowStyle = {}

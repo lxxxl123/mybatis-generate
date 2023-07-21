@@ -6,14 +6,14 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 cost_manual_check_dt
+                 qc_sample_qasr
   targetName: &targetName  # 实体名
-                costManualCheckDt
+                qcSampleQasrBo
   prefix: &prefix #路径名
-            cost
+            qals
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    报表-成本统计-手工对账单 # 菜单
+    检验批管理-检验特性结果批处理 # 菜单
 
   entityName: '对账单' # 实体中文名
   frontEndPath: &frontEndPath #前端路径
@@ -29,7 +29,7 @@ actions:
 
   -
     class: menusAction
-    apply: false
+#    apply: false
   -
     class: setCtxAction
     params:
@@ -38,7 +38,7 @@ actions:
 
   - ## build route1
     class: buildVmFileAction
-    apply: false
+#    apply: false
     spelParams:
       exitIfHave: "['pathChName']"
     params:
@@ -50,7 +50,7 @@ actions:
 
   - ## build route2
     class: buildVmFileAction
-    apply: false
+#    apply: false
     params:
       path: [ *frontEndPath ,src\router\routes.js ]
       vm: front/route-module.vm

@@ -11,10 +11,10 @@ base:
   targetTable: &targetTable
 #    sys_job  # 表名
 #     oa_sync_config  # 表名
-      qc_qasr_extra  # 表名
+                 qc_sample_qasr  # 表名
   targetName: &targetName # 实体名
 #    sysJob
-     qcQasrExtra
+        qcSampleQasrBo
   prefix: &prefix  #路径名
    qc
 

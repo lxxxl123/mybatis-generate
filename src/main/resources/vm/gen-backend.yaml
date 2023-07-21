@@ -16,7 +16,7 @@ base:
 #                 pp_aufm  # 表名
 #                 pp_aufm
 #                 oa_sync_config
-                 cost_manual_check_dt
+                 qc_sample_qasr
   targetName: &targetName # 实体名
 #    oriPakSupplierAuth
 #    oriPakCheckReport
@@ -24,11 +24,11 @@ base:
 #                factoryNutritionMetric
 #                FlowableStartRecord
 #                factoryNutritionRpt
-    CostManualCheckDt
+    QcSampleQasrBo
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
-            cost
+            qc
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\
