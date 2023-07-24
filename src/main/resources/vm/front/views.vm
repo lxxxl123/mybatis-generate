@@ -34,7 +34,7 @@
               :update-method="batchUpdateMethod"
               :after-add="search"
           />
-            #if($delCol)##
+#if($delCol)##
               <vxe-modify-btn
                   :x-grid="$refs.xGrid"
                   icon="el-icon-check"
@@ -54,8 +54,7 @@
                   :method="batchUpdateMethod"
                   :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 1} ) "
                   :after-modify="search"
-              />
-            #end##
+              />#end##
           <vxe-delete-btn
               :x-grid="$refs.xGrid"
               :delete-method="batchDeleteMethod"
