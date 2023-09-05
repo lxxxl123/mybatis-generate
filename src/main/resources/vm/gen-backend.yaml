@@ -16,7 +16,7 @@ base:
 #                 pp_aufm  # 表名
 #                 pp_aufm
 #                 oa_sync_config
-                 qc_sample_qasr
+                 reserve_lab_area
   targetName: &targetName # 实体名
 #    oriPakSupplierAuth
 #    oriPakCheckReport
@@ -24,11 +24,11 @@ base:
 #                factoryNutritionMetric
 #                FlowableStartRecord
 #                factoryNutritionRpt
-    QcSampleQasrBo
+                ReserveLabArea
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
-            qc
+    reserve
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\
@@ -57,7 +57,7 @@ actions:
 
   - ## 唯一索引错误提示
     class: buildVmFileAction
-    apply: false
+#    apply: false
     params:
       path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
       spelCond: "['indexs']?.size() > 0 && ['indexs'][0]['remark']?.length > 0 && ! ['content'].contains(['indexs'][0]['idxName'])"
@@ -67,10 +67,10 @@ actions:
 
   - ##创建路由豁免
     class: buildVmFileAction
-    apply: false
+#    apply: false
     params:
       path: [ *backEndPath , src\main\resources\application.yml ]
-      exitIfHave: [ /, *targetName , /\*\*]
+      exitIfHave: [ /, *prefix , /\*\*]
       replaceList:
         - range: '(\s+permission: jwtFilter)'
           vm: front/application.vm

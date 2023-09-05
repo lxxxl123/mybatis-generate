@@ -105,6 +105,7 @@ import VxeAddBtn from '@/views/template/vxe-btn/vxe-add-btn'
 import VxeUpdateBtn from '@/views/template/vxe-btn/vxe-update-btn'
 import VxeImportBtn from '@/views/template/vxe-btn/vxe-import-btn'
 import VxeDeleteBtn from '@/views/template/vxe-btn/vxe-delete-btn'
+import autoDs from '@/views/template/mixin/autoDs'
 import XEUtils from 'xe-utils'
   export default {
     name: '${prefix}-${targetName}',
@@ -119,7 +120,7 @@ import XEUtils from 'xe-utils'
       VxePageGrid,
       VxeExportBtn
     },
-    mixins: [ gridMethod, colorInfo ],
+    mixins: [ gridMethod, colorInfo, autoDs ],
     data: function () {
       return {
         title: '${pathChName}',
