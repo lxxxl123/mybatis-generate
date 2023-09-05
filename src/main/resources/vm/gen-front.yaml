@@ -6,16 +6,16 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 qc_sample_qasr
+                 reserve_lab_area
   targetName: &targetName  # 实体名
-                qcSampleQasrBo
+              reserveLabArea
   prefix: &prefix #路径名
-            qals
+            reserve
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    检验批管理-检验特性结果批处理 # 菜单
+    基础数据-实验室-实验室资源线对应关系 # 菜单
 
-  entityName: '对账单' # 实体中文名
+  entityName: 留样区域 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 

@@ -23,7 +23,7 @@ import java.util.List;
 */
 #set($path="${name.substring(0, 1).toLowerCase()}${name.substring(1)}")
 @RestController
-@RequestMapping("/$path")
+@RequestMapping("/$prefix/$path")
 @Api(value = "${tableInfo.desc}控制器", tags = "${tableInfo.desc}控制器")
 @DS(StringUtil.DB_AUTO)
 public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name}Mapper, ${name}> {
@@ -48,16 +48,13 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
 
 
 
-#if($isMerge)##
     @ApiOperation(value = "批量合并", notes = "批量合并")
     @PostMapping("/batchMerge")
     @Auth
     @RequiresPermissions("qms:$path:update")
     public R<?> batchMerge(@RequestBody List<${name}> list) {
         return R.data(service.batchMerge(list));
-    }##
-
-#end
+    }
 
 #if($buildSelectList || $buildSelectPage)##
     @ApiOperation(value = "查询", notes = "查询")

@@ -138,3 +138,13 @@ tables:
       - columnName: budgetOrgName
         remark: 收入方
         javaFieldName: revenueCenter
+
+  resourceCode:
+    tableName: mdm_resource
+    prefix: res
+    on: 'resourceCode = res.resource_code'
+    cols:
+      - columnName: resource_description
+        remark: 资源线描述
+        javaFieldName: resourceDesc
+
