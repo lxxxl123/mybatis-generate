@@ -78,7 +78,9 @@ public class SetViewMetaDataAction extends Action {
                     } else if (col.getField().endsWith("kostl")) {
                         col.setCusMsg(StrUtil.format("type: 'vxe-kostl-pulldown', propMap: [ { key: '{}', val: 'kostl' } ]", col.getCol()));
                     } else if (col.getField().endsWith("resourceCode")) {
-                        col.setCusMsg(StrUtil.format("type: 'vxe-resource-pulldown', propMap: [ { key: '{}', val: 'resourceCode' }, { key: '-', val: 'resourceDesc' }} ]", col.getCol()));
+                        col.setCusMsg(StrUtil.format("type: 'vxe-resource-pulldown', propMap: [ { key: '{}', val: 'resourceCode' }, { key: 'resourceDesc', val: 'resourceDesc' } ]", col.getCol()));
+                    } else if (col.getField().endsWith("cinismp")) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-cinismp-pulldown', propMap: [{ key: '{}', val: 'cno' }, { key: 'cinismpDesc', val: 'cnm' }]", col.getCol()));
                     } else if (col.getTitle().endsWith("年份")) {
                         col.setCusMsg("props: { type: 'year' }");
                     }

@@ -16,19 +16,16 @@ base:
 #                 pp_aufm  # 表名
 #                 pp_aufm
 #                 oa_sync_config
-                 mdm_resource
+                 reserve_prod_smp_template
   targetName: &targetName # 实体名
-#    oriPakSupplierAuth
-#    oriPakCheckReport
 #                OaSyncConfig
-#                factoryNutritionMetric
 #                FlowableStartRecord
-#                factoryNutritionRpt
-                 MdmResource
+#                 MdmResource
+                ReserveProdSmpTemplate
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
-    mdm
+    reserve
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\

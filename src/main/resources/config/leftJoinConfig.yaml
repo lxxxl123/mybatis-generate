@@ -148,3 +148,11 @@ tables:
         remark: 资源线描述
         javaFieldName: resourceDesc
 
+  cinismp:
+    tableName: qc_roombrevitycode
+    prefix: code
+    on: 'cinismp = code.cno'
+    cols:
+      - columnName: cnm
+        remark: 实验室简称
+        javaFieldName: cinismpDesc
