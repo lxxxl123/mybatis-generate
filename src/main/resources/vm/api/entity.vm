@@ -3,7 +3,7 @@ package ${package}.${entity}.${prefix};
 import lombok.Data;
 import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
+import java.io.Serializable;
 
 #set($hasDate=0)
 #foreach($column in $columns)
@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 */
 @Data
 @TableName("${table}")
-public class ${name}{
+public class ${name} implements Serializable {
 
 private static final long serialVersionUID = 1L;
 

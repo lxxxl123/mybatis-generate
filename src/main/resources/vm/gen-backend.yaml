@@ -16,12 +16,12 @@ base:
 #                 pp_aufm  # 表名
 #                 pp_aufm
 #                 oa_sync_config
-                 reserve_prod_smp_template
+                 reserve_prod_slot
   targetName: &targetName # 实体名
 #                OaSyncConfig
 #                FlowableStartRecord
 #                 MdmResource
-                ReserveProdSmpTemplate
+                ReserveProdSlot
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
@@ -54,7 +54,7 @@ actions:
 
   - ## 唯一索引错误提示
     class: buildVmFileAction
-#    apply: false
+    apply: false
     params:
       path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
       spelCond: "['indexs']?.size() > 0 && ['indexs'][0]['remark']?.length > 0 && ! ['content'].contains(['indexs'][0]['idxName'])"
