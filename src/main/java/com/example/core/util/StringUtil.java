@@ -77,9 +77,23 @@ public class StringUtil {
      * 将下划线风格替换为驼峰风格
      */
     public static String underlineToCamelhump(String str) {
+        //连续大写转首字母大写
+        Matcher matcher = Pattern.compile("([A-Z])([A-Z]+)").matcher(str);
+        StringBuffer builder = new StringBuffer();
+        for (int i = 0; matcher.find(); i++) {
+            matcher.appendReplacement(builder, matcher.group(1) + matcher.group(2).toLowerCase());
+        }
+        matcher.appendTail(builder);
+
+        // 字符串中第二个字母是大写的情况, 直接变小写
+        char secondChar = builder.charAt(1);
+        if (Character.isUpperCase(secondChar)) {
+            builder.replace(1, 2, String.valueOf(Character.toLowerCase(secondChar)));
+        }
+
+        // 驼峰转换
         if(isNotEmpty(str)){
-            Matcher matcher = Pattern.compile("_[a-z]").matcher(str);
-            StringBuilder builder = new StringBuilder(str);
+            matcher = Pattern.compile("_[a-z]").matcher(str);
             for (int i = 0; matcher.find(); i++) {
                 builder.replace(matcher.start() - i, matcher.end() - i, matcher.group().substring(1).toUpperCase());
             }

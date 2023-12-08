@@ -6,16 +6,16 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 reserve_left_num
+                 supp_statist_area_lab
   targetName: &targetName  # 实体名
-                reserveLeftNum
+                SuppStatistAreaLab
   prefix: &prefix #路径名
-            reserve
+            supp
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    基础数据-留样管理-物料存放区域维护 # 菜单
+    基础数据-原包材收货检验-库存区域权限维护 # 菜单
 
-  entityName: 物料存放区域 # 实体中文名
+  entityName: 库存区域权限 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 

@@ -37,6 +37,9 @@ public class BaseDataService {
                 columnName = columnName.toLowerCase();
             }
             String type = rowMap.getStr("DATA_TYPE");
+            if("timestamp".equals(type)){
+                continue;
+            }
             Integer order = rowMap.getInt("ORDINAL_POSITION");
             String remark = rowMap.getStr("REMARK");
             String defaultVal = rowMap.getStr("COLUMN_DEFAULT");

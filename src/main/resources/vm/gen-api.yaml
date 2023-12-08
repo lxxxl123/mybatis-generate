@@ -11,13 +11,14 @@ base:
   targetTable: &targetTable
 #    sys_job  # 表名
 #     oa_sync_config  # 表名
-                 reserve_prod_slot  # 表名
+                 qc_aproom2user  # 表名
   targetName: &targetName # 实体名
 #    sysJob
 #     OaSyncConfig
-                    ReserveProdSlot
+    SuppStatistAreaLab
+
   prefix: &prefix  #路径名
-    reserve
+    supp
 
 
   backEndPath: &backEndPath # 后端路径
