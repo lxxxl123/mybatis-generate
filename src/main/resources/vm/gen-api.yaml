@@ -11,14 +11,13 @@ base:
   targetTable: &targetTable
 #    sys_job  # 表名
 #     oa_sync_config  # 表名
-                 qc_aproom2user  # 表名
+                 aufnr_quality_notify_return  # 表名
   targetName: &targetName # 实体名
 #    sysJob
 #     OaSyncConfig
-    SuppStatistAreaLab
-
+      AufnrQualityNotifyReturn
   prefix: &prefix  #路径名
-    supp
+    aufnr
 
 
   backEndPath: &backEndPath # 后端路径
@@ -56,7 +55,6 @@ actions:
         table: *targetTable
       spelMap:
         name: "#StrUtil.upperFirst(['targetName'])"
-
   -
     class: buildVmFileAction
     params:

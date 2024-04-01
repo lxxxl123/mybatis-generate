@@ -7,6 +7,8 @@ import ${package}.${dao}.${prefix}.${name}Mapper;
 import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
+import com.haday.qms.core.tool.support.PlainWrapper;
 
 #if($buildSelectList||$buildSelectPage)
 import com.haday.qms.interceptor.anno.Try;
@@ -33,17 +35,16 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
 
 
 #if(${buildSelectPage})##
-    @Try
-    public Page search(JSONObject obj) {
-        SearchVo searchVo = obj.toJavaObject(SearchVo.class);
-        return baseMapper.select(searchVo.buildPage(), searchVo.buildWrapper());
+    public Page<Map<String,Object>> search(JSONObject obj) {
+        PlainWrapper wrapper = PlainWrapper.ofObj(obj);
+        return baseMapper.select(wrapper.buildPage(), wrapper);
     }
 #end ##
 #if(${buildSelectList})##
     @Try
-        public List search(JSONObject obj) {
-        SearchVo searchVo = obj.toJavaObject(SearchVo.class);
-        return baseMapper.select(searchVo.buildWrapper());
+      public List search(JSONObject obj) {
+        PlainWrapper wrapper = PlainWrapper.ofObj(obj);
+        return baseMapper.select(wrapper.buildPage(), wrapper);
     }
 #end ##
 

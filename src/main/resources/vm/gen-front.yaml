@@ -6,16 +6,16 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 supp_statist_area_lab
+                 qc_project_user
   targetName: &targetName  # 实体名
-                SuppStatistAreaLab
+      qcProjectUser
   prefix: &prefix #路径名
-            supp
+            qc
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    基础数据-原包材收货检验-库存区域权限维护 # 菜单
+    基础数据-受托检验基础数据-项目人员维护 # 菜单
 
-  entityName: 库存区域权限 # 实体中文名
+  entityName: 项目人员维护 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 
@@ -29,7 +29,7 @@ actions:
 
   -
     class: menusAction
-#    apply: false
+    apply: false
   -
     class: setCtxAction
     params:
@@ -38,7 +38,7 @@ actions:
 
   - ## build route1
     class: buildVmFileAction
-#    apply: false
+    apply: false
     spelParams:
       exitIfHave: "['pathChName']"
     params:
@@ -50,7 +50,7 @@ actions:
 
   - ## build route2
     class: buildVmFileAction
-#    apply: false
+    apply: false
     params:
       path: [ *frontEndPath ,src\router\routes.js ]
       vm: front/route-module.vm
