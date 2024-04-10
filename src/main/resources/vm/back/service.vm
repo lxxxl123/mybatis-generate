@@ -8,6 +8,7 @@ import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import com.haday.qms.core.tool.support.PlainWrapper;
 
 #if($buildSelectList||$buildSelectPage)
@@ -21,6 +22,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 * @author ${author}
 */
 @Service
+@Slf4j
 public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
 

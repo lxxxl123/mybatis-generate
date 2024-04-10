@@ -5,6 +5,7 @@ import ${package}.${service}.${prefix}.${name}Service;
 import ${package}.${dao}.${prefix}.${name}Mapper;
 import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 #if($isMerge)import java.util.List;
 #end
 
@@ -19,6 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 * @author ${author}
 */
 @Service
+@Slf4j
 public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
 

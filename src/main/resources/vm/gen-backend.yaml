@@ -10,12 +10,12 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #                 oa_sync_config
-                 aufnr_quality_notify_return
+                 aufnr_quality_fly
   targetName: &targetName # 实体名
 #                OaSyncConfig
 #                FlowableStartRecord
 #                 MdmResource
-      AufnrQualityNotifyReturn
+      AufnrQualityFly
 
 #    oaProgress
 #                  ppAufm
