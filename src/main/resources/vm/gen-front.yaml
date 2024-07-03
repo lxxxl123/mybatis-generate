@@ -6,16 +6,16 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 aufnr_quality_fly
+                 sys_workday
   targetName: &targetName  # 实体名
-      aufnrQualityFly
+    sysWorkday
   prefix: &prefix #路径名
-          aufnr
+          sys
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    原包材收货检验-飞行任务 # 菜单
+    系统管理-其他-工作日管理 # 菜单
 
-  entityName: 飞行任务 # 实体中文名
+  entityName: 工作日 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 

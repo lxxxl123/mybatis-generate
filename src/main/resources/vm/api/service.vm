@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 #if($buildSelect)
 import com.haday.qms.interceptor.anno.Try;
 import com.haday.qms.vo.SearchVo;
-import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 #end
 
@@ -26,7 +26,11 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
 
     #if(${isMerge})
     public Integer batchMerge(List<$name> obj){
-        return baseMapper.batchMerge(obj);
+        CollUtils.partitionList(obj,100)
+            .forEach(e->{
+            baseMapper.batchMerge(e);
+        });
+        return obj.size();
     }#end ##
 
 

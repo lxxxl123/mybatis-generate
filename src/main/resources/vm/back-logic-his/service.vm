@@ -6,6 +6,7 @@ import ${package}.${service}.${prefix}.${name}Service;
 import ${package}.${dao}.${prefix}.${name}Mapper;
 import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
+import com.haday.qms.core.tool.utils.CollUtils;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -27,29 +28,33 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
 
 
-    #if(${isMerge})@Try
-    public Integer batchMerge(List<$name> obj){
-        CollUtils.partitionList(obj,100)
-            .forEach(e->{
-            baseMapper.batchMerge(e);
-        });
-        return obj.size();
-    }#end ##
+    @Transactional(rollbackFor = Exception.class)
+    public Integer batchMerge(List<${name}> list) {
+        batchSetHis(list.stream().map(${name}::getId));
+        list.forEach(e -> e.setId(null));
+        return super.batchAdd(list);
+    }
+
+      /**
+     * 逻辑删除 ，且不可恢复
+     */
+    public void batchSetHis(Object ids) {
+        List<Integer> idList = CollUtils.toIntList(ids);
+        if (idList.isEmpty()) {
+            return;
+        }
+        update().set("hisTag", 2)
+                .in("id", idList)
+                .update();
+    }
 
 
-#if(${buildSelectPage})##
     public Page<Map<String,Object>> search(JSONObject obj) {
         PlainWrapper wrapper = PlainWrapper.ofObj(obj);
         return baseMapper.select(wrapper.buildPage(), wrapper);
     }
-#end ##
-#if(${buildSelectList})##
-    @Try
-      public List search(JSONObject obj) {
-        PlainWrapper wrapper = PlainWrapper.ofObj(obj);
-        return baseMapper.select(wrapper.buildPage(), wrapper);
-    }
-#end ##
+
+
 
 #if(${buildExport})##
     public Page<?> export(JSONObject body, Page<?> page) {

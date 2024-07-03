@@ -4,12 +4,16 @@ import ${package}.controller.base.BaseController;
 import ${package}.${dao}.${prefix}.${name}Mapper;
 import com.haday.qms.core.tool.api.R;
 import ${package}.${entity}.${prefix}.${name};
+import com.haday.qms.interceptor.anno.Auth;
+import ${package}.vo.SearchVo;
 import ${package}.${service}.${prefix}.${serviceImpl}.${name}ServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import com.baomidou.dynamic.datasource.annotation.DS;
+import com.haday.qms.core.tool.utils.StringUtil;
 import com.alibaba.fastjson2.JSONObject;
 
 import java.util.List;
@@ -19,34 +23,43 @@ import java.util.List;
 */
 #set($path="${name.substring(0, 1).toLowerCase()}${name.substring(1)}")
 @RestController
-@RequestMapping("/$path")
+@RequestMapping("/$prefix/$path")
 @Api(value = "${tableInfo.desc}控制器", tags = "${tableInfo.desc}控制器")
+@DS(StringUtil.DB_AUTO)
 public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name}Mapper, ${name}> {
 
 
-
-#if($isMerge)##
     @ApiOperation(value = "批量合并", notes = "批量合并")
     @PostMapping("/batchMerge")
+    @Auth
+    @RequiresPermissions("qms:$path:update")
     public R<?> batchMerge(@RequestBody List<${name}> list) {
         return R.data(service.batchMerge(list));
-    }##
+    }
 
-#end
-
-#if(${buildSelect})##
     @ApiOperation(value = "查询", notes = "查询")
     @PostMapping("/search")
+    @Auth
+    @RequiresPermissions("qms:$path:read")
     public R<?> search(@RequestBody JSONObject obj) {
         return R.data(service.search(obj));
     }
-#else##
-    @Override
-    @ApiOperation(value = "查询", notes = "查询")
-    @PostMapping("/search")
-    public R<?> search(@RequestBody @Validated SearchVo obj) {
-        return super.search(obj);
-    }
-#end
 
+    @Override
+    @ApiOperation(value = "批量删除", notes = "批量删除")
+    @PostMapping("/batchDelete")
+    @Auth
+    @RequiresPermissions("qms:$path:delete")
+    public R<?> batchDelete(@RequestBody List<String> id) {
+        return super.batchDelete(id);
+    }
+
+    @Override
+    @ApiOperation(value = "批量恢复", notes = "批量恢复")
+    @PostMapping("/batchRestore")
+    @Auth
+    @RequiresPermissions("qms:$path:delete")
+    public R<?> batchRestore(@RequestBody List<String> id) {
+        return super.batchRestore(id);
+    }
 }

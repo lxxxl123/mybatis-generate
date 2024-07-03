@@ -6,21 +6,24 @@ database:
   username: sa
   password: BFZybMAmaQ7P
 
-
 base:
   targetTable: &targetTable
-#    sys_job  # 表名
-#     oa_sync_config  # 表名
-                 sys_workdays  # 表名
+#    ori_pak_supplier_auth  # 表名
+#                 oa_sync_config
+                 cost_combine_price
   targetName: &targetName # 实体名
-#     OaSyncConfig
-    SysWorkdays
-  prefix: &prefix  #路径名
-    sys
+#                OaSyncConfig
+#                FlowableStartRecord
+#                 MdmResource
+    CostCombinePrice
 
+#    oaProgress
+#                  ppAufm
+  prefix: &prefix  #路径名
+    cost
 
   backEndPath: &backEndPath # 后端路径
-      D:\20221014\idea-workspace\qmsapicenter\qms-service\
+     D:\20221014\qms-platform\qms-service\
 
   package: com.haday.qms
   entity: entity
@@ -31,11 +34,9 @@ base:
 
   author: chenwh3 # 作者名
   isMerge: true
-#  buildExportList: true
-#  buildExport: false
-#  buildSelectPage: true
-  buildSelectList: false
-  buildExport: false
+  buildSelectPage: true
+#  buildSelectList: true
+  buildExport: true
 
 actions:
   - class: dataBaseAction
@@ -44,8 +45,27 @@ actions:
       tableName: *targetTable
 
   - class: leftAction
+
+
+  - ## 唯一索引错误提示
+    class: buildVmFileAction
+    apply: false
     params:
-      config: config/leftJoinConfig.yaml
+      path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
+      spelCond: "['indexs']?.size() > 0 && ['indexs'][0]['remark']?.length > 0 && ! ['content'].contains(['indexs'][0]['idxName'])"
+      replaceList:
+        - range: '(?m)^\s+\.build\(\);'
+          vm: back-logic-his/AspectUtils.vm
+
+  - ##创建路由豁免
+    class: buildVmFileAction
+#    apply: false
+    params:
+      path: [ *backEndPath , src\main\resources\application.yml ]
+      exitIfHave: [ /, *prefix , /\*\*]
+      replaceList:
+        - range: '(\s+permission: jwtFilter)'
+          vm: front/application.vm
 
   -
     class: setCtxAction
@@ -54,51 +74,44 @@ actions:
         table: *targetTable
       spelMap:
         name: "#StrUtil.upperFirst(['targetName'])"
+
   -
     class: buildVmFileAction
     params:
-      vm: back/entity.vm
+      vm: back-logic-his/entity.vm
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/entity/{}/{}.java',['backEndPath'],['prefix'],['name'])"
 
-# service
   -
     class: buildVmFileAction
     params:
-      vm: back/contract.vm
+      vm: back-logic-his/contract.vm
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/service/{}/{}Service.java',['backEndPath'],['prefix'],['name'])"
 
-# mapper
   -
     class: buildVmFileAction
     params:
-      vm: back/mapper.vm
+      vm: back-logic-his/mapper.vm
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/dao/{}/{}Mapper.java',['backEndPath'],['prefix'],['name'])"
-
-# serviceImpl
   -
     class: buildVmFileAction
     params:
-      vm: back/service.vm
+      vm: back-logic-his/service.vm
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/service/{}/impl/{}ServiceImpl.java',['backEndPath'],['prefix'],['name'])"
 
-# controller
   -
     class: buildVmFileAction
-#    apply: false
     params:
-      vm: back/controller.vm
+      vm: back-logic-his/controller.vm
     spelParams:
       path: "#StrUtil.format('{}src/main/java/com/haday/qms/controller/{}/{}Controller.java',['backEndPath'],['prefix'],['name'])"
 
-# mapperXml
   -
     class: buildVmFileAction
     params:
-      vm: back/mapperXml.vm
+      vm: back-logic-his/mapperXml.vm
     spelParams:
       path: "#StrUtil.format('{}src/main/resources/mybatis-mapper/{}/{}Mapper.xml',['backEndPath'],['prefix'],['name'])"
-

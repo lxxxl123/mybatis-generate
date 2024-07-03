@@ -1,0 +1,51 @@
+package ${package}.${entity}.${prefix};
+
+import lombok.Data;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serializable;
+import com.haday.qms.interceptor.anno.LogicDelete;
+
+#set($hasDate=0)
+#foreach($column in $columns)
+    #if($column.javaType=='Date' && $hasDate==0)import java.util.Date;
+    #set($hasDate=1)#end
+#end
+
+/**
+* ${tableInfo.desc}实体
+* @author ${author}
+*/
+@Data
+@LogicDelete
+@TableName("${table}")
+public class ${name} implements Serializable{
+
+private static final long serialVersionUID = 1L;
+
+#foreach($column in $columns)
+    #if(${column.pk})
+    /**
+    * ${column.remark}
+    */
+    @TableId(value = "${column.columnName}" #if(${column.identity}),type = IdType.AUTO#elseif(${column.remark.contains('uuid')}),type = IdType.ASSIGN_UUID#end)
+    private ${column.javaType} ${column.javaFieldName};
+
+    #else
+    /**
+      * ${column.remark}
+      */
+    @TableField(value = "${column.columnName}"##
+#if($insertList.contains($column.columnName)) ,fill = FieldFill.INSERT##
+#elseif($updateList.contains($column.columnName)) ,fill = FieldFill.INSERT_UPDATE##
+#end)
+#if($column.type=='date')##
+@JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy-MM-dd")##
+#end
+    private ${column.javaType} ${column.javaFieldName};
+
+    #end
+#end
+
+
+}
