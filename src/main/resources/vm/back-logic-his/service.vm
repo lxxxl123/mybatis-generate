@@ -18,6 +18,7 @@ import com.haday.qms.vo.SearchVo;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 #end
+import org.springframework.transaction.annotation.Transactional;
 
 /**
 * @author ${author}
@@ -63,4 +64,3 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
 #end ##
 
 }
-

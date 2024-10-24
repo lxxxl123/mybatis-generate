@@ -22,6 +22,8 @@ public class BaseDataService {
 
     private BaseMapper mapper;
 
+
+
     public List<ColumnDefinition> getColumnsInfo(String tableName) {
         List<Map> columnsInfo = mapper.getColumnsInfo(tableName);
 
@@ -73,8 +75,15 @@ public class BaseDataService {
                     columnDefinition.setEnumList(enumList);
                 }
             }
-//            String javaFieldName = StrUtil.toCamelCase(columnName.toLowerCase());
+
+
             String javaFieldName = StringUtil.underlineToCamelhump(columnName);
+
+            if (StrUtil.equalsAnyIgnoreCase(javaFieldName, "isDel")) {
+                columnDefinition.getEnumMap().put("0", "否");
+                columnDefinition.getEnumMap().put("1", "是");
+            }
+
             String selectSql;
             if (javaFieldName.equals(columnName)) {
                 selectSql = StrUtil.format("{}.{}", t, columnName);
@@ -85,7 +94,7 @@ public class BaseDataService {
                 selectSql = String.format("CONVERT(varchar(10), %s.%s, 120) as %s", t, columnName, javaFieldName);
             }
             if (StringUtils.equalsAny(type, "datetime")) {
-                selectSql = String.format("CONVERT(varchar(19), %s, 120) as %s", columnName, javaFieldName);
+                selectSql = String.format("CONVERT(varchar(19), %s.%s, 120) as %s",t, columnName, javaFieldName);
             }
             columnDefinition.setSelectSql(selectSql);
 

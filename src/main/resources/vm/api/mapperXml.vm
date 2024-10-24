@@ -34,7 +34,8 @@ ${column.columnName}#if($foreach.hasNext),#end##
         ON t.id = s.id
         WHEN MATCHED THEN
             UPDATE SET
-            #foreach($column in $columns)#if(!${column.pk})t.${column.columnName} = isnull(s.${column.columnName},t.${column.columnName})#if($foreach.hasNext),
+##            #foreach($column in $columns)#if(!${column.pk})t.${column.columnName} = isnull(s.${column.columnName},t.${column.columnName})#if($foreach.hasNext),
+        #foreach($column in $columns)#if(!${column.pk})t.${column.columnName} = s.${column.columnName}#if($foreach.hasNext),
 #end#end#end##
 
         WHEN NOT MATCHED THEN

@@ -6,16 +6,17 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 sys_workday
+                 mdm_product_reserved_sample_monitoring_plan
   targetName: &targetName  # 实体名
-    sysWorkday
+#    costRevenueUser
+     mdmProductReservedSampleMonitoringPlan
   prefix: &prefix #路径名
-          sys
+          mdm
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    系统管理-其他-工作日管理 # 菜单
+    基础数据-留样管理-预留样检测模板 # 菜单
 
-  entityName: 工作日 # 实体中文名
+  entityName: 预留样检测模板 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 

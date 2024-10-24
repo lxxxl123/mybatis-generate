@@ -17,7 +17,7 @@
                      :rowStyle="rowStyle"
       >
         <template #btns>
-          <vxe-search-btn ref="searchForm" :search-form="searchForm" height="auto" width="500" :submit="searchByCond"/>
+          <vxe-search-btn ref="searchForm" :search-form="searchForm" height="auto" width="500" @submit="searchByBtn"/>
           <vxe-add-btn
               :title="'新增'+entity"
               :form-data="addForm"

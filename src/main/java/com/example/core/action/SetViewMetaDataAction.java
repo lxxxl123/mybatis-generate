@@ -32,7 +32,7 @@ public class SetViewMetaDataAction extends Action {
 
     private List<Col> buildMainList(List<ColumnDefinition> columns){
         Set<String> sets = CollUtil.newHashSet("createTime","updateTime","creator","modifier");
-        List<String> uindex = indexs.stream().map(e -> e.getIdxName()).filter(e -> StrUtil.endWith(e, "uindex")).collect(Collectors.toList());
+        List<String> uindex = indexs.stream().map(TableIndex::getIdxName).filter(e -> StrUtil.endWith(e, "uindex")).collect(Collectors.toList());
         List<Col> list = columns.stream()
                 .filter(e -> StrUtil.isNotBlank(e.getRemark()) && !e.getRemark().startsWith("#"))
                 .map(e -> {

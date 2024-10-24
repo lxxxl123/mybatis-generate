@@ -11,12 +11,12 @@ base:
   targetTable: &targetTable
 #    sys_job  # 表名
 #     oa_sync_config  # 表名
-                 sys_workdays  # 表名
+                 mdm_product_shelf_life_standard  # 表名
   targetName: &targetName # 实体名
 #     OaSyncConfig
-    SysWorkdays
+    MdmProductShelfLifeStandard
   prefix: &prefix  #路径名
-    sys
+    mdm
 
 
   backEndPath: &backEndPath # 后端路径
