@@ -1,20 +1,21 @@
 <template>
   <el-container style="background-color: #ffffff; height: calc(100vh - 100px); width: 100% ; min-height: 400px">
     <el-main>
-      <vxe-page-grid ref="xGrid"
-                     :columns="columns"
-                     :form-data="formData"
-                     size="mini"
-                     :page-size="40"
-                     :page-sizes="[40,100,200]"
-                     :height-light="true"
-                     :toolBar="{ refresh: {query: reload} }"
-                     :search="searchMethod"
+      <vxe-page-grid
+         ref="xGrid"
+         :columns="columns"
+         :form-data="formData"
+         size="mini"
+         :page-size="40"
+         :page-sizes="[40,100,200]"
+         :height-light="true"
+         :toolBar="{ refresh: {query: reload} }"
+         :search="searchMethod"
           #if($delCol)##
-                     init-cond="${delCol.col} = 0"
-          #end##
-                     overflow
-                     :rowStyle="rowStyle"
+         init-cond="${delCol.col} = 0"
+         #end##
+         overflow
+         :rowStyle="rowStyle"
       >
         <template #btns>
           <vxe-search-btn ref="searchForm" :search-form="searchForm" height="auto" width="500" @submit="searchByBtn"/>
@@ -54,7 +55,7 @@
                   :method="batchUpdateMethod"
                   :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 1} ) "
                   :after-modify="search"
-              />#end##
+              />#end
           <vxe-delete-btn
               :x-grid="$refs.xGrid"
               :delete-method="batchDeleteMethod"
@@ -79,8 +80,8 @@
                      @input="searchByText"/>
             #if($delCol)##
               <vxe-grid-cond-checkbox ref="showAllBox" :x-grid="$refs.xGrid" un-check-sql="${delCol.col} = 0"
-                                      :after-click="showAll"/>
-            #end##
+                                      :after-click="showAll"/>#end##
+
           <el-tooltip placement="top">
             <div slot="content">颜色说明:
               <br/><span :style="'color: '+ grey">灰色: </span>被删除行
@@ -223,15 +224,14 @@ import XEUtils from 'xe-utils'
                   ,params: { property: '$col.fullFieldName'}##
                 #end##
                   #if($col.isTime) ##
-                  #elseif($col.enumMap.size()>0),##
-                    filters: [#foreach($para in ${col.enumMap.entrySet()}) {##
-                      label: '$para.value',##
-                      value: '${para.key}'##
-                    } #if($foreach.hasNext),#end #end ] ##
+##                  #elseif($col.enumMap.size()>0),##
+##                    filters: [#foreach($para in ${col.enumMap.entrySet()}) {##
+##                      label: '$para.value',##
+##                      value: '${para.key}'##
+##                    } #if($foreach.hasNext),#end #end ] ##
                   #else ##
                   #end##
-                  #if($col.col!=$col.field),##
-                    params: {property: '${col.col}'}#end##
+##                  #if($col.col!=$col.field), params: {property: '${col.col}'}#end##
                 , sortable: true##
               } #if($foreach.hasNext) ,#end
 

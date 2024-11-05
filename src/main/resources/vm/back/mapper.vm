@@ -27,11 +27,10 @@ public interface ${name}Mapper extends BaseMapper<${name}> {
 #if(${buildSelectPage})
     /**
     * 查询
-    * @param page 分页参数
     * @param wrapper 条件
     * @return 数据行
     */
-    Page<Map<String,Object>> select(Page page, @Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
+    List<Map<String,Object>> select(@Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
 #end
 
 #if(${buildSelectList})

@@ -7,6 +7,7 @@ import ${package}.${dao}.${prefix}.${name}Mapper;
 import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
 import java.util.List;
+import com.haday.qms.core.tool.support.QueryProxy;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import com.haday.qms.core.tool.support.PlainWrapper;
@@ -26,9 +27,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
 
+    public void validate(List<$name> list){
+    }
+
 
     #if(${isMerge})@Try
     public Integer batchMerge(List<$name> obj){
+        validate(obj);
         CollUtils.partitionList(obj,100)
             .forEach(e->{
             baseMapper.batchMerge(e);
@@ -36,11 +41,15 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         return obj.size();
     }#end ##
 
+    public QueryProxy baseSelect(){
+        return QueryProxy.ofFun(baseMapper::select);
+    }
+
 
 #if(${buildSelectPage})##
     public Page<Map<String,Object>> search(JSONObject obj) {
         PlainWrapper wrapper = PlainWrapper.ofObj(obj);
-        return baseMapper.select(wrapper.buildPage(), wrapper);
+        return baseSelect().setWrapper(wrapper).getPage();
     }
 #end ##
 #if(${buildSelectList})##

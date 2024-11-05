@@ -6,17 +6,17 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 mdm_product_reserved_sample_monitoring_plan
+                 pkg_process_risk_point
   targetName: &targetName  # 实体名
 #    costRevenueUser
-     mdmProductReservedSampleMonitoringPlan
+     pkgProcessRiskPoint
   prefix: &prefix #路径名
-          mdm
+          pkgProcess
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    基础数据-留样管理-预留样检测模板 # 菜单
+    基础数据-包装过程监控-监控风险点维护 # 菜单
 
-  entityName: 预留样检测模板 # 实体中文名
+  entityName: 监控风险点维护 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 

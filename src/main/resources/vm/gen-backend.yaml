@@ -10,17 +10,17 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #                 oa_sync_config
-                 mdm_product_reserved_sample_monitoring_plan
+                 pkg_process_risk_point
   targetName: &targetName # 实体名
 #                OaSyncConfig
 #                FlowableStartRecord
 #                 MdmResource
-    MdmProductReservedSampleMonitoringPlan
+    PkgProcessRiskPoint
 
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
-    mdm
+    pkgProcess
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\
