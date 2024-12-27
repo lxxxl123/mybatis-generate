@@ -33,7 +33,7 @@ public class BaseDataService {
         for (Map column : columnsInfo) {
             JSONObject rowMap = new JSONObject(column);
 
-            ColumnDefinition columnDefinition = new ColumnDefinition();
+            ColumnDefinition obj = new ColumnDefinition();
             String columnName = rowMap.getStr("COLUMN_NAME");
             if(StrUtil.isUpperCase(columnName)){
                 columnName = columnName.toLowerCase();
@@ -51,14 +51,15 @@ public class BaseDataService {
 
 
             if (defaultVal != null) {
-                columnDefinition.setDefaultVal(StrUtil.unWrap(defaultVal, "(", ")"));
+                obj.setDefaultVal(StrUtil.unWrap(defaultVal, "(", ")"));
             }
-            columnDefinition.setPk(Objects.equals(order, 1));
-            columnDefinition.setColumnName(columnName);
-            columnDefinition.setMaxLength(rowMap.getInt("CHARACTER_MAXIMUM_LENGTH"));
+            obj.setPk(Objects.equals(order, 1));
+            obj.setColumnName(columnName);
+            obj.setMaxLength(rowMap.getInt("CHARACTER_MAXIMUM_LENGTH"));
+            obj.setTitle(StrUtil.nullToDefault(remark, "").split("[ ;；]")[0].trim());
 
             if (StrUtil.isNotBlank(remark) && StrUtil.containsAny(remark, "；", ";")) {
-                String[] vals = remark.split("[；;]")[1].split("\\s*,\\s*");
+                String[] vals = remark.split("[；;]")[1].split("\\s*[,，]\\s*");
                 if (remark.contains("-")) {
                     Map<String, String> map = new LinkedHashMap<>();
                     for (String val : vals) {
@@ -67,13 +68,13 @@ public class BaseDataService {
                         String value = entry[1].trim();
                         map.put(key, value);
                     }
-                    columnDefinition.setEnumMap(map);
+                    obj.setEnumMap(map);
                 } else {
                     List<String> enumList = new ArrayList<>();
                     for (String val : vals) {
                         enumList.add(val.trim());
                     }
-                    columnDefinition.setEnumList(enumList);
+                    obj.setEnumList(enumList);
                 }
             }
 
@@ -81,8 +82,8 @@ public class BaseDataService {
             String javaFieldName = StringUtil.underlineToCamelhump(columnName);
 
             if (StrUtil.equalsAnyIgnoreCase(javaFieldName, "isDel")) {
-                columnDefinition.getEnumMap().put("0", "否");
-                columnDefinition.getEnumMap().put("1", "是");
+                obj.getEnumMap().put("0", "否");
+                obj.getEnumMap().put("1", "是");
             }
 
             String selectSql;
@@ -97,17 +98,17 @@ public class BaseDataService {
             if (StringUtils.equalsAny(type, "datetime")) {
                 selectSql = String.format("CONVERT(varchar(19), %s.%s, 120) as %s",t, columnName, javaFieldName);
             }
-            columnDefinition.setSelectSql(selectSql);
+            obj.setSelectSql(selectSql);
 
-            columnDefinition.setIdentity(isIndentity);
-            columnDefinition.setType(temp[0]);
-            columnDefinition.setRemark(remark);
-            columnDefinition.setJavaType(SqlTypeUtil.convertToJavaBoxType(temp[0]));
-            columnDefinition.setJavaFieldName(javaFieldName);
-            columnDefinition.setTitle(StrUtil.nullToDefault(remark, "").split("[ ;；]")[0].trim());
-            columnDefinition.setJavaFiledNameUpCaseFirst(StrUtil.upperFirst(javaFieldName));
-            columnDefinition.setJdbcType(SqlTypeUtil.convertToMyBatisJdbcType(temp[0]));
-            list.add(columnDefinition);
+            obj.setIdentity(isIndentity);
+            obj.setType(temp[0]);
+            obj.setRemark(remark);
+            obj.setJavaType(SqlTypeUtil.convertToJavaBoxType(temp[0]));
+            obj.setJavaFieldName(javaFieldName);
+
+            obj.setJavaFiledNameUpCaseFirst(StrUtil.upperFirst(javaFieldName));
+            obj.setJdbcType(SqlTypeUtil.convertToMyBatisJdbcType(temp[0]));
+            list.add(obj);
         }
         return list;
 

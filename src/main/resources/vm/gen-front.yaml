@@ -9,12 +9,12 @@ base:
                  mold_product_rate
   targetName: &targetName  # 实体名
 #    costRevenueUser
-      CostMonthAuditor
+      moldProductRate
   prefix: &prefix #路径名
-          factory
+          mold
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    基础数据-出厂报告主数据-产品检验依据(新) # 菜单
+    基础数据-型检管理-三方型检样品大类 # 菜单
 
   entityName: 出厂报告物料 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
