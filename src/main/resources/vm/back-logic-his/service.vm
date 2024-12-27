@@ -44,6 +44,7 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
 
     @Transactional(rollbackFor = Exception.class)
     public Integer batchMerge(List<${name}> list) {
+        validate(list);
         batchSetHis(list.stream().map(${name}::getId));
         list.forEach(e -> e.setId(null));
         return super.batchAdd(list);

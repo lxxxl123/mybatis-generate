@@ -156,3 +156,12 @@ tables:
       - columnName: cnm
         remark: 实验室简称
         javaFieldName: cinismpDesc
+  productType:
+    tableName: mdm_quailty_standard
+    prefix: qs
+    on: 'productType = qs.code'
+    cols:
+      - columnName: product_catagory
+        remark: 样品大类
+        javaFieldName: productTypeName
+

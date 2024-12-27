@@ -40,7 +40,12 @@ public class SetViewMetaDataAction extends Action {
                     col.setIsPk(e.isPk());
                     col.setCol(e.getJavaFieldName());
                     col.setField(e.getJavaFieldName());
-                    col.setTitle(e.getTitle());
+                    if (e.getTitle() == null) {
+                        col.setTitle(e.getRemark());
+                    } else {
+                        col.setTitle(e.getTitle());
+                    }
+
 
                     uindex.stream().filter(e1 -> e1.contains(e.getColumnName())).findFirst().ifPresent(e1 -> {
                         col.setIsUnique(true);
@@ -81,6 +86,8 @@ public class SetViewMetaDataAction extends Action {
                         col.setCusMsg(StrUtil.format("type: 'vxe-resource-pulldown', propMap: [ { key: '{}', val: 'resourceCode' }, { key: 'resourceDesc', val: 'resourceDesc' } ]", col.getCol()));
                     } else if (col.getField().endsWith("cinismp")) {
                         col.setCusMsg(StrUtil.format("type: 'vxe-cinismp-pulldown', propMap: [{ key: '{}', val: 'cno' }, { key: 'cinismpDesc', val: 'cnm' }]", col.getCol()));
+                    } else if (col.getField().endsWith("productType")) {
+                        col.setCusMsg(StrUtil.format("type: 'vxe-quailty-stand-pulldown', propMap: [['{}','code'],['productTypeName','productCatagory']]", col.getCol()));
                     } else if (col.getTitle().endsWith("年份")) {
                         col.setCusMsg("props: { type: 'year' }");
                     }

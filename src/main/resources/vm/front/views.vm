@@ -130,7 +130,7 @@ import XEUtils from 'xe-utils'
           condition: '',
           pageIndex: '',
           pageSize: '',
-          order: ''
+          order: 'id desc'
         },
         searchMethod: service.search,
         batchUpdateMethod: service.batchUpdate,
@@ -171,6 +171,8 @@ import XEUtils from 'xe-utils'
                 title: '${col.title}' ##
                   #if($col.isTime),##
                     props: {type: 'date'} ##
+                  #elseif($col.type == 'int'),##
+                    props: {type: 'integer'} ##
                   #elseif($col.enumMap.size()>0),##
                     type: 'select',##
                     options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}', '${para.key}'] #if($foreach.hasNext),#end #end ] ##
@@ -196,6 +198,8 @@ import XEUtils from 'xe-utils'
                 title: '${col.title}' ##
                   #if($col.isTime),##
                     props: {type: 'date'} ##
+                  #elseif($col.type == 'int'),##
+                    props: {type: 'integer'} ##
                   #elseif($col.isUnique),##
                     editable: false , rules: [{required: true}] ##
                   #elseif($col.editable==false),editable: false##
