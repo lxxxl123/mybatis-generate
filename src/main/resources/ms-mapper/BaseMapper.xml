@@ -11,8 +11,9 @@
                c.DATA_TYPE,
                t.REMARK,
                ORDINAL_POSITION,
-               c.COLUMN_DEFAULT,
-               t.is_identity isIndentity
+               c.COLUMN_DEFAULT
+               , t.is_identity isIndentity
+            , c.CHARACTER_MAXIMUM_LENGTH
         FROM [INFORMATION_SCHEMA].[COLUMNS] c
                  left join (SELECT col.name   AS COLUMN_NAME,
                                    prop.value AS REMARK,

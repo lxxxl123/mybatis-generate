@@ -7,6 +7,7 @@ import ${package}.${dao}.${prefix}.${name}Mapper;
 import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
 import com.haday.qms.core.tool.utils.CollUtils;
+import com.haday.qms.core.tool.support.Validators;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,18 @@ import org.springframework.transaction.annotation.Transactional;
 public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
 
+    public void validate(List<$name> list){
+        for (${name} obj : list) {
+            Validators.of(obj)
+            #foreach($column in $columns)
+#if(${column.maxLength} && ${column.type} == "nvarchar") .checkMaxNLength(${name}::get${column.javaFiledNameUpCaseFirst},${column.maxLength},"${column.title}")
+#end
+#if(${column.maxLength} && ${column.type} == "varchar") .checkMaxLength(${name}::get${column.javaFiledNameUpCaseFirst},${column.maxLength},"${column.title}")
+#end
+            #end
+        .tryThrow();
+        }
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public Integer batchMerge(List<${name}> list) {

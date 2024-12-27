@@ -10,17 +10,17 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #                 oa_sync_config
-                 shelf_entrust_item
+                 mold_product_rate
   targetName: &targetName # 实体名
 #                OaSyncConfig
 #                FlowableStartRecord
 #                 MdmResource
-    ShelfEntrustItem
+              MoldProductRate
 
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
-    shelf
+          mold
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\
@@ -49,7 +49,7 @@ actions:
 
   - ## 唯一索引错误提示
     class: buildVmFileAction
-    apply: false
+#    apply: false
     params:
       path: [ *backEndPath , src\main\java\com\haday\qms\core\tool\utils\AspectUtils.java ]
       spelCond: "['indexs']?.size() > 0 && ['indexs'][0]['remark']?.length > 0 && ! ['content'].contains(['indexs'][0]['idxName'])"

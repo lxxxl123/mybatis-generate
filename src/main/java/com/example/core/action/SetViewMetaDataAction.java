@@ -40,7 +40,7 @@ public class SetViewMetaDataAction extends Action {
                     col.setIsPk(e.isPk());
                     col.setCol(e.getJavaFieldName());
                     col.setField(e.getJavaFieldName());
-                    col.setTitle(e.getRemark().split("\\s")[0].trim());
+                    col.setTitle(e.getTitle());
 
                     uindex.stream().filter(e1 -> e1.contains(e.getColumnName())).findFirst().ifPresent(e1 -> {
                         col.setIsUnique(true);

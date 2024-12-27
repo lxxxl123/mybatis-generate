@@ -6,29 +6,28 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 pkg_process_risk_point
+                 mold_product_rate
   targetName: &targetName  # 实体名
 #    costRevenueUser
-     pkgProcessRiskPoint
+      CostMonthAuditor
   prefix: &prefix #路径名
-          pkgProcess
+          factory
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    基础数据-包装过程监控-监控风险点维护 # 菜单
+    基础数据-出厂报告主数据-产品检验依据(新) # 菜单
 
-  entityName: 监控风险点维护 # 实体中文名
+  entityName: 出厂报告物料 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 
 
 
 actions:
-  # 新增菜单
   -
     class: dataBaseAction
     params:
       tableName: *targetTable
-
+  # 新增菜单
   -
     class: menusAction
 #    apply: false

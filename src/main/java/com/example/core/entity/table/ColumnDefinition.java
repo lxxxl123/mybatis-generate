@@ -36,6 +36,7 @@ public class ColumnDefinition {
 	private boolean pk;
 	private String javaType;
 	private String javaFieldName;
+	private String javaFiledNameUpCaseFirst;
 	private String jdbcType;
 
 	private String defaultVal;
@@ -43,6 +44,12 @@ public class ColumnDefinition {
 	private Map<String, String> enumMap = new LinkedHashMap<>(0);
 
 	private List<String> enumList = new ArrayList<>();
+
+	/**
+	 * 最大长度
+	 */
+	private Integer maxLength;
+
 
 	/**
 	 * 备注
@@ -53,5 +60,7 @@ public class ColumnDefinition {
 	 * 用于前端 , 表示该字段属于的表
 	 */
 	private String prefix;
+
+	private String title;
 
 }

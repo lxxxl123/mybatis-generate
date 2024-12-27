@@ -55,9 +55,10 @@ public class BaseDataService {
             }
             columnDefinition.setPk(Objects.equals(order, 1));
             columnDefinition.setColumnName(columnName);
+            columnDefinition.setMaxLength(rowMap.getInt("CHARACTER_MAXIMUM_LENGTH"));
 
-            if (StrUtil.isNotBlank(remark) && remark.contains("; ")) {
-                String[] vals = remark.split(";")[1].split("\\s*,\\s*");
+            if (StrUtil.isNotBlank(remark) && StrUtil.containsAny(remark, "；", ";")) {
+                String[] vals = remark.split("[；;]")[1].split("\\s*,\\s*");
                 if (remark.contains("-")) {
                     Map<String, String> map = new LinkedHashMap<>();
                     for (String val : vals) {
@@ -103,6 +104,8 @@ public class BaseDataService {
             columnDefinition.setRemark(remark);
             columnDefinition.setJavaType(SqlTypeUtil.convertToJavaBoxType(temp[0]));
             columnDefinition.setJavaFieldName(javaFieldName);
+            columnDefinition.setTitle(StrUtil.nullToDefault(remark, "").split("[ ;；]")[0].trim());
+            columnDefinition.setJavaFiledNameUpCaseFirst(StrUtil.upperFirst(javaFieldName));
             columnDefinition.setJdbcType(SqlTypeUtil.convertToMyBatisJdbcType(temp[0]));
             list.add(columnDefinition);
         }
