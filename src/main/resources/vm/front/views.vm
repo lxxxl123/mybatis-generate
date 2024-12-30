@@ -238,11 +238,10 @@ import XEUtils from 'xe-utils'
     },
 
     methods: {
-      rowStyle(row) {
+      rowStyle({row}) {
         let rowStyle = {}
-        let data = row.row
           #if($delCol)##
-            if (data.${delCol.col}) {
+            if (row.${delCol.col}) {
               rowStyle.background = this.grey
             }
           #end##

@@ -93,7 +93,7 @@ public class SetViewMetaDataAction extends Action {
                     }
 
 
-                    if (StrUtil.containsAnyIgnoreCase(col.getField(), "isDel", "delTag")) {
+                    if (StrUtil.containsAnyIgnoreCase(col.getField(), "isDel", "delTag","hisTag")) {
                         col.setIsDel(true);
                     }
                     /**
