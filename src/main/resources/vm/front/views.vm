@@ -33,7 +33,7 @@
               :before-show="beforeShowUpdate"
               :param-convert="({form})=> [ form ]"
               :update-method="batchUpdateMethod"
-              :after-add="search"
+              :after-add="reloadPage"
           />
 #if($delCol)##
               <vxe-modify-btn
@@ -44,7 +44,7 @@
                   name="生效"
                   :method="batchUpdateMethod"
                   :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 0} ) "
-                  :after-modify="search"
+                  :after-modify="reloadPage"
               />
               <vxe-modify-btn
                   :x-grid="$refs.xGrid"
@@ -54,13 +54,13 @@
                   name="废止"
                   :method="batchUpdateMethod"
                   :param-convert="({rows})=>  rows.map(e=> e = {${pkCol.col}: e.${pkCol.col} , ${delCol.col}: 1} ) "
-                  :after-modify="search"
+                  :after-modify="reloadPage"
               />#end
           <vxe-delete-btn
               :x-grid="$refs.xGrid"
               :delete-method="batchDeleteMethod"
               :popup-validate="deleteValidate"
-              :after-delete="search"
+              :after-delete="reloadPage"
           />
           <vxe-import-btn
               :x-grid="$refs.xGrid"

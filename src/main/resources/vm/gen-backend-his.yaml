@@ -10,12 +10,12 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #                 oa_sync_config
-                 mold_mara
+                 mold_spot_check
   targetName: &targetName # 实体名
 #                OaSyncConfig
 #                FlowableStartRecord
 #                 MdmResource
-              MoldMara
+              MoldSpotCheck
 
 #    oaProgress
 #                  ppAufm

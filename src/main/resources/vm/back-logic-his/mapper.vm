@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import java.util.Map;
+import java.util.List;
 /**
 * @author ${author}
 */
@@ -24,22 +25,10 @@ public interface ${name}Mapper extends BaseMapper<${name}> {
     int batchMerge(@Param("list") List<${name}> obj);
 #end
 
-#if(${buildSelectPage})
     /**
     * 查询
-    * @param page 分页参数
-    * @param wrapper 条件
-    * @return 数据行
     */
-    Page<Map<String,Object>> select(Page page, @Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
-#end
+    List<Map<String,Object>> select( @Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
 
-#if(${buildSelectList})
-      /**
-      * 查询
-      * @param wrapper 条件
-      * @return 数据行
-      */
-      List<Map<String,Object>> select(@Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
-#end
+
 }

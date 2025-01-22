@@ -6,17 +6,17 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 mold_product_rate
+                 mold_mara
   targetName: &targetName  # 实体名
 #    costRevenueUser
-      moldProductRate
+          moldMara
   prefix: &prefix #路径名
           mold
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    基础数据-型检管理-三方型检样品大类 # 菜单
+    基础数据-型检管理-物料型检基础数据 # 菜单
 
-  entityName: 出厂报告物料 # 实体中文名
+  entityName: 型检物料 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 

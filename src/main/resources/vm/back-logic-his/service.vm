@@ -43,6 +43,14 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     }
 
     @Transactional(rollbackFor = Exception.class)
+    @Try
+    public Integer batchAdd(List<${name}> list) {
+        validate(list);
+        super.batchAdd(list);
+        return list.size();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
     public Integer batchMerge(List<${name}> list) {
         validate(list);
         batchSetHis(list.stream().map(${name}::getId));
@@ -59,17 +67,23 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
             return;
         }
         update().set("hisTag", 2)
+                .set("deleteTime", new Date())
+                .set("deleteAcc", UserUtil.getUserAcct())
+                .in("hisTag",0)
                 .in("id", idList)
                 .update();
     }
 
 
-    public Page<Map<String,Object>> search(JSONObject obj) {
+  public QueryProxy baseSelect(){
+      return QueryProxy.ofFun(baseMapper::select);
+  }
+
+
+  public Page<Map<String,Object>> search(JSONObject obj) {
         PlainWrapper wrapper = PlainWrapper.ofObj(obj);
-        return baseMapper.select(wrapper.buildPage(), wrapper);
+        return baseSelect().setWrapper(wrapper).getPage();
     }
-
-
 
 #if(${buildExport})##
     public Page<?> export(JSONObject body, Page<?> page) {

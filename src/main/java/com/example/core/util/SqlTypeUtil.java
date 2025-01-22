@@ -50,7 +50,7 @@ public class SqlTypeUtil {
 		javaBoxTypeMap.put("datetime", "Date");
 		javaBoxTypeMap.put("decimal", "BigDecimal");
 		javaBoxTypeMap.put("double", "Double");
-		javaBoxTypeMap.put("float", "Float");
+		javaBoxTypeMap.put("float", "Double");
 		javaBoxTypeMap.put("int", "Integer");
 		javaBoxTypeMap.put("image", "Byte[]");
 		javaBoxTypeMap.put("money", "BigDecimal");
