@@ -66,6 +66,7 @@
               :x-grid="$refs.xGrid"
               :title="entity+'导入模板'"
               :form-data="addForm"
+              :identify-enter="true"
               :add-method="batchMergeMethod"
               :after-add="trySearch"
           />
@@ -142,9 +143,9 @@ import XEUtils from 'xe-utils'
               {##
                 field: '${col.col}',##
                 title: '${col.title}' ##
-                #if($col.fullFieldName)##
-                  ,param: '$col.fullFieldName'##
-                #end##
+##                #if($col.fullFieldName)##
+##                  ,param: '$col.fullFieldName'##
+##                #end##
                   #if($col.isTime),##
                     type: 'vxe-range-picker',##
                     props: {type: 'date'} ##

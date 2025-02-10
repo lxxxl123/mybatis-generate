@@ -35,7 +35,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @Auth
     @RequiresPermissions("qms:$path:update")
     public R<?> batchAdd(@RequestBody List<${name}> list) {
-        return super.batchAdd(list);
+        return R.data(service.batchAdd(list));
     }
 
     @ApiOperation(value = "批量更新", notes = "批量更新")
@@ -43,7 +43,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @Auth
     @RequiresPermissions("qms:$path:update")
     public R<?> batchUpdate(@RequestBody List<${name}> list) {
-        return super.batchUpdate(list);
+        return R.data(service.batchUpdate(list));
     }
 
 

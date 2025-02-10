@@ -10,17 +10,17 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #                 oa_sync_config
-                 mold_spot_check
+                 pp_ddzy
   targetName: &targetName # 实体名
 #                OaSyncConfig
 #                FlowableStartRecord
 #                 MdmResource
-              MoldSpotCheck
+              PpDdzy
 
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
-          mold
+          aufnr
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\

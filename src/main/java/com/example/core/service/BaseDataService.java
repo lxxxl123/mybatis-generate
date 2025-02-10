@@ -93,7 +93,7 @@ public class BaseDataService {
                 selectSql = StrUtil.format("{}.{} as {}", t, columnName, javaFieldName);
             }
             if (StringUtils.equalsAny(type, "date")) {
-                selectSql = String.format("CONVERT(varchar(10), %s.%s, 120) as %s", t, columnName, javaFieldName);
+                selectSql = String.format("cast(%s.%s as date) as %s", t, columnName, javaFieldName);
             }
             if (StringUtils.equalsAny(type, "datetime")) {
                 selectSql = String.format("CONVERT(varchar(19), %s.%s, 120) as %s",t, columnName, javaFieldName);

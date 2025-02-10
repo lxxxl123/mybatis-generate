@@ -11,6 +11,7 @@ import com.haday.qms.core.tool.support.QueryProxy;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import com.haday.qms.core.tool.support.PlainWrapper;
+import org.springframework.transaction.annotation.Transactional;
 
 #if($buildSelectList||$buildSelectPage)
 import com.haday.qms.interceptor.anno.Try;
@@ -30,6 +31,21 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     public void validate(List<$name> list){
     }
 
+    @Transactional(rollbackFor = Exception.class)
+    @Try
+    public Integer batchAdd(List<${name}> list) {
+        validate(list);
+        super.batchAdd(list);
+        return list.size();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Try
+    public Integer batchUpdate(List<${name}> list) {
+        validate(list);
+        updateListById(list);
+        return list.size();
+    }
 
     #if(${isMerge})@Try
     public Integer batchMerge(List<$name> obj){
