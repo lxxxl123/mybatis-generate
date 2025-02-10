@@ -41,4 +41,6 @@ public interface ${name}Mapper extends BaseMapper<${name}> {
       */
       List<Map<String,Object>> select(@Param(Constants.WRAPPER) QueryWrapper<Object> wrapper);
 #end
+
+      List<Map<String, Object>> check(@Param("list") List<${name}> list);
 }

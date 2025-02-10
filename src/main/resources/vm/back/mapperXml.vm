@@ -82,4 +82,16 @@ s.${column.columnName}##
     </select>
 #end##
 
+    <select id="check" resultType="map">
+        with temp as (
+        <foreach collection="list" item="item" index="index" separator="union all">
+            select
+                #{item.id} as id
+        </foreach>
+        )
+        select
+            '' as message
+        from temp
+    </select>
+
 </mapper>

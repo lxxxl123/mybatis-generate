@@ -6,12 +6,15 @@ import ${package}.${service}.${prefix}.${name}Service;
 import ${package}.${dao}.${prefix}.${name}Mapper;
 import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
+import com.haday.qms.core.tool.utils.MessageBuilder;
 import java.util.List;
 import com.haday.qms.core.tool.support.QueryProxy;
 import java.util.Map;
+import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
 import com.haday.qms.core.tool.support.PlainWrapper;
 import org.springframework.transaction.annotation.Transactional;
+import com.haday.qms.core.tool.support.ExceptionTool;
 
 #if($buildSelectList||$buildSelectPage)
 import com.haday.qms.interceptor.anno.Try;
@@ -31,11 +34,21 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     public void validate(List<$name> list){
     }
 
+    public void afterUpdate(List<$name> list){
+    }
+
+
+    public void check(List<${name}> list) {
+        List<Map<String, Object>> res = baseMapper.check(list);
+        ExceptionTool.checkList(res, new MessageBuilder("</br>","</br>",""));
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Try
     public Integer batchAdd(List<${name}> list) {
         validate(list);
         super.batchAdd(list);
+        afterUpdate(list);
         return list.size();
     }
 
@@ -44,18 +57,34 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     public Integer batchUpdate(List<${name}> list) {
         validate(list);
         updateListById(list);
+        afterUpdate(list);
         return list.size();
     }
 
     #if(${isMerge})@Try
-    public Integer batchMerge(List<$name> obj){
-        validate(obj);
-        CollUtils.partitionList(obj,100)
+    public Integer batchMerge(List<$name> list){
+        validate(list);
+        CollUtils.partitionList(list,100)
             .forEach(e->{
             baseMapper.batchMerge(e);
         });
-        return obj.size();
+        afterUpdate(list);
+        return list.size();
     }#end ##
+
+    public Integer batchDelete(List<String> ids) {
+        return super.batchDelete(ids);
+    }
+
+    public List<${name}> getListById(Object obj) {
+        return baseSelect().setWrapper(PlainWrapper.of()
+                        .in(${name}::getId, CollUtils.toList(obj)))
+                .getList(${name}.class);
+    }
+
+    public ${name} getOneById(Object id) {
+        return CollUtil.getFirst(getListById(id));
+    }
 
     public QueryProxy baseSelect(){
         return QueryProxy.ofFun(baseMapper::select);
