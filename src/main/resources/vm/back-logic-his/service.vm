@@ -8,8 +8,6 @@ import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
 import com.haday.qms.core.tool.utils.CollUtils;
 import com.haday.qms.core.tool.support.Validators;
-import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import com.haday.qms.core.tool.support.PlainWrapper;
 
@@ -20,6 +18,10 @@ import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 #end
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author ${author}
@@ -42,6 +44,16 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         }
     }
 
+
+    public void afterUpdate(List<$name> list){
+    }
+
+
+    public void check(List<${name}> list) {
+        List<Map<String, Object>> res = baseMapper.check(list);
+        ExceptionTool.checkList(res, new MessageBuilder("</br>","</br>",""));
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Try
     public Integer batchAdd(List<${name}> list) {
@@ -61,12 +73,12 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
       /**
      * 逻辑删除 ，且不可恢复
      */
-    public void batchSetHis(Object ids) {
+    public void batchSetHis(Object ids, boolean delTag) {
         List<Integer> idList = CollUtils.toIntList(ids);
         if (idList.isEmpty()) {
             return;
         }
-        update().set("hisTag", 2)
+        update().set("hisTag", delTag ? 1 : 2)
                 .set("deleteTime", new Date())
                 .set("deleteAcc", UserUtil.getUserAcct())
                 .in("hisTag",0)

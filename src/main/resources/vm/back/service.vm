@@ -8,6 +8,7 @@ import ${package}.${entity}.${prefix}.${name};
 import org.springframework.stereotype.Service;
 import com.haday.qms.core.tool.utils.MessageBuilder;
 import java.util.List;
+import com.haday.qms.core.tool.support.Validators;
 import com.haday.qms.core.tool.support.QueryProxy;
 import java.util.Map;
 import cn.hutool.core.collection.CollUtil;
@@ -32,6 +33,16 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
 
     public void validate(List<$name> list){
+        for (${name} obj : list) {
+            Validators.of(obj)
+            #foreach($column in $columns)
+#if(${column.maxLength} && ${column.type} == "nvarchar") .checkMaxNLength(${name}::get${column.javaFiledNameUpCaseFirst},${column.maxLength},"${column.title}")
+#end
+#if(${column.maxLength} && ${column.type} == "varchar") .checkMaxLength(${name}::get${column.javaFiledNameUpCaseFirst},${column.maxLength},"${column.title}")
+#end
+            #end
+        .tryThrow();
+        }
     }
 
     public void afterUpdate(List<$name> list){

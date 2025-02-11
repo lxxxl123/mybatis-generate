@@ -11,12 +11,12 @@ base:
   targetTable: &targetTable
 #    sys_job  # 表名
 #     oa_sync_config  # 表名
-                 mdm_product_shelf_life_standard  # 表名
+                 factory_nutrition_aufnr  # 表名
   targetName: &targetName # 实体名
 #     OaSyncConfig
-    MdmProductShelfLifeStandard
+    FactoryNutritionAufnr
   prefix: &prefix  #路径名
-    mdm
+    factory
 
 
   backEndPath: &backEndPath # 后端路径

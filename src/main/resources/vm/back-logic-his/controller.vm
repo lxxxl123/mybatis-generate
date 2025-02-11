@@ -33,7 +33,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @PostMapping("/batchAdd")
     @Auth
     @RequiresPermissions("qms:$path:update")
-    public R<?> batchMerge(@RequestBody List<${name}> list) {
+    public R<?> batchAdd(@RequestBody List<${name}> list) {
         return R.data(service.batchAdd(list));
     }
 
