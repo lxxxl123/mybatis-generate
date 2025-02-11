@@ -79,7 +79,11 @@ public class BaseDataService {
             }
 
 
+
             String javaFieldName = StringUtil.underlineToCamelhump(columnName);
+            if (javaFieldName.equals("import")) {
+                javaFieldName = "isImport";
+            }
 
             if (StrUtil.equalsAnyIgnoreCase(javaFieldName, "isDel")) {
                 obj.getEnumMap().put("0", "否");

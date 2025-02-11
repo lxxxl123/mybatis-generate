@@ -6,17 +6,17 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 mold_task
+                 thirdpart_report
   targetName: &targetName  # 实体名
 #    costRevenueUser
-          moldTask
+          thirdpartReportExport
   prefix: &prefix #路径名
-          mold
+          factory
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    型检管理-型检任务管理 # 菜单
+    出厂报告管理-第三方检验报告导出 # 菜单
 
-  entityName: 型检任务 # 实体中文名
+  entityName: 第三方检验报告 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 
