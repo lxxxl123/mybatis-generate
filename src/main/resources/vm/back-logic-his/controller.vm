@@ -59,7 +59,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @Auth
     @RequiresPermissions("qms:$path:delete")
     public R<?> batchDelete(@RequestBody List<String> id) {
-        return super.batchDelete(id);
+        return R.data(service.batchDelete(id));
     }
 
     @Override
