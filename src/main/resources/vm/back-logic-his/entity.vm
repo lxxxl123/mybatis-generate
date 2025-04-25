@@ -17,7 +17,6 @@ import com.haday.qms.interceptor.anno.LogicDelete;
 * @author ${author}
 */
 @Data
-@LogicDelete
 @TableName("${table}")
 public class ${name} implements Serializable{
 

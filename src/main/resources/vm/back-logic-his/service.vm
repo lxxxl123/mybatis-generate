@@ -65,7 +65,7 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     @Transactional(rollbackFor = Exception.class)
     public Integer batchMerge(List<${name}> list) {
         validate(list);
-        batchSetHis(list.stream().map(${name}::getId));
+        batchSetHis(list.stream().map(${name}::getId),false);
         list.forEach(e -> e.setId(null));
         return super.batchAdd(list);
     }
@@ -84,6 +84,12 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
                 .in("hisTag",0)
                 .in("id", idList)
                 .update();
+    }
+
+  @Override
+    public int batchDelete(Collection<? extends Serializable> ids) {
+        batchSetHis(ids, true);
+        return ids.size();
     }
 
 
