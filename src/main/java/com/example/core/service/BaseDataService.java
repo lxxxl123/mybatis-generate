@@ -106,7 +106,13 @@ public class BaseDataService {
 
             obj.setIdentity(isIndentity);
             obj.setType(temp[0]);
-            obj.setRemark(remark);
+
+            if (StrUtil.isBlank(remark) && obj.isPk()) {
+                obj.setRemark(obj.getColumnName());
+            } else {
+                obj.setRemark(remark);
+            }
+
             obj.setJavaType(SqlTypeUtil.convertToJavaBoxType(temp[0]));
             obj.setJavaFieldName(javaFieldName);
 

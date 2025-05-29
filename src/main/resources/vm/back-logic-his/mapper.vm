@@ -19,8 +19,6 @@ public interface ${name}Mapper extends BaseMapper<${name}> {
 #if(${isMerge})
     /**
      * 合并数据
-     * @param obj 行
-     * @return 影响行
      */
     int batchMerge(@Param("list") List<${name}> obj);
 #end

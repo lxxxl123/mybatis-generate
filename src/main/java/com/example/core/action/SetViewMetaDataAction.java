@@ -87,7 +87,11 @@ public class SetViewMetaDataAction extends Action {
                     } else if (col.getField().endsWith("cinismp")) {
                         col.setCusMsg(StrUtil.format("type: 'vxe-cinismp-pulldown', propMap: [{ key: '{}', val: 'cno' }, { key: 'cinismpDesc', val: 'cnm' }]", col.getCol()));
                     } else if (col.getField().endsWith("productType")) {
-                        col.setCusMsg(StrUtil.format("type: 'vxe-quailty-stand-pulldown', propMap: [['{}','code'],['productTypeName','productCatagory']]", col.getCol()));
+//                        , type: 'vxe-mold-product-type-pulldown', propMap: [['productType', 'code'], ['productTypeName', 'codeName']]
+                        col.setCusMsg(StrUtil.format("type: 'vxe-mold-product-type-pulldown', propMap: [['{}','code'],['productTypeName','codeName']]", col.getCol()));
+                    } else if (col.getField().endsWith("stdCode")) {
+//                        , type: 'vxe-mold-product-type-pulldown', propMap: [['productType', 'code'], ['productTypeName', 'codeName']]
+                        col.setCusMsg(StrUtil.format("type: 'vxe-mold-std-pulldown', propMap: [['{}','stdCode'],['stdName','stdName']]", col.getCol()));
                     } else if (col.getTitle().endsWith("年份")) {
                         col.setCusMsg("props: { type: 'year' }");
                     }

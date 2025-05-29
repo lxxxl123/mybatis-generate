@@ -78,15 +78,15 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         if (idList.isEmpty()) {
             return;
         }
-        update().set("hisTag", delTag ? 1 : 2)
-                .set("deleteTime", new Date())
-                .set("deleteAcc", UserUtil.getUserAcct())
-                .in("hisTag",0)
-                .in("id", idList)
+        lambdaUpdate().set(${name}::getHisTag, delTag ? 1 : 2)
+                .set(${name}::getDeleteTime, new Date())
+                .set(${name}::getDeleteAcc, UserUtil.getUserAcct())
+                .in(${name}::getHisTag,0)
+                .in(${name}::getId, idList)
                 .update();
     }
 
-  @Override
+   @Override
     public int batchDelete(Collection<? extends Serializable> ids) {
         batchSetHis(ids, true);
         return ids.size();

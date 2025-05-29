@@ -157,11 +157,20 @@ tables:
         remark: 实验室简称
         javaFieldName: cinismpDesc
   productType:
-    tableName: mdm_quailty_standard
-    prefix: qs
-    on: 'productType = qs.code'
+    tableName: mold_product_type
+    prefix: mpt
+    on: 'productType = mpt.code'
     cols:
-      - columnName: product_catagory
+      - columnName: codeName
         remark: 样品大类
         javaFieldName: productTypeName
+
+  stdCode:
+    tableName: mold_exec_standard
+    prefix: std
+    on: 'stdCode = std.stdCode'
+    cols:
+      - columnName: stdName
+        remark: 标准名称
+        javaFieldName: stdName
 

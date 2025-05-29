@@ -17,12 +17,13 @@ import com.haday.qms.core.tool.support.PlainWrapper;
 import org.springframework.transaction.annotation.Transactional;
 import com.haday.qms.core.tool.support.ExceptionTool;
 
-#if($buildSelectList||$buildSelectPage)
 import com.haday.qms.interceptor.anno.Try;
 import com.haday.qms.vo.SearchVo;
 import com.alibaba.fastjson2.JSONObject;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-#end
+
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
 * @author ${author}
@@ -55,7 +56,6 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     }
 
     @Transactional(rollbackFor = Exception.class)
-    @Try
     public Integer batchAdd(List<${name}> list) {
         validate(list);
         super.batchAdd(list);
@@ -64,7 +64,6 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     }
 
     @Transactional(rollbackFor = Exception.class)
-    @Try
     public Integer batchUpdate(List<${name}> list) {
         validate(list);
         updateListById(list);
@@ -72,7 +71,6 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         return list.size();
     }
 
-    #if(${isMerge})@Try
     public Integer batchMerge(List<$name> list){
         validate(list);
         CollUtils.partitionList(list,100)
@@ -81,7 +79,7 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         });
         afterUpdate(list);
         return list.size();
-    }#end ##
+    }
 
     public Integer batchDelete(List<String> ids) {
         return super.batchDelete(ids);
@@ -101,26 +99,20 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         return QueryProxy.ofFun(baseMapper::select);
     }
 
+    public int batchDelete(Collection<? extends Serializable> ids) {
+        return super.logicDeleteBatchByIds(ids);
+    }
 
-#if(${buildSelectPage})##
+
     public Page<Map<String,Object>> search(JSONObject obj) {
         PlainWrapper wrapper = PlainWrapper.ofObj(obj);
         return baseSelect().setWrapper(wrapper).getPage();
     }
-#end ##
-#if(${buildSelectList})##
-    @Try
-      public List search(JSONObject obj) {
-        PlainWrapper wrapper = PlainWrapper.ofObj(obj);
-        return baseMapper.select(wrapper.buildPage(), wrapper);
-    }
-#end ##
 
-#if(${buildExport})##
+
     public Page<?> export(JSONObject body, Page<?> page) {
         return search(getExportJson(body, page));
     }
-#end ##
 
 }
 

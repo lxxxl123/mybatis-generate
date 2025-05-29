@@ -150,10 +150,10 @@ import XEUtils from 'xe-utils'
                     type: 'vxe-range-picker',##
                     props: {type: 'date'} ##
                   #elseif($col.enumMap.size()>0),##
-                    type: 'select',##
+                    type: 'multi-select',##
                     options: [#foreach($para in ${col.enumMap.entrySet()}) ['${para.value}', '${para.key}'] #if($foreach.hasNext),#end #end ] ##
                   #elseif($col.enumList.size()>0),##
-                    type: 'select',##
+                    type: 'multi-select',##
                     options: '#foreach($para in ${col.enumList})${para}#if($foreach.hasNext),#end#end' ##
                   #elseif($col.cusMsg),##
                           $col.cusMsg ##

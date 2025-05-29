@@ -6,17 +6,17 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 mold_product_type
+                 mold_check_set
   targetName: &targetName  # 实体名
 #    costRevenueUser
-          moldProductType
+       moldCheckSet
   prefix: &prefix #路径名
-          mold
+      mold
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    基础数据-外部送检管理主数据-样品大类维护 # 菜单
+    基础数据-外部送检管理主数据-检验套餐价格维护 # 菜单
 
-  entityName: 样品大类 # 实体中文名
+  entityName: 检验套餐价格 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 
@@ -46,7 +46,7 @@ actions:
       path: [ *frontEndPath , src/router/modules/, *prefix , .js ]
       vm: front/route-module.vm
       replaceList:
-        - range: '\h*}\v{1,2}(?=\s{2}])'
+        - range: '\h*}\s*(?=\s\s])'
           vm: front/route-module-part.vm
 
   - ## build route2
