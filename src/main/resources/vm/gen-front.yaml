@@ -6,17 +6,17 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 mold_check_set
+                 mold_check_price
   targetName: &targetName  # 实体名
 #    costRevenueUser
-       moldCheckSet
+       moldCheckPrice
   prefix: &prefix #路径名
       mold
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    基础数据-外部送检管理主数据-检验套餐价格维护 # 菜单
+    基础数据-外部送检管理主数据-单项检验价格维护 # 菜单
 
-  entityName: 检验套餐价格 # 实体中文名
+  entityName: 单项检验价格 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 

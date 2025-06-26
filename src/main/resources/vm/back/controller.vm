@@ -59,7 +59,7 @@ public class ${name}Controller extends BaseController<${name}ServiceImpl, ${name
     @ApiOperation(value = "查询", notes = "查询")
     @PostMapping("/search")
     @Auth
-    @RequiresPermissions("qms:moldCheckSet:read")
+    @RequiresPermissions("qms:$path:read")
     public R<?> search(@RequestBody JSONObject obj) {
         return R.data(service.search(obj));
     }

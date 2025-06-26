@@ -71,6 +71,7 @@
           <vxe-export-btn
               :x-grid="$refs.xGrid"
               bean-name="${targetName}ServiceImpl"
+              :page-size="4000"
               :form-data="formData"
               :title="entity+'导出'"
               :start-index="2"
