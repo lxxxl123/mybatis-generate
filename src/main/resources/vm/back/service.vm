@@ -33,6 +33,10 @@ import java.util.Collection;
 public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     implements ${name}Service {
 
+    public QueryProxy baseSelect(){
+        return QueryProxy.ofFun(baseMapper::select);
+    }
+
     public void validate(List<$name> list){
         for (${name} obj : list) {
             Validators.of(obj)
@@ -87,7 +91,9 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
 
     public List<${name}> getListById(Object obj) {
         return baseSelect().setWrapper(PlainWrapper.of()
-                        .in(${name}::getId, CollUtils.toList(obj)))
+                        .tryIn(${name}::getId, CollUtils.toList(obj))
+                        .blockIfEmpty()
+                        )
                 .getList(${name}.class);
     }
 
@@ -95,9 +101,7 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         return CollUtil.getFirst(getListById(id));
     }
 
-    public QueryProxy baseSelect(){
-        return QueryProxy.ofFun(baseMapper::select);
-    }
+
 
     public int batchDelete(Collection<? extends Serializable> ids) {
         return super.logicDeleteBatchByIds(ids);

@@ -83,8 +83,13 @@
                                       :after-click="showAll"/>#end##
 
           <el-tooltip placement="top">
-            <div slot="content">颜色说明:
-              <br/><span :style="'color: '+ grey">灰色: </span>被删除行
+            <div slot="content">
+              <span style="font-weight: bold" :style="{color: yellow}">数据约束:</span>
+              <div style="padding-left: 5px">
+              </div>
+              <span style="font-weight: bold" :style="{color: yellow}">字段说明:</span>
+              <div style="padding-left: 5px">
+              </div>
             </div>
             <vxe-button size="mini" type="text" status="warning">提示</vxe-button>
           </el-tooltip>

@@ -107,7 +107,7 @@ public class BaseDataService {
             obj.setIdentity(isIndentity);
             obj.setType(temp[0]);
 
-            if (StrUtil.isBlank(remark) && obj.isPk()) {
+            if (StrUtil.isBlank(remark)) {
                 obj.setRemark(obj.getColumnName());
             } else {
                 obj.setRemark(remark);

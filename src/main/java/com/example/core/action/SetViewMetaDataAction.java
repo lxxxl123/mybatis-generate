@@ -75,13 +75,13 @@ public class SetViewMetaDataAction extends Action {
                     } else if (CollUtil.newHashSet("vtcode").contains(col.getField())) {
                         col.setCusMsg(StrUtil.format("type: 'vxe-vtcode-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
                     } else if (CollUtil.newHashSet("supplierCode", "supplierNo").contains(col.getField())) {
-                        col.setCusMsg(StrUtil.format("type: 'vxe-supplier-pulldown', propMap: [ { key: '{}', val: 'supplierCode' } ]", col.getCol()));
+                        col.setCusMsg(StrUtil.format("type: 'vxe-supplier-pulldown', propMap: [ ['{}','supplierCode'] ]", col.getCol()));
                     } else if (CollUtil.newHashSet("producerCode").contains(col.getField())) {
                         col.setCusMsg(StrUtil.format("type: 'vxe-oriPak-producer-pulldown', propMap: [ { key: '{}', val: 'cno' } ]", col.getCol()));
                     } else if (CollUtil.newHashSet("factoryMaraGroup").contains(col.getField())) {
                         col.setCusMsg(StrUtil.format("type: 'vxe-factory-mara-gp-pulldown', propMap: [ { key: '{}', val: 'code' }, { key: '-', val: 'descr' } ]", col.getCol()));
                     } else if (col.getField().endsWith("kostl")) {
-                        col.setCusMsg(StrUtil.format("type: 'vxe-kostl-pulldown', propMap: [ { key: '{}', val: 'kostl' } ]", col.getCol()));
+                        col.setCusMsg(StrUtil.format("type: 'vxe-kostl-pulldown', propMap: [ [ '{}', 'kostl' ] ]", col.getCol()));
                     } else if (col.getField().endsWith("resourceCode")) {
                         col.setCusMsg(StrUtil.format("type: 'vxe-resource-pulldown', propMap: [ { key: '{}', val: 'resourceCode' }, { key: 'resourceDesc', val: 'resourceDesc' } ]", col.getCol()));
                     } else if (col.getField().endsWith("cinismp")) {
