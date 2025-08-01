@@ -89,12 +89,20 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         return super.batchDelete(ids);
     }
 
+    public List<${name}> getListBy(Consumer<PlainWrapper> consumer) {
+        PlainWrapper wrapper = PlainWrapper.of();
+        consumer.accept(wrapper);
+        return baseSelect().setWrapper(wrapper.blockIfEmpty()).getList(${name}.class);
+    }
+
+    @Override
+    public List<${name}> getFListByField(Func1<${name}, Object> func1, Object vals) {
+        return getListBy(w -> w.tryIn(func1, CollUtils.toList(vals)));
+    }
+
+
     public List<${name}> getListById(Object obj) {
-        return baseSelect().setWrapper(PlainWrapper.of()
-                        .tryIn(${name}::getId, CollUtils.toList(obj))
-                        .blockIfEmpty()
-                        )
-                .getList(${name}.class);
+        return getFListByField(${name}::getId, obj);
     }
 
     public ${name} getOneById(Object id) {
