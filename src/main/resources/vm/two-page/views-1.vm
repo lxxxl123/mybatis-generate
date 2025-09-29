@@ -8,15 +8,15 @@
                      :height-light="true"
                      :show-total="true"
                      :page-size="5000"
-                     :page-show="false"
-                     :rowConfig="{ isCurrent: true }"
+                     :toolBar="{ refresh: {query: currentReload} , filter: { columns } }"
+                     :rowConfig="{ isCurrent: true , isHover: true, height: 30 , keyField: 'id'}"
+                     :checkboxConfig="{ trigger: 'cell', range: true }"
                      :search="searchMethod"
                      :sort-by-remote="false"
                      @current-change="currentChange"
                      overflow
       >
       <template #btns>
-          <vxe-input class-name="vxe-button" style="display: inline-flex ; width: 100px" placeholder="搜索" @input="searchByText"/>
           <vxe-search-btn ref="searchForm" :search-form="searchForm" height="auto" width="500" :submit="searchByCond"/>
           <vxe-add-btn
                   :title="'新增'+entity"
@@ -25,11 +25,26 @@
                   :add-method="batchAddMethod"
                   :after-add="search"
           />
+          <vxe-update-btn
+              ref="updateBtn"
+              :x-grid="$refs.xGrid"
+              :title="'修改'+entity"
+              style="display: none;"
+              name="修改"
+              :form-data="addForm"
+              :param-convert="({form, row})=> [ form ] "
+              :update-method="batchUpdateMethod"
+              :after-invoke="search"
+          />
           <vxe-delete-btn
                   :x-grid="$refs.xGrid"
                   :delete-method="batchDeleteMethod"
                   :after-delete="search"
           />
+          <el-input size="mini"  style="width: 120px; padding-left: 12px; padding-right: 6px " placeholder="搜索当前页" v-model="searchText" maxlength="70" clearable @input="(val)=> searchByText({ value: val })"/>
+          <el-input size="mini"  style="width: 180px; margin-left: 12px" placeholder="请输入人员信息" v-model="formData.${leftSearchKey}" maxlength="70" clearable>
+             <el-button size="mini" slot="append" icon="el-icon-search" @click="search"></el-button>
+          </el-input>
         </template>
       </vxe-page-grid>
     </el-main>
@@ -51,7 +66,7 @@ import VxeDeleteBtn from '@/views/template/vxe-btn/vxe-delete-btn'
 import XEUtils from 'xe-utils'
 
 export default {
-  name: '${prefix}-${targetName}',
+  name: '${prefix}-${vueName}-left',
   components: {  VxeAddBtn , VxeUpdateBtn , VxeImportBtn ,VxeGridCondCheckbox,VxeDeleteBtn, VxeModifyBtn, VxeSearchBtn, VxePageGrid, VxeExportBtn },
   data: function () {
     return {
@@ -61,8 +76,10 @@ export default {
         condition: '',
         pageIndex: '',
         pageSize: '',
-        order: ''
+        order: '',
+        ${leftSearchKey}: '',
       },
+      searchText: '',
       searchMethod: service.search,
       batchUpdateMethod: service.batchUpdate,
       batchMergeMethod: service.batchMerge,
@@ -78,7 +95,6 @@ export default {
 #else, type: 'vxe-boot-operation-ipt', operation: 'likeRight' ##
 #end##
 } #if($foreach.hasNext) ,#end
-
 #end
       ],
       addForm: [
@@ -91,7 +107,6 @@ export default {
 #else ##
 #end##
 } #if($foreach.hasNext) ,#end
-
 #end
       ],
       columns: [
@@ -105,8 +120,19 @@ export default {
 #end##
 #if($col.col!=$col.field), params: { property: '${col.col}' }#end##
 , sortable: true } #if($foreach.hasNext) ,#end
-
 #end
+        ,{ title: '操作',
+          align: 'center',
+          width: 85,
+          cellRender: {
+            name: 'vxe-operations',
+            props: {
+              btns: [
+                { icon: 'el-icon-edit-outline', click: ({ row }) => { this.$refs .updateBtn.tryShowForm({ row }) } }
+              ]
+            }
+          }
+        }
       ]
     }
   },
@@ -125,13 +151,27 @@ export default {
        #set($rowVal='this.$refs.xGrid.searchByText(val.value)')##
        $rowVal
     },
+    currentReload () {
+      this.formData.${leftSearchKey} = ''
+      this.$nextTick(() => {
+        this.reload()
+      })
+    },
+    afterSearch () {
+      let row = XEUtils.get(this.$refs.xGrid.getVisibleData(), 0)
+      if (row) {
+        this.$refs.xGrid.setCurrentRow(row)
+        this.currentChange()
+      }
+    },
     beforeShowAdd ({ form }) {
     },
     beforeShowUpdate ({ form, row }) {
     },
-    currentChange (row) {
-        this.$emit('codeChange', row.row)
-    }
+    currentChange () {
+      let row = this.getSingleRow()
+      this.$emit('rowChange', { row })
+    },
   },
   computed: {},
   watch: {

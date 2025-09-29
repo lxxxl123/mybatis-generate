@@ -1,18 +1,18 @@
 <template>
-  <el-container style="background-color: #ffffff; height: calc(100vh - 100px); width: 100% ; min-height: 400px">
-    <split-pane @resize="resize" :min-percent="20" :default-percent="40" split="vertical"
+    <el-container style="background-color: #ffffff; height: calc(100vh - 100px); width: 100% ; min-height: 400px">
+    <split-pane :min-percent="30" :default-percent="60" split="vertical"
                 style="width: 100%;height: 100%">
       <template slot="paneL">
-        <left-page ref="leftPage" @codeChange="codeChange"/>
+        <left-page ref="left" @rowChange="onLeftChange"/>
       </template>
       <template slot="paneR">
-        <right-page ref="rightPage" :leftRow="leftRow" @search="search"/>
+        <right-page ref="right" :leftRow="leftRow"/>
       </template>
     </split-pane>
   </el-container>
 </template>
 <script>
-import '@/libs/appConst'
+
 import Vue from 'vue'
 import splitPane from 'vue-splitpane'
 import LeftPage from '@/views/${prefix}/${targetName}/left'
@@ -24,25 +24,21 @@ export default {
   components: { LeftPage, RightPage },
   data: function () {
     return {
-      leftRow: ''
+      leftRow: null
     }
   },
   mounted () {
     this.$nextTick(() => {
+      this.searchLeft()
     })
   },
   methods: {
-      search () {
-      this.$refs.leftPage.search()
+    searchLeft () {
+      this.$refs.left.search()
     },
-    resize () {
-
-    },
-    codeChange (val) {
-      this.leftRow = val
+    onLeftChange ({ row }) {
+      this.leftRow = row
     }
-  },
-  computed: {},
-  watch: {}
+  }
 }
 </script>

@@ -1,7 +1,6 @@
 package com.example.core.util;
 
-import cn.hutool.core.util.StrUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;

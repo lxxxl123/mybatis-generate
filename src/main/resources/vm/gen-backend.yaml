@@ -10,17 +10,17 @@ base:
   targetTable: &targetTable
 #    ori_pak_supplier_auth  # 表名
 #                 oa_sync_config
-                 hbk_settle_log
+                 factory_nutrition_mat
   targetName: &targetName # 实体名
 #                OaSyncConfig
 #                FlowableStartRecord
 #                 MdmResource
-        HbkSettleLog
+        FactoryNutritionMat
 
 #    oaProgress
 #                  ppAufm
   prefix: &prefix  #路径名
-    hbk
+    factory
 
   backEndPath: &backEndPath # 后端路径
      D:\20221014\qms-platform\qms-service\

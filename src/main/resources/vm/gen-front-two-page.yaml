@@ -5,31 +5,36 @@ database:
   password: BFZybMAmaQ7P
 
 base:
-  menusChPath: 基础数据-原包材第三方检验基础数据-供应商数据权限维护 # 菜单
+  menusChPath: 基础数据-外部送检管理主数据-外部送检特殊物料组 # 菜单
 
   prefix: |- #路径名
-    oriPak
+    mold
 
   frontEndPath:  #前端路径
     D:/20221014/qms-front/
 
   mainPage: &mainPage
-    targetName: oriPakSupplierAuthPage
-    entityName: 供应商权限
+    targetName: &vueName moldUniMara
+#    entityName: 外部送检特殊物料组
 
   leftPage: &leftPage
-    tableName: ori_pak_supplier_auth_user  #表名
-    targetName: oriPakSupplierAuthUser #实体名
-    entityName: 供应商权限-用户数据
+    tableName: mold_uni_mara  #表名
+    targetName: *vueName #实体名
+    entityName: 外部送检特殊物料组
 
   rightPage: &rightPage
-    tableName: ori_pak_supplier_auth  #表名
-    targetName: oriPakSupplierAuth #实体名
-    entityName: 供应商权限-供应商数据
+    tableName: mold_uni_mara_dt  #表名
+    targetName: moldUniMaraDt #实体名
+    entityName: 外部送检特殊物料
 
-  joinConfig:
-    leftCol: account
-    rightCol: acc
+  globalConst: &globalConst
+    vueName: *vueName
+    leftSearchKey: matName
+    leftKey: id
+    leftKeyName: name
+    rightKey: pid
+    rightKeyName: groupName
+
 
 actions:
   #########################################
@@ -39,6 +44,7 @@ actions:
     class: setCtxAction
     params:
       map:
+        <<: *globalConst
         <<: *mainPage
       spelMap:
         pathChName: "#ReUtil.get('-([^-]+)$',['menusChPath'],1)"

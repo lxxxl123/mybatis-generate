@@ -12,7 +12,6 @@ import com.example.core.entity.table.LeftJoinCol;
 import com.example.core.entity.table.TableIndex;
 import com.example.core.thread.Ctx;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections.list.SetUniqueList;
 
 import java.util.List;
 import java.util.Set;

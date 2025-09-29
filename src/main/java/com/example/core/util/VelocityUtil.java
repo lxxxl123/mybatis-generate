@@ -51,11 +51,13 @@ public class VelocityUtil {
 	}
 
 	public static void init(String resourcePath){
-		Properties velocityPros = new Properties();
-		velocityPros.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, resourcePath);
-		velocityPros.setProperty("input.encoding", "utf-8");
-		velocityPros.setProperty("output.encoding", "utf-8");
-		Velocity.init(velocityPros);
+		Properties props = new Properties();
+		props.setProperty(VelocityEngine.FILE_RESOURCE_LOADER_PATH, resourcePath);
+		props.setProperty("input.encoding", "utf-8");
+		props.setProperty("output.encoding", "utf-8");
+		// --true Velocity 会尝试解析字符串中的 $变量
+		props.setProperty("runtime.interpolate.string.literals", "false");
+		Velocity.init(props);
 	}
 
 	private static String getPackagePath(String targetPackage) {

@@ -24,6 +24,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
 * @author ${author}
@@ -35,6 +36,11 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
 
     public QueryProxy baseSelect(){
         return QueryProxy.ofFun(baseMapper::select);
+    }
+
+    public Page<Map<String,Object>> search(JSONObject obj) {
+        PlainWrapper wrapper = PlainWrapper.ofObj(obj);
+        return baseSelect().setWrapper(wrapper).getPage();
     }
 
     public void validate(List<$name> list){
@@ -85,22 +91,6 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         return list.size();
     }
 
-    public Integer batchDelete(List<String> ids) {
-        return super.batchDelete(ids);
-    }
-
-    public List<${name}> getListBy(Consumer<PlainWrapper> consumer) {
-        PlainWrapper wrapper = PlainWrapper.of();
-        consumer.accept(wrapper);
-        return baseSelect().setWrapper(wrapper.blockIfEmpty()).getList(${name}.class);
-    }
-
-    @Override
-    public List<${name}> getFListByField(Func1<${name}, Object> func1, Object vals) {
-        return getListBy(w -> w.tryIn(func1, CollUtils.toList(vals)));
-    }
-
-
     public List<${name}> getListById(Object obj) {
         return getFListByField(${name}::getId, obj);
     }
@@ -110,17 +100,9 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     }
 
 
-
     public int batchDelete(Collection<? extends Serializable> ids) {
         return super.logicDeleteBatchByIds(ids);
     }
-
-
-    public Page<Map<String,Object>> search(JSONObject obj) {
-        PlainWrapper wrapper = PlainWrapper.ofObj(obj);
-        return baseSelect().setWrapper(wrapper).getPage();
-    }
-
 
     public Page<?> export(JSONObject body, Page<?> page) {
         return search(getExportJson(body, page));
