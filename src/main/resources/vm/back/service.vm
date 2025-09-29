@@ -81,6 +81,7 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
         return list.size();
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public Integer batchMerge(List<$name> list){
         validate(list);
         CollUtils.partitionList(list,100)
@@ -100,6 +101,7 @@ public class ${name}ServiceImpl extends BaseServiceImpl<${name}Mapper, ${name}>
     }
 
 
+    @Transactional(rollbackFor = Exception.class)
     public int batchDelete(Collection<? extends Serializable> ids) {
         return super.logicDeleteBatchByIds(ids);
     }

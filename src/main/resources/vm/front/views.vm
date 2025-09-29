@@ -11,7 +11,9 @@
          :height-light="true"
          :toolBar="{ refresh: {query: reload}, filter: { columns } }"
          :search="searchMethod"
-          #if($delCol)init-cond="${delCol.col} = 0"#end##
+          #if($delCol)
+          init-cond="${delCol.col} = 0"
+          #end##
          overflow
          :rowStyle="rowStyle"
       >
