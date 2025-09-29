@@ -6,17 +6,18 @@ database:
 
 base:
   targetTable: &targetTable # 表名
-                 mold_mail
+                 # cost_revenue_user
+                 factory_nutrition_mat
   targetName: &targetName  # 实体名
 #    costRevenueUser
-       moldMail
+       factoryNutritionMat
   prefix: &prefix #路径名
-      mold
+      factory
   menusChPath:
 #    报表-质量风险报表-风险流程报表 # 菜单
-    外部送检管理-邮件发送任务 # 菜单
+    基础数据-出厂报告主数据-营养参数-产品营养标签计算公式维护 # 菜单
 
-  entityName: 邮件发送任务 # 实体中文名
+  entityName: 产品公式 # 实体中文名
   frontEndPath: &frontEndPath #前端路径
     D:/20221014/qms-front/
 

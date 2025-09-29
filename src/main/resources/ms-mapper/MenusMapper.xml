@@ -35,7 +35,7 @@
         on s.name = t.name and  s.pid = t.pid
         when not matched then
             insert (id, system_id, pid, name, type, uri , permission_value, orders, status, ctime)
-            values (s.id, s.system_id, isnull(s.pid, '1'), s.name, s.type, s.uri, s.permission_value, isnull(s.orders, 100) + 1,
+            values (s.id, s.system_id, isnull(s.pid, '1'), s.name, s.type, s.uri, s.permission_value, isnull(s.orders, 100) + 100,
                     1, s.ctime);
     </insert>
 

@@ -56,7 +56,7 @@ public class VelocityUtil {
 		props.setProperty("input.encoding", "utf-8");
 		props.setProperty("output.encoding", "utf-8");
 		// --true Velocity 会尝试解析字符串中的 $变量
-		props.setProperty("runtime.interpolate.string.literals", "false");
+//		props.setProperty("runtime.interpolate.string.literals", "false");
 		Velocity.init(props);
 	}
 

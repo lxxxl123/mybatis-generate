@@ -166,7 +166,6 @@ import XEUtils from 'xe-utils'
                     operation: 'likeRight' ##
                   #end##
               } #if($foreach.hasNext) ,#end
-
             #end
         ],
         addForm: [
@@ -193,7 +192,6 @@ import XEUtils from 'xe-utils'
                 rules: [{required: true}] ##
                 #end
               } #if($foreach.hasNext) ,#end
-
             #end
         ],
         updateForm: [
@@ -219,7 +217,6 @@ import XEUtils from 'xe-utils'
                   #else ##
                   #end##
               } #if($foreach.hasNext) ,#end
-
             #end
         ],
         columns: [
@@ -231,7 +228,6 @@ import XEUtils from 'xe-utils'
                 , title: '${col.title}' ##
                 , sortable: true##
               } #if($foreach.hasNext) ,#end
-
             #end
         ]
       }
@@ -262,8 +258,6 @@ import XEUtils from 'xe-utils'
       beforeShowAdd({form}) {
       },
       beforeShowUpdate({form, row}) {
-      },
-      deleteValidate({row}) {
       },
         #if($delCol)##
           reuseValidate({rows}) {
